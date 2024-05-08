@@ -4,9 +4,9 @@ spring:
   application:
     name: base
   datasource:
-    url: jdbc:mysql://ds-db-1.cl22oo0sesz5.ap-southeast-1.rds.amazonaws.com/base?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+    url: jdbc:mysql://diamond-shop-db-1.cl22oo0sesz5.ap-southeast-1.rds.amazonaws.com/base?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
     username: admin
-    password: i*ZTX6De5.0>aDBEq7oPe57NJz9j
+    password: 36ZP4nil9Hff3w7fLQJp
 
 security:
   oauth2:
