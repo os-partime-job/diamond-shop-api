@@ -1,0 +1,36 @@
+<configuration>
+    <property name="DEV_HOME" value="/home/apps/mbf-aff-dev-apps/mbf-aff-payment-gateway/logs"/>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{dd/MM/yyyy HH:mm:ss} %p [%c{1}] %m%n
+            </Pattern>
+        </layout>
+    </appender>
+    <appender name="FILE-DEBUG"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${DEV_HOME}/payment.log</file>
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{dd/MM/yyyy HH:mm:ss} %p [%c{1}] %m%n
+            </Pattern>
+        </encoder>
+
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${DEV_HOME}/archived/%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>50MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+    <logger name="vn.vnp" level="debug" />
+    <root level="info">
+        <appender-ref ref="FILE-DEBUG"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
