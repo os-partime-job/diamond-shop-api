@@ -9,7 +9,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "CONFIG_VALUE")
+@Table(name = "DIAMOND_SHOP_CONFIG_VALUE")
 @Data
 @NoArgsConstructor
 public class ConfigValue {
@@ -17,16 +17,12 @@ public class ConfigValue {
     @GeneratedValue(generator = "uuid-hibernate-generator")
     @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
-
-    @Column(name = "key")
+    @Column(name = "key", unique = true)
     private String key;
-
     @Column(name = "value")
     private String value;
-
     @Column(name = "description")
     private String description;
-
     @Column(name = "create_at")
     private OffsetDateTime createAt;
 

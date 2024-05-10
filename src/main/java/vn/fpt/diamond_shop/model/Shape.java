@@ -20,7 +20,7 @@ public class Shape {
     @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @Column(name = "shape")
+    @Column(name = "shape", unique = true)
     private DiamondShapeEnum shape;
 
     @Column(name = "image")
