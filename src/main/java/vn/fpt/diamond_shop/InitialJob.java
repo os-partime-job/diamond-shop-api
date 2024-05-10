@@ -7,7 +7,7 @@ import vn.fpt.diamond_shop.constants.*;
 import vn.fpt.diamond_shop.model.*;
 import vn.fpt.diamond_shop.repository.*;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class InitialJob implements CommandLineRunner {
 
