@@ -20,7 +20,7 @@ public class Polish {
     private UUID id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "polish")
+    @Column(name = "polish", unique = true)
     private DiamondPolishEnum polish;
 
     @Column(name = "create_at")

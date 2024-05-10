@@ -20,7 +20,7 @@ public class Cut {
     private UUID id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "cut")
+    @Column(name = "cut", unique = true)
     private DiamondCutEnum cut;
     @Column(name = "point")
     private int point;

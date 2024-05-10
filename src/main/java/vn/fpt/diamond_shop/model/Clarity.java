@@ -20,7 +20,7 @@ public class Clarity {
     private UUID id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "clarity")
+    @Column(name = "clarity", unique = true)
     private DiamondClarityEnum clarity;
 
     @Column(name = "create_at")
