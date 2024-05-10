@@ -1,10 +1,10 @@
 package vn.fpt.diamond_shop.payload;
 
-public class ApiResponse {
+public class SignupResponse {
     private boolean success;
     private String message;
 
-    public ApiResponse(boolean success, String message) {
+    public SignupResponse(boolean success, String message) {
         this.success = success;
         this.message = message;
     }

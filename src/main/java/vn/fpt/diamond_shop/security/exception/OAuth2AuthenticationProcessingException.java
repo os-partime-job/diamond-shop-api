@@ -1,4 +1,4 @@
-package vn.fpt.diamond_shop.exception;
+package vn.fpt.diamond_shop.security.exception;
 
 import org.springframework.security.core.AuthenticationException;
 

@@ -1,7 +1,7 @@
 package vn.fpt.diamond_shop.security.oauth2;
 
 import vn.fpt.diamond_shop.config.AppProperties;
-import vn.fpt.diamond_shop.exception.BadRequestException;
+import vn.fpt.diamond_shop.security.exception.BadRequestException;
 import vn.fpt.diamond_shop.security.TokenProvider;
 import vn.fpt.diamond_shop.util.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;

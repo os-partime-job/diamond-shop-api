@@ -1,4 +1,4 @@
-package vn.fpt.diamond_shop.model;
+package vn.fpt.diamond_shop.security.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;

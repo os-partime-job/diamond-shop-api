@@ -1,9 +1,9 @@
-package vn.fpt.diamond_shop.controller;
+package vn.fpt.diamond_shop.security.endpoint;
 
-import vn.fpt.diamond_shop.exception.BadRequestException;
-import vn.fpt.diamond_shop.model.AuthProvider;
-import vn.fpt.diamond_shop.model.User;
-import vn.fpt.diamond_shop.payload.ApiResponse;
+import vn.fpt.diamond_shop.security.exception.BadRequestException;
+import vn.fpt.diamond_shop.security.model.AuthProvider;
+import vn.fpt.diamond_shop.security.model.User;
+import vn.fpt.diamond_shop.payload.SignupResponse;
 import vn.fpt.diamond_shop.payload.AuthResponse;
 import vn.fpt.diamond_shop.payload.LoginRequest;
 import vn.fpt.diamond_shop.payload.SignUpRequest;
@@ -23,18 +23,14 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/shop/auth")
 public class AuthController {
-
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
     private TokenProvider tokenProvider;
 
@@ -56,7 +52,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new BadRequestException("Email address already in use.");
         }
 
@@ -76,7 +72,7 @@ public class AuthController {
                 .buildAndExpand(result.getId()).toUri();
 
         return ResponseEntity.created(location)
-                .body(new ApiResponse(true, "User registered successfully@"));
+                .body(new SignupResponse(true, "User registered successfully@"));
     }
 
 }

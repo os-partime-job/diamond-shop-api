@@ -1,8 +1,8 @@
 package vn.fpt.diamond_shop.security;
 
 
-import vn.fpt.diamond_shop.exception.ResourceNotFoundException;
-import vn.fpt.diamond_shop.model.User;
+import vn.fpt.diamond_shop.security.exception.ResourceNotFoundException;
+import vn.fpt.diamond_shop.security.model.User;
 import vn.fpt.diamond_shop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
