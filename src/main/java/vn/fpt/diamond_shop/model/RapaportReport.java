@@ -34,6 +34,9 @@ public class RapaportReport {
     @Column(name = "cara_to")
     private int caraT;
 
+    @Column(name = "percent")
+    private Double percent;
+
     @Column(name = "create_at")
     private OffsetDateTime createAt;
 
