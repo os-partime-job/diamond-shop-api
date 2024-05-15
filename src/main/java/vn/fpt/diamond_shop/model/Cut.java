@@ -18,7 +18,6 @@ public class Cut {
     @GeneratedValue(generator = "uuid-hibernate-generator")
     @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "cut", unique = true)
     private DiamondCutEnum cut;

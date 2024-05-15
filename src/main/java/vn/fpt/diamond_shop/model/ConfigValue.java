@@ -8,8 +8,8 @@ import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-@Entity
-@Table(name = "DIAMOND_SHOP_CONFIG_VALUE")
+//@Entity
+//@Table(name = "DIAMOND_SHOP_CONFIG_VALUE")
 @Data
 @NoArgsConstructor
 public class ConfigValue {
