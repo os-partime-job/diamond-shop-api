@@ -21,6 +21,8 @@ public class Jewelry {
     @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
+    private String jewelryCode;
+
     private String name;
 
     private JewelryTypeEnum typeEnum;

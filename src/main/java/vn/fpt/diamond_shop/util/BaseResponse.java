@@ -22,6 +22,10 @@ public class BaseResponse {
         return new ResponseEntity<T>(body, page(page, size, total), HttpStatus.OK);
     }
 
+    public static <T> ResponseEntity<T> bad(T body) {
+        return ResponseEntity.badRequest().body(body);
+    }
+
     private static HttpHeaders page(int page, int size, long total) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("page", String.valueOf(page));

@@ -25,7 +25,6 @@ public class Cut {
     private int point;
     @Column(name = "create_at")
     private OffsetDateTime createAt;
-
     @Column(name = "update_at")
     private OffsetDateTime updateAt;
 

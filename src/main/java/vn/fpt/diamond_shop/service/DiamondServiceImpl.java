@@ -27,5 +27,6 @@ public class DiamondServiceImpl implements DiamondService {
     @Override
     public List<ListDiamondReponse> listDiamonds() {
         List<Diamond> diamonds = diamondRepo.findAll();
+        return null;
     }
 }
