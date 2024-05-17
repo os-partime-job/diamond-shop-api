@@ -19,6 +19,9 @@ public class Diamond {
     private UUID id;
     @Column(name = "carat")
     private int carat;
+
+    @Column(name = "quantity")
+    private int quantity;
     @Column(name = "clarity_id")
     private UUID clarityId;
     @Column(name = "cut_id")
