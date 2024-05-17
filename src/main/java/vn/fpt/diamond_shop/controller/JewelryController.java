@@ -10,7 +10,9 @@ import vn.fpt.diamond_shop.constants.UrlConstants;
 import vn.fpt.diamond_shop.model.Diamond;
 import vn.fpt.diamond_shop.model.Jewelry;
 import vn.fpt.diamond_shop.request.CreateDiamondRequest;
+import vn.fpt.diamond_shop.request.GetDetailJewelryRequest;
 import vn.fpt.diamond_shop.request.GetListJewelryRequest;
+import vn.fpt.diamond_shop.response.GetDetailJewelryResponse;
 import vn.fpt.diamond_shop.service.DiamondService;
 import vn.fpt.diamond_shop.service.JewelryService;
 import vn.fpt.diamond_shop.util.BaseResponse;
@@ -32,7 +34,7 @@ public class JewelryController {
         return new ResponseEntity<>(jewelryService.jewelries(request), HttpStatus.OK);
     }
     @PostMapping("detail")
-    public ResponseEntity<List<Jewelry>> detail(@Valid @RequestBody GetListJewelryRequest request) {
-        return new ResponseEntity<>(jewelryService.jewelries(request), HttpStatus.OK);
+    public ResponseEntity<GetDetailJewelryResponse> detail(@Valid @RequestBody GetDetailJewelryRequest request) {
+        return new ResponseEntity<>(jewelryService.detailJewelry(request.getIdJewelry()), HttpStatus.OK);
     }
 }

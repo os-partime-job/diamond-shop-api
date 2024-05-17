@@ -55,4 +55,14 @@ public class Jewelry {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "description")
+    private String description;
+
+
+    @Column(name = "image_id")
+    private Long imageId;
+
+    @Column(name = "type_enum")
+    private Integer typeEnum;
+
 }

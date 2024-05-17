@@ -12,6 +12,7 @@ import vn.fpt.diamond_shop.repository.DiamondRepository;
 import vn.fpt.diamond_shop.repository.JewelryRepository;
 import vn.fpt.diamond_shop.request.GetListJewelryRequest;
 import vn.fpt.diamond_shop.response.GetDetailDiamondResponse;
+import vn.fpt.diamond_shop.response.GetDetailJewelryResponse;
 import vn.fpt.diamond_shop.service.DiamondService;
 import vn.fpt.diamond_shop.service.JewelryService;
 
@@ -29,5 +30,10 @@ public class JewelryServiceImpl implements JewelryService {
     @Override
     public List<Jewelry> jewelries(GetListJewelryRequest request) {
         return jewelryRepository.findAll();
+    }
+
+    @Override
+    public GetDetailJewelryResponse detailJewelry(Integer id) {
+        return jewelryRepository.getDetailJewelry(id);
     }
 }
