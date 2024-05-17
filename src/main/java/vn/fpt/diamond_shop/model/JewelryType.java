@@ -19,10 +19,10 @@ public class JewelryType {
     private Integer id;
 
     @Column(name = "jewelry_type_name")
-    private String jewelrytypeName;
+    private String jewelryTypeName;
 
     @Column(name = "jewelry_type_code")
-    private String jewelrytypeCode;
+    private String jewelryTypeCode;
 
     @Column(name = "id_guide")
     private Integer idGuide;

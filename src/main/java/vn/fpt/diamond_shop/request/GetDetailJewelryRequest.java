@@ -6,15 +6,15 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Configuration;
 
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GetListJewelryRequest {
-    private String jewelryType;
-    private Integer limit;
-    private Integer offset;
+public class GetDetailJewelryRequest {
+
+    Integer idJewelry;
+
+
 }
