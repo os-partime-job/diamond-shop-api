@@ -13,7 +13,7 @@ public class InitialJob implements CommandLineRunner {
 
     private final ClarityRepository clarityRepository;
     private final ColorRepository colorRepository;
-    private final ConfigValueRepository configValueRepository;
+//    private final ConfigValueRepository configValueRepository;
     private final CutRepository cutRepository;
     private final PolishRepository polishRepository;
     private final ShapeRepository shapeRepository;

@@ -30,14 +30,14 @@ import java.util.stream.Stream;
 /**
  * The type Request validate aop handle.
  */
-@Aspect
-@Component
-@PropertySource(
-        //update bundle dir
-        value = "classpath:messages/message.properties",
-        encoding = "UTF-8",
-        name = "messageCode"
-)
+//@Aspect
+//@Component
+//@PropertySource(
+//        //update bundle dir
+//        value = "classpath:rsrc/main/resources/message.properties",
+//        encoding = "UTF-8",
+//        name = "messageCode"
+//)
 
 @Slf4j
 public class RequestValidateAOPHandle {
