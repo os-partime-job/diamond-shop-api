@@ -43,4 +43,9 @@ public class JewelryController extends  BaseController{
     public ResponseEntity<Object> type() {
         return ok(jewelryService.jewelryType(), null);
     }
+
+    @PostMapping("create")
+    public ResponseEntity<Object> create(@Valid @RequestBody CreateDiamondRequest request) {
+        return ok(jewelryService.jewelryType(), null);
+    }
 }
