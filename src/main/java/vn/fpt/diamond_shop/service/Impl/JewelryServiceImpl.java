@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.fpt.diamond_shop.model.Diamond;
 import vn.fpt.diamond_shop.model.Jewelry;
+import vn.fpt.diamond_shop.model.JewelryType;
 import vn.fpt.diamond_shop.payload.AddDiamondRequest;
 import vn.fpt.diamond_shop.payload.ListDiamondReponse;
 import vn.fpt.diamond_shop.repository.DiamondRepository;
 import vn.fpt.diamond_shop.repository.JewelryRepository;
+import vn.fpt.diamond_shop.repository.JewelryTypeRepository;
 import vn.fpt.diamond_shop.request.GetListJewelryRequest;
 import vn.fpt.diamond_shop.response.GetDetailDiamondResponse;
 import vn.fpt.diamond_shop.response.GetDetailJewelryResponse;
@@ -26,6 +28,9 @@ public class JewelryServiceImpl implements JewelryService {
     @Autowired
     private JewelryRepository jewelryRepository;
 
+    @Autowired
+    private JewelryTypeRepository jewelryTypeRepository;
+
 
     @Override
     public List<Jewelry> jewelries(GetListJewelryRequest request) {
@@ -36,4 +41,8 @@ public class JewelryServiceImpl implements JewelryService {
     public GetDetailJewelryResponse detailJewelry(Integer id) {
         return jewelryRepository.getDetailJewelry(id);
     }
+
+    @Override
+    public List<JewelryType> jewelryType() {
+            return jewelryTypeRepository.findAll();    }
 }
