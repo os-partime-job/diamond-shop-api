@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import vn.fpt.diamond_shop.constants.UrlConstants;
 import vn.fpt.diamond_shop.model.Diamond;
 import vn.fpt.diamond_shop.model.Jewelry;
+import vn.fpt.diamond_shop.model.JewelryType;
 import vn.fpt.diamond_shop.request.CreateDiamondRequest;
 import vn.fpt.diamond_shop.request.GetDetailJewelryRequest;
 import vn.fpt.diamond_shop.request.GetListJewelryRequest;
@@ -24,17 +25,22 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(UrlConstants.BASIC_JEWELRY_URL)
-public class JewelryController {
+public class JewelryController extends  BaseController{
 
     @Autowired
     private JewelryService jewelryService;
 
     @PostMapping("list")
-    public ResponseEntity<List<Jewelry>> list(@Valid @RequestBody GetListJewelryRequest request) {
-        return new ResponseEntity<>(jewelryService.jewelries(request), HttpStatus.OK);
+    public ResponseEntity<Object> list(@Valid @RequestBody GetListJewelryRequest request) {
+        return ok(jewelryService.jewelries(request), null);
     }
     @PostMapping("detail")
-    public ResponseEntity<GetDetailJewelryResponse> detail(@Valid @RequestBody GetDetailJewelryRequest request) {
-        return new ResponseEntity<>(jewelryService.detailJewelry(request.getIdJewelry()), HttpStatus.OK);
+    public ResponseEntity<Object> detail(@Valid @RequestBody GetDetailJewelryRequest request) {
+        return ok(jewelryService.detailJewelry(request.getIdJewelry()), null);
+    }
+
+    @GetMapping("jewelry_type")
+    public ResponseEntity<Object> type() {
+        return ok(jewelryService.jewelryType(), null);
     }
 }

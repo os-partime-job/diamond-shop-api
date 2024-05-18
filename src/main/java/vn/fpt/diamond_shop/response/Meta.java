@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Meta {
@@ -22,6 +21,24 @@ public class Meta {
 
     private String httpCode;
 
-    private String errorCode;
+    private Integer limit;
+    private Integer offset;
+    private Integer total;
 
+    public Meta(String requestId, int code, String message, String httpCode) {
+        this.requestId = requestId;
+        this.code = code;
+        this.message = message;
+        this.httpCode = httpCode;
+    }
+
+    public Meta(String requestId, int code, String message, String httpCode, Integer limit, Integer offset, Integer total) {
+        this.requestId = requestId;
+        this.code = code;
+        this.message = message;
+        this.httpCode = httpCode;
+        this.limit = limit;
+        this.offset = offset;
+        this.total = total;
+    }
 }
