@@ -59,3 +59,7 @@ app:
       - http://localhost:3000/oauth2/redirect
       - myandroidapp://oauth2/redirect
       - myiosapp://oauth2/redirect
+minio:
+  host: http://178.128.111.191:9000
+  accesKey: LhvzlYoqSbl1Go3U2tRF
+  secretKey: muIyi1QKM27OXxLofmCUk4C8cR82Qe9N7Ess2M6R
