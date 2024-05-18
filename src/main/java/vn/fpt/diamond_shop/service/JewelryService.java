@@ -2,6 +2,7 @@ package vn.fpt.diamond_shop.service;
 
 import vn.fpt.diamond_shop.model.Jewelry;
 import vn.fpt.diamond_shop.model.JewelryType;
+import vn.fpt.diamond_shop.request.CreateDiamondRequest;
 import vn.fpt.diamond_shop.request.GetListJewelryRequest;
 import vn.fpt.diamond_shop.response.GetDetailJewelryResponse;
 
@@ -13,4 +14,6 @@ public interface JewelryService {
     GetDetailJewelryResponse detailJewelry(Integer id);
 
     List<JewelryType> jewelryType();
+
+    boolean createJewelry(CreateDiamondRequest request);
 }
