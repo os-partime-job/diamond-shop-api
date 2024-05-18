@@ -8,7 +8,7 @@ import vn.fpt.diamond_shop.model.RapaportReport;
 
 import java.util.UUID;
 
-public interface RapaportReportRepository extends JpaRepository<RapaportReport, UUID> {
+public interface RapaportReportRepository extends JpaRepository<RapaportReport, Long> {
 
     @Query(value = "SELECT rr.percent FROM RapaportReport rr JOIN Clarity c JOIN Color cc WHERE " +
             "(:weight >= rr.caraF" +

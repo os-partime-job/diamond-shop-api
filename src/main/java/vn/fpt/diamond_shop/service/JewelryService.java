@@ -11,7 +11,7 @@ import java.util.List;
 public interface JewelryService {
     List<Jewelry> jewelries(GetListJewelryRequest request);
 
-    GetDetailJewelryResponse detailJewelry(Integer id);
+    GetDetailJewelryResponse detailJewelry(Long id);
 
     List<JewelryType> jewelryType();
 

@@ -16,7 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class JewelryType {
     @Id
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "jewelry_type_name")
     private String jewelryTypeName;

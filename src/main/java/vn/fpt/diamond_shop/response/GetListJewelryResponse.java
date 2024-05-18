@@ -43,7 +43,7 @@ public class GetListJewelryResponse {
 
     private Integer typeEnum;
 
-    private UUID diamondId;
+    private Long diamondId;
 
 
 }

@@ -15,18 +15,17 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Jewelry {
     @Id
-//    @GeneratedValue(generator = "uuid-hibernate-generator")
-//    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "jewelry_code")
     private String jewelryCode;
 
     @Column(name = "id_diamond")
-    private UUID idDiamond;
+    private Long idDiamond;
 
     @Column(name = "jewelry_type_id")
-    private Integer jewelryTypeId;
+    private Long jewelryTypeId;
 
     @Column(name = "quantity")
     private Integer quantity;
@@ -35,10 +34,10 @@ public class Jewelry {
     private Double materialPrices;
 
     @Column(name = "id_guide")
-    private Integer idGuide;
+    private Long idGuide;
 
     @Column(name = "is_active")
-    private Integer isActive;
+    private Long isActive;
 
     @Column(name = "created_at")
     private Date createdAt;
@@ -63,6 +62,6 @@ public class Jewelry {
     private Long imageId;
 
     @Column(name = "type_enum")
-    private Integer typeEnum;
+    private Long typeEnum;
 
 }

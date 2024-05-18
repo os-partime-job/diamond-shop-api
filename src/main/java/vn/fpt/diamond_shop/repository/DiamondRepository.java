@@ -5,5 +5,5 @@ import vn.fpt.diamond_shop.model.Diamond;
 
 import java.util.UUID;
 
-public interface DiamondRepository extends JpaRepository<Diamond, UUID> {
+public interface DiamondRepository extends JpaRepository<Diamond, Long> {
 }

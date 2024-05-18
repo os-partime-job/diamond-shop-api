@@ -41,13 +41,15 @@ public class JewelryServiceImpl implements JewelryService {
     }
 
     @Override
-    public GetDetailJewelryResponse detailJewelry(Integer id) {
-        return jewelryRepository.getDetailJewelry(id);
+    public GetDetailJewelryResponse detailJewelry(Long id) {
+        return null;
+//        return jewelryRepository.getDetailJewelry(id);
     }
 
     @Override
     public List<JewelryType> jewelryType() {
-            return jewelryTypeRepository.findAll();    }
+        return jewelryTypeRepository.findAll();
+    }
 
     @Override
     public boolean createJewelry(CreateDiamondRequest request) {
@@ -59,7 +61,8 @@ public class JewelryServiceImpl implements JewelryService {
 
         return false;
     }
-    private String jewelryCode(){
+
+    private String jewelryCode() {
         long count = jewelryTypeRepository.count();
         return JEWELRY_CODE_DEFAULT + count;
     }

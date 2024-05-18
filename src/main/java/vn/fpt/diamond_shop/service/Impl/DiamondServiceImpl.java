@@ -39,8 +39,8 @@ public class DiamondServiceImpl implements DiamondService {
     }
 
     @Override
-    public GetDetailDiamondResponse getDetailDiamondResponse(String id) {
-        Optional<Diamond> byId = diamondRepo.findById(UUID.fromString(id));
+    public GetDetailDiamondResponse getDetailDiamondResponse(long id) {
+        Optional<Diamond> byId = diamondRepo.findById(id);
         GetDetailDiamondResponse getDetailDiamondResponse = new GetDetailDiamondResponse();
         BeanUtils.copyProperties(byId, getDetailDiamondResponse);
         return getDetailDiamondResponse;

@@ -6,5 +6,5 @@ import vn.fpt.diamond_shop.model.Jewelry;
 import vn.fpt.diamond_shop.model.JewelryType;
 
 @Repository
-public interface JewelryTypeRepository extends JpaRepository<JewelryType, Integer> {
+public interface JewelryTypeRepository extends JpaRepository<JewelryType, Long> {
 }

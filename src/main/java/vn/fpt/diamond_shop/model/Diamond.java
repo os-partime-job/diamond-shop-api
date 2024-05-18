@@ -14,27 +14,26 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Diamond {
     @Id
-    @GeneratedValue(generator = "uuid-hibernate-generator")
-    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(name = "carat")
     private int carat;
 
     @Column(name = "quantity")
-    private int quantity;
+    private Integer quantity;
     @Column(name = "clarity_id")
-    private UUID clarityId;
+    private Long clarityId;
     @Column(name = "cut_id")
-    private UUID cutId;
+    private Long cutId;
     @Column(name = "polish_id")
-    private UUID polishId;
+    private Long polishId;
     @Column(name = "color_id")
-    private UUID colorId;
+    private Long colorId;
     @Column(name = "shape_id")
-    private UUID shapeId;
+    private Long shapeId;
 
     @Column(name = "origin_id")
-    private UUID originId;
+    private Long originId;
 
     @Column(name = "image_id")
     private Long imageId;
@@ -44,7 +43,7 @@ public class Diamond {
     @Column(name = "update_at")
     private OffsetDateTime updateAt;
 
-    public Diamond(int carat, UUID clarityId, UUID cutId, UUID polishId, UUID colorId, UUID shapeId) {
+    public Diamond(int carat, Long clarityId, Long cutId, Long polishId, Long colorId, Long shapeId) {
         this.carat = carat;
         this.clarityId = clarityId;
         this.cutId = cutId;

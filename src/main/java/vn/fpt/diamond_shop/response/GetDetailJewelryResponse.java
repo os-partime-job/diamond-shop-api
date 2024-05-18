@@ -18,14 +18,14 @@ import java.util.UUID;
 @NoArgsConstructor
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GetDetailJewelryResponse {
-    private Integer idJewelry;
+    private Long idJewelry;
     private String jewelryTitle;// name
 
     private String jewelryCode;
 
     private String jewelryType;
 
-    private Integer jewelryTypeId;
+    private Long jewelryTypeId;
 
     private Integer quantity;
 
@@ -45,7 +45,7 @@ public class GetDetailJewelryResponse {
 
     private Integer typeEnum;
 
-    private UUID diamondId;
+    private Long diamondId;
 
 
 }

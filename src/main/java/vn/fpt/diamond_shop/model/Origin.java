@@ -13,9 +13,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Origin {
     @Id
-    @GeneratedValue(generator = "uuid-hibernate-generator")
-    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "origin_name", unique = true)
     private String originName;

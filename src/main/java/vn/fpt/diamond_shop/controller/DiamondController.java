@@ -26,13 +26,14 @@ public class DiamondController {
 
     @GetMapping("/detail/")
     public ResponseEntity<?> getSmartOTPInfo() {
-        return new ResponseEntity<>(diamondService.getDetailDiamondResponse("a"), HttpStatus.OK);
+        return new ResponseEntity<>(diamondService.getDetailDiamondResponse(1), HttpStatus.OK);
     }
 
     @PostMapping("/create")
     public ResponseEntity<?> getSmartOTPInfo(@Valid @RequestBody CreateDiamondRequest request, BindingResult bindingResult) {
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
+
     @GetMapping("/list")
     public ResponseEntity<List<Diamond>> list(@RequestParam("page") int page,
                                               @RequestParam("size") int size) {

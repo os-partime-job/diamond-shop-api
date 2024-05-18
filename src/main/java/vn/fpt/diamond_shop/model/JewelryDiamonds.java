@@ -16,8 +16,8 @@ public class JewelryDiamonds {
     private Long id;
 
     @Column(name = "jewelry_id")
-    private UUID jewelryId;
+    private Long jewelryId;
 
     @Column(name = "diamond_id")
-    private UUID diamondId;
+    private Long diamondId;
 }

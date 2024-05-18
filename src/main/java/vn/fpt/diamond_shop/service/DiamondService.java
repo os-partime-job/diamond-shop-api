@@ -11,5 +11,5 @@ public interface DiamondService {
 
     List<ListDiamondReponse> listDiamonds();
 
-    GetDetailDiamondResponse getDetailDiamondResponse (String id);
+    GetDetailDiamondResponse getDetailDiamondResponse (long id);
 }

@@ -8,8 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
-import java.sql.Date;
-import java.util.UUID;
 
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -19,7 +17,7 @@ import java.util.UUID;
 public class CreateDiamondRequest {
 
     @Column(name = "id_diamond")
-    private UUID idDiamond;
+    private Long idDiamond;
 
     @Column(name = "jewelry_type_id")
     private Integer jewelryTypeId;
