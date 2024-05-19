@@ -1,5 +1,6 @@
 package vn.fpt.diamond_shop.service;
 
+import org.springframework.web.multipart.MultipartFile;
 import vn.fpt.diamond_shop.model.Jewelry;
 import vn.fpt.diamond_shop.model.JewelryType;
 import vn.fpt.diamond_shop.request.CreateDiamondRequest;
@@ -16,4 +17,6 @@ public interface JewelryService {
     List<JewelryType> jewelryType();
 
     boolean createJewelry(CreateDiamondRequest request);
+
+    boolean uploadFile(MultipartFile file);
 }

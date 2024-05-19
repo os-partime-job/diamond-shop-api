@@ -4,26 +4,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.fpt.diamond_shop.model.Diamond;
 import vn.fpt.diamond_shop.model.Jewelry;
 import vn.fpt.diamond_shop.model.JewelryType;
-import vn.fpt.diamond_shop.payload.AddDiamondRequest;
-import vn.fpt.diamond_shop.payload.ListDiamondReponse;
-import vn.fpt.diamond_shop.repository.DiamondRepository;
 import vn.fpt.diamond_shop.repository.JewelryRepository;
 import vn.fpt.diamond_shop.repository.JewelryTypeRepository;
 import vn.fpt.diamond_shop.request.CreateDiamondRequest;
 import vn.fpt.diamond_shop.request.GetListJewelryRequest;
-import vn.fpt.diamond_shop.response.GetDetailDiamondResponse;
 import vn.fpt.diamond_shop.response.GetDetailJewelryResponse;
-import vn.fpt.diamond_shop.service.DiamondService;
 import vn.fpt.diamond_shop.service.JewelryService;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -36,6 +27,9 @@ public class JewelryServiceImpl implements JewelryService {
 
     private static String JEWELRY_CODE_DEFAULT = "DMS_";
     private static Integer ACTIVE_VALUE = 1;
+
+    @Autowired
+    private ImageServiceImpl imageService;
     @Override
     public List<Jewelry> jewelries(GetListJewelryRequest request) {
         return jewelryRepository.findAll();
@@ -72,4 +66,5 @@ public class JewelryServiceImpl implements JewelryService {
         long count = jewelryRepository.count();
         return JEWELRY_CODE_DEFAULT + count;
     }
+
 }

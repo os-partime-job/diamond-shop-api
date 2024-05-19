@@ -2,28 +2,18 @@ package vn.fpt.diamond_shop.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.codec.Hex;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import vn.fpt.diamond_shop.constants.UrlConstants;
-import vn.fpt.diamond_shop.model.Diamond;
-import vn.fpt.diamond_shop.model.Jewelry;
-import vn.fpt.diamond_shop.model.JewelryType;
 import vn.fpt.diamond_shop.request.CreateDiamondRequest;
 import vn.fpt.diamond_shop.request.GetDetailJewelryRequest;
 import vn.fpt.diamond_shop.request.GetListJewelryRequest;
-import vn.fpt.diamond_shop.response.GetDetailJewelryResponse;
-import vn.fpt.diamond_shop.service.DiamondService;
+import vn.fpt.diamond_shop.service.ImageService;
+import vn.fpt.diamond_shop.service.Impl.ImageServiceImpl;
 import vn.fpt.diamond_shop.service.JewelryService;
-import vn.fpt.diamond_shop.util.BaseResponse;
 
 import javax.validation.Valid;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -32,6 +22,9 @@ public class JewelryController extends  BaseController{
 
     @Autowired
     private JewelryService jewelryService;
+
+    @Autowired
+    private ImageService imageService;
 
     @PostMapping("list")
     public ResponseEntity<Object> list(@Valid @RequestBody GetListJewelryRequest request) {
@@ -51,8 +44,8 @@ public class JewelryController extends  BaseController{
     public ResponseEntity<Object> create(@Valid @RequestBody CreateDiamondRequest request) {
         return ok(jewelryService.createJewelry(request), null);
     }
-    @PostMapping("uploadf/file")
-    public ResponseEntity<Object> uploadFile(@Valid @RequestBody CreateDiamondRequest request) {
-        return ok(jewelryService.createJewelry(request), null);
+    @PostMapping("upload/file")
+    public ResponseEntity<Object> uploadFile(@RequestParam("image") MultipartFile file) {
+        return ok(imageService.push(file), null);
     }
 }
