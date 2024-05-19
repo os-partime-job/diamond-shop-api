@@ -14,13 +14,13 @@ import javax.persistence.Column;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CreateDiamondRequest {
+public class CreateDiamondRequest extends BaseRequest{
 
     @Column(name = "id_diamond")
     private Long idDiamond;
 
     @Column(name = "jewelry_type_id")
-    private Integer jewelryTypeId;
+    private Long jewelryTypeId;
 
     @Column(name = "quantity")
     private Integer quantity;
@@ -41,6 +41,4 @@ public class CreateDiamondRequest {
     @Column(name = "image_id")
     private Long imageId;
 
-    @Column(name = "type_enum")
-    private Integer typeEnum;
 }

@@ -58,16 +58,18 @@ public class JewelryServiceImpl implements JewelryService {
         Jewelry jewelry = new Jewelry();
         BeanUtils.copyProperties(request, jewelry);
         jewelry.setJewelryCode(jewelryCode());
-//        jewelry.setCreatedAt(new Date(java.time.LocalDate.now().));
         jewelry.setCreatedBy("Khoa Tran");
-        jewelry.setIdGuide(1);
+        jewelry.setJewelryTypeId(request.getJewelryTypeId());
+        jewelry.setIdGuide(1L);
         jewelry.setIsActive(ACTIVE_VALUE);
+        java.util.Date date = new java.util.Date();
+        jewelry.setCreatedAt(new Date(date.getTime()));
         jewelryRepository.save(jewelry);
         return true;
     }
 
     private String jewelryCode() {
-        long count = jewelryTypeRepository.count();
+        long count = jewelryRepository.count();
         return JEWELRY_CODE_DEFAULT + count;
     }
 }

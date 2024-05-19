@@ -25,12 +25,12 @@ public class DiamondController {
     private DiamondService diamondService;
 
     @GetMapping("/detail/")
-    public ResponseEntity<?> getSmartOTPInfo() {
+    public ResponseEntity<?> detail() {
         return new ResponseEntity<>(diamondService.getDetailDiamondResponse(1), HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> getSmartOTPInfo(@Valid @RequestBody CreateDiamondRequest request, BindingResult bindingResult) {
+    public ResponseEntity<?> create(@Valid @RequestBody CreateDiamondRequest request, BindingResult bindingResult) {
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 

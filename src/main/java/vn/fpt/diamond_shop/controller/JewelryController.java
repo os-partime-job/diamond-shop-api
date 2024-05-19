@@ -39,7 +39,7 @@ public class JewelryController extends  BaseController{
     }
     @PostMapping("detail")
     public ResponseEntity<Object> detail(@Valid @RequestBody GetDetailJewelryRequest request) {
-        return ok(jewelryService.detailJewelry(request.getIdJewelry()), null);
+        return ok(jewelryService.detailJewelry(request.getIdJewelry()), request.getRequestId());
     }
 
     @GetMapping("jewelry_type")
@@ -49,6 +49,10 @@ public class JewelryController extends  BaseController{
 
     @PostMapping("create")
     public ResponseEntity<Object> create(@Valid @RequestBody CreateDiamondRequest request) {
+        return ok(jewelryService.createJewelry(request), null);
+    }
+    @PostMapping("uploadf/file")
+    public ResponseEntity<Object> uploadFile(@Valid @RequestBody CreateDiamondRequest request) {
         return ok(jewelryService.createJewelry(request), null);
     }
 }

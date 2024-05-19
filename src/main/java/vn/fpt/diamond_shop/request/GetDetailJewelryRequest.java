@@ -12,9 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GetDetailJewelryRequest {
-
-    Long idJewelry;
+public class GetDetailJewelryRequest extends BaseRequest{
+    private Long idJewelry;
 
 
 }
