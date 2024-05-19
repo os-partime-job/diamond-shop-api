@@ -1,5 +1,6 @@
 package vn.fpt.diamond_shop.config;
 
+import vn.fpt.diamond_shop.security.model.RoleEnum;
 import vn.fpt.diamond_shop.security.oauth2.CustomOAuth2UserService;
 import vn.fpt.diamond_shop.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import vn.fpt.diamond_shop.security.oauth2.OAuth2AuthenticationFailureHandler;
@@ -106,6 +107,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/**", "/oauth2/**")
                 .permitAll()
+                .antMatchers("/test")
+                .authenticated()
                 .anyRequest()
                 .authenticated()
                 .and()

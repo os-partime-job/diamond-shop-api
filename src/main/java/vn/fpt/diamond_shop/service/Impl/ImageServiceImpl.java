@@ -22,7 +22,7 @@ public class ImageServiceImpl implements ImageService {
     private String host;
     @Value("${minio.accessKey}")
     private String accessKey;
-    @Value("${minio.scretKey}")
+    @Value("${minio.secretKey}")
     private String scretKey;
     private final String bucket = "diamondshop";
     private MinioClient minioClient;

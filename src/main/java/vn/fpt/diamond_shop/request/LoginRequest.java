@@ -1,4 +1,4 @@
-package vn.fpt.diamond_shop.payload;
+package vn.fpt.diamond_shop.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

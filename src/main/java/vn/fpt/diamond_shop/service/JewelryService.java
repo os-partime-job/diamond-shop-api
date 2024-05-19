@@ -17,6 +17,4 @@ public interface JewelryService {
     List<JewelryType> jewelryType();
 
     boolean createJewelry(CreateDiamondRequest request);
-
-    boolean uploadFile(MultipartFile file);
 }

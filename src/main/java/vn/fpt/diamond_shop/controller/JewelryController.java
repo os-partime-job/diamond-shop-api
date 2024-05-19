@@ -18,18 +18,16 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequestMapping(UrlConstants.BASIC_JEWELRY_URL)
-public class JewelryController extends  BaseController{
+public class JewelryController extends BaseController {
 
     @Autowired
     private JewelryService jewelryService;
-
-    @Autowired
-    private ImageService imageService;
 
     @PostMapping("list")
     public ResponseEntity<Object> list(@Valid @RequestBody GetListJewelryRequest request) {
         return ok(jewelryService.jewelries(request), null);
     }
+
     @PostMapping("detail")
     public ResponseEntity<Object> detail(@Valid @RequestBody GetDetailJewelryRequest request) {
         return ok(jewelryService.detailJewelry(request.getIdJewelry()), request.getRequestId());
@@ -40,12 +38,14 @@ public class JewelryController extends  BaseController{
         return ok(jewelryService.jewelryType(), null);
     }
 
-    @PostMapping("create")
-    public ResponseEntity<Object> create(@Valid @RequestBody CreateDiamondRequest request) {
+    @PostMapping(value = "create", consumes = {"multipart/form-data"})
+    public ResponseEntity<Object> create(@RequestPart("request") CreateDiamondRequest request,
+                                         @RequestPart("image") MultipartFile file) {
+        request.setMultipartFile(file);
         return ok(jewelryService.createJewelry(request), null);
     }
-    @PostMapping("upload/file")
-    public ResponseEntity<Object> uploadFile(@RequestParam("image") MultipartFile file) {
-        return ok(imageService.push(file), null);
-    }
+//    @PostMapping("upload/file")
+//    public ResponseEntity<Object> uploadFile(@RequestParam("image") MultipartFile file) {
+//        return ok(imageService.push(file), null);
+//    }
 }

@@ -1,4 +1,4 @@
-package vn.fpt.diamond_shop.payload;
+package vn.fpt.diamond_shop.response;
 
 public class SignupResponse {
     private boolean success;

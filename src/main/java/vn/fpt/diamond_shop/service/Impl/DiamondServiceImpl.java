@@ -5,15 +5,14 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.fpt.diamond_shop.model.Diamond;
-import vn.fpt.diamond_shop.payload.AddDiamondRequest;
-import vn.fpt.diamond_shop.payload.ListDiamondReponse;
+import vn.fpt.diamond_shop.request.AddDiamondRequest;
+import vn.fpt.diamond_shop.response.ListDiamondReponse;
 import vn.fpt.diamond_shop.repository.DiamondRepository;
 import vn.fpt.diamond_shop.response.GetDetailDiamondResponse;
 import vn.fpt.diamond_shop.service.DiamondService;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @Service

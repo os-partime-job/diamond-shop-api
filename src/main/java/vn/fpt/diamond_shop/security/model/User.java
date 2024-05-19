@@ -1,4 +1,5 @@
 package vn.fpt.diamond_shop.security.model;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -98,4 +99,5 @@ public class User {
     public void setProviderId(String providerId) {
         this.providerId = providerId;
     }
+
 }
