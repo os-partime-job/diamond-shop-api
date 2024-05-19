@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.codec.Hex;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import vn.fpt.diamond_shop.constants.UrlConstants;
@@ -19,8 +20,10 @@ import vn.fpt.diamond_shop.service.JewelryService;
 import vn.fpt.diamond_shop.util.BaseResponse;
 
 import javax.validation.Valid;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -36,7 +39,7 @@ public class JewelryController extends  BaseController{
     }
     @PostMapping("detail")
     public ResponseEntity<Object> detail(@Valid @RequestBody GetDetailJewelryRequest request) {
-        return ok(jewelryService.detailJewelry(request.getIdJewelry()), null);
+        return ok(jewelryService.detailJewelry(request.getIdJewelry()), request.getRequestId());
     }
 
     @GetMapping("jewelry_type")
@@ -46,6 +49,10 @@ public class JewelryController extends  BaseController{
 
     @PostMapping("create")
     public ResponseEntity<Object> create(@Valid @RequestBody CreateDiamondRequest request) {
-        return ok(jewelryService.jewelryType(), null);
+        return ok(jewelryService.createJewelry(request), null);
+    }
+    @PostMapping("uploadf/file")
+    public ResponseEntity<Object> uploadFile(@Valid @RequestBody CreateDiamondRequest request) {
+        return ok(jewelryService.createJewelry(request), null);
     }
 }

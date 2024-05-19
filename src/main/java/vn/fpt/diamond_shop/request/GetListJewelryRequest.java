@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GetListJewelryRequest {
+public class GetListJewelryRequest extends BaseRequest{
     private String jewelryType;
     private Integer limit;
     private Integer offset;

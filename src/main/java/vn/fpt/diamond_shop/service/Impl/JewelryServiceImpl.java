@@ -20,6 +20,7 @@ import vn.fpt.diamond_shop.service.DiamondService;
 import vn.fpt.diamond_shop.service.JewelryService;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,7 +35,7 @@ public class JewelryServiceImpl implements JewelryService {
     private JewelryTypeRepository jewelryTypeRepository;
 
     private static String JEWELRY_CODE_DEFAULT = "DMS_";
-
+    private static Integer ACTIVE_VALUE = 1;
     @Override
     public List<Jewelry> jewelries(GetListJewelryRequest request) {
         return jewelryRepository.findAll();
@@ -57,13 +58,18 @@ public class JewelryServiceImpl implements JewelryService {
         Jewelry jewelry = new Jewelry();
         BeanUtils.copyProperties(request, jewelry);
         jewelry.setJewelryCode(jewelryCode());
-//        jewelry.setCreatedAt(new Date(New ));
-
-        return false;
+        jewelry.setCreatedBy("Khoa Tran");
+        jewelry.setJewelryTypeId(request.getJewelryTypeId());
+        jewelry.setIdGuide(1L);
+        jewelry.setIsActive(ACTIVE_VALUE);
+        java.util.Date date = new java.util.Date();
+        jewelry.setCreatedAt(new Date(date.getTime()));
+        jewelryRepository.save(jewelry);
+        return true;
     }
 
     private String jewelryCode() {
-        long count = jewelryTypeRepository.count();
+        long count = jewelryRepository.count();
         return JEWELRY_CODE_DEFAULT + count;
     }
 }

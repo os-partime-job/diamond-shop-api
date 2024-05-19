@@ -37,7 +37,7 @@ public class Jewelry {
     private Long idGuide;
 
     @Column(name = "is_active")
-    private Long isActive;
+    private Integer isActive;
 
     @Column(name = "created_at")
     private Date createdAt;
@@ -57,11 +57,7 @@ public class Jewelry {
     @Column(name = "description")
     private String description;
 
-
     @Column(name = "image_id")
     private Long imageId;
-
-    @Column(name = "type_enum")
-    private Long typeEnum;
 
 }
