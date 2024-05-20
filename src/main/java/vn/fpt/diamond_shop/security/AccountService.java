@@ -69,12 +69,15 @@ public class AccountService {
     }
 
     public void changeProfile(ChangeProfileRequest changeProfileRequest) {
+
         User account = userRepository.findByEmail(changeProfileRequest.getEmail()).orElseThrow(() -> new BadRequestException("User not found"));
         EndUser endUser = endUserRepository.findEndUserByAccountId(account.getId()).orElseThrow(() -> new BadRequestException("EndUser not found"));
-        Address address = addressRepository.findById(endUser.getAddress()).orElseThrow(() -> new BadRequestException("Address not found"));
+        Address address = addressRepository.findById(endUser.getAddress()).orElseGet(Address::new);
 
         if (StringUtils.isNoneBlank(changeProfileRequest.getPassword()))
             account.setPassword(passwordEncoder.encode(changeProfileRequest.getPassword()));
+
+        userRepository.save(account);
 
         if (StringUtils.isNoneBlank(changeProfileRequest.getProvince()))
             address.setProvince(changeProfileRequest.getProvince());
@@ -99,8 +102,13 @@ public class AccountService {
         if (StringUtils.isNoneBlank(changeProfileRequest.getPhoneNumber()))
             endUser.setPhoneNumber(changeProfileRequest.getPhoneNumber());
 
+        if (endUser.getAddress() == null) {
+            endUser.setAddress(account.getId());
+        }
         endUser.setAge(changeProfileRequest.getAge());
         endUser.setUpdateAt(OffsetDateTime.now());
+
+        endUserRepository.save(endUser);
     }
 
     public UserProfileResponse profile(Long accountId) {

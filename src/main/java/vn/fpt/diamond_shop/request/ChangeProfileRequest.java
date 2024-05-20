@@ -15,7 +15,6 @@ public class ChangeProfileRequest {
     private String email;
     private String phoneNumber;
     private String password;
-    private String address;
     private String fullName;
     private boolean isMale;
     private String dateOfBirth;

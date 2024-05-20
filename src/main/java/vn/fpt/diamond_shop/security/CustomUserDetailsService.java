@@ -37,7 +37,13 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found with email : " + email)
                 );
-        return UserPrincipal.create(user);
+        List<UserRole> userRoleList = userRoleRepository.findAllByAccountId(user.getId());
+        if (userRoleList.isEmpty()) throw new RuntimeException("User has no role");
+        List<String> roles = new ArrayList<>();
+        userRoleList.forEach(e -> {
+            roles.add(Objects.requireNonNull(RoleEnum.getRoleEnumById(e.getRoleId())).name());
+        });
+        return UserPrincipal.create(user, roles);
     }
 
     @Transactional

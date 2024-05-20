@@ -105,6 +105,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
+                .antMatchers("/shop/admin/**").hasRole(RoleEnum.ADMIN.name())
                 .antMatchers("/**", "/oauth2/**")
                 .permitAll()
                 .antMatchers("/test")
