@@ -24,4 +24,5 @@ public class ChangeProfileRequest {
     private String city;
     private String ward;
     private String extra;
+    private String bio;
 }

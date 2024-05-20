@@ -17,5 +17,6 @@ public class UserProfileResponse {
     private String dateOfBirth;
     private boolean isMale;
     private String avatar;
+    private String bio;
     private Address address;
 }

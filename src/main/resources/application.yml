@@ -5,6 +5,10 @@ spring:
     url: jdbc:mysql://diamond-shop-db-1.cl22oo0sesz5.ap-southeast-1.rds.amazonaws.com:3306/diamond_shop?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
     username: admin
     password: VAhQsFv{~#S-J<>sdGfgu}ekh1Ta
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
   jpa:
     show-sql: true

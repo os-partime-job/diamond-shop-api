@@ -19,4 +19,5 @@ public class ManagerListAccountResponse {
     private boolean mailIsVerify;
     private String role;
     private String accountProvider;
+    private boolean isActive = true;
 }

@@ -64,7 +64,8 @@ public class AdminServiceImpl implements AdminService {
                         e.getName(),
                         e.getEmailVerified(),
                         roleEnum.name(),
-                        e.getProvider().name()));
+                        e.getProvider().name(),
+                        e.isActive()));
             }
         });
         return responses;

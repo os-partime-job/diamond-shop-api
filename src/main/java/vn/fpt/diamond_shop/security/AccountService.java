@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import vn.fpt.diamond_shop.model.Address;
 import vn.fpt.diamond_shop.model.EndUser;
 import vn.fpt.diamond_shop.request.ChangeProfileRequest;
@@ -12,9 +13,11 @@ import vn.fpt.diamond_shop.repository.AddressRepository;
 import vn.fpt.diamond_shop.repository.EndUserRepository;
 import vn.fpt.diamond_shop.repository.UserRepository;
 import vn.fpt.diamond_shop.repository.UserRoleRepository;
+import vn.fpt.diamond_shop.response.ImageInformation;
 import vn.fpt.diamond_shop.response.UserProfileResponse;
 import vn.fpt.diamond_shop.security.exception.BadRequestException;
 import vn.fpt.diamond_shop.security.model.*;
+import vn.fpt.diamond_shop.service.ImageService;
 
 import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
@@ -31,6 +34,8 @@ public class AccountService {
     private UserRoleRepository userRoleRepository;
     @Autowired
     private EndUserRepository endUserRepository;
+    @Autowired
+    private ImageService imageService;
 
     @Transactional
     public void register(SignUpRequest registerRequest) {
@@ -74,40 +79,24 @@ public class AccountService {
         EndUser endUser = endUserRepository.findEndUserByAccountId(account.getId()).orElseThrow(() -> new BadRequestException("EndUser not found"));
         Address address = addressRepository.findById(endUser.getAddress()).orElseGet(Address::new);
 
-        if (StringUtils.isNoneBlank(changeProfileRequest.getPassword()))
-            account.setPassword(passwordEncoder.encode(changeProfileRequest.getPassword()));
-
-        userRepository.save(account);
-
-        if (StringUtils.isNoneBlank(changeProfileRequest.getProvince()))
-            address.setProvince(changeProfileRequest.getProvince());
-
-        if (StringUtils.isNoneBlank(changeProfileRequest.getDistrict()))
-            address.setDistrict(changeProfileRequest.getDistrict());
-
-        if (StringUtils.isNoneBlank(changeProfileRequest.getCity()))
-            address.setCity(changeProfileRequest.getCity());
-
-        if (StringUtils.isNoneBlank(changeProfileRequest.getWard()))
-            address.setWard(changeProfileRequest.getWard());
-
-        if (StringUtils.isNoneBlank(changeProfileRequest.getExtra()))
-            address.setExtra(changeProfileRequest.getExtra());
-
+        address.setProvince(changeProfileRequest.getProvince());
+        address.setDistrict(changeProfileRequest.getDistrict());
+        address.setCity(changeProfileRequest.getCity());
+        address.setWard(changeProfileRequest.getWard());
+        address.setExtra(changeProfileRequest.getExtra());
         addressRepository.save(address);
 
-        if (StringUtils.isNoneBlank(changeProfileRequest.getFullName()))
-            endUser.setFullName(changeProfileRequest.getFullName());
+        endUser.setFullName(changeProfileRequest.getFullName());
+        endUser.setPhoneNumber(changeProfileRequest.getPhoneNumber());
+        endUser.setDateOfBirth(changeProfileRequest.getDateOfBirth());
 
-        if (StringUtils.isNoneBlank(changeProfileRequest.getPhoneNumber()))
-            endUser.setPhoneNumber(changeProfileRequest.getPhoneNumber());
 
+        // if user has not address, set address = accountId to add new address
         if (endUser.getAddress() == null) {
             endUser.setAddress(account.getId());
         }
         endUser.setAge(changeProfileRequest.getAge());
         endUser.setUpdateAt(OffsetDateTime.now());
-
         endUserRepository.save(endUser);
     }
 
@@ -126,5 +115,12 @@ public class AccountService {
         response.setAddress(address);
 
         return response;
+    }
+
+    public void updateAvt(Long accountId, MultipartFile file) {
+        User account = userRepository.findById(accountId).orElseThrow(() -> new BadRequestException("User not found"));
+        ImageInformation imageInformation = imageService.push(file);
+        account.setImageUrl(imageInformation.getUrl());
+        userRepository.save(account);
     }
 }
