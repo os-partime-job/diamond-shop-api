@@ -1,11 +1,13 @@
 package vn.fpt.diamond_shop.service.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.fpt.diamond_shop.repository.UserRepository;
 import vn.fpt.diamond_shop.repository.UserRoleRepository;
 import vn.fpt.diamond_shop.request.ManagerModifyAccountRequest;
 import vn.fpt.diamond_shop.response.ManagerListAccountResponse;
+import vn.fpt.diamond_shop.security.UserPrincipal;
 import vn.fpt.diamond_shop.security.model.*;
 import vn.fpt.diamond_shop.service.AdminService;
 
@@ -24,6 +26,11 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void changeInforAccount(ManagerModifyAccountRequest request) {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (request.getAccountId().equals(userPrincipal.getId())) {
+            throw new RuntimeException("Cannot change your own account");
+        }
+
         User user = userRepository.findById(request.getAccountId()).orElseThrow(() -> new RuntimeException("User not found"));
         if (request.getEmail() != null)
             user.setEmail(request.getEmail());
@@ -45,17 +52,20 @@ public class AdminServiceImpl implements AdminService {
     public List<ManagerListAccountResponse> listAccount() {
         List<ManagerListAccountResponse> responses = new ArrayList<>();
         List<User> users = userRepository.findAll();
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         users.forEach(e -> {
             UserRole role = userRoleRepository.findAllByAccountId(e.getId()).get(0);
             RoleEnum roleEnum = RoleEnum.getRoleEnumById(role.getId());
-            responses.add(new ManagerListAccountResponse(
-                    e.getId(),
-                    e.getEmail(),
-                    e.getName(),
-                    e.getEmailVerified(),
-                    roleEnum.name(),
-                    e.getProvider().name()));
+            if (!e.getId().equals(userPrincipal.getId())) {
+                responses.add(new ManagerListAccountResponse(
+                        e.getId(),
+                        e.getEmail(),
+                        e.getName(),
+                        e.getEmailVerified(),
+                        roleEnum.name(),
+                        e.getProvider().name()));
+            }
         });
         return responses;
     }
