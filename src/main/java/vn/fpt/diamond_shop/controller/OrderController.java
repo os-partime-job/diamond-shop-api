@@ -4,12 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import vn.fpt.diamond_shop.constants.UrlConstants;
-import vn.fpt.diamond_shop.request.CreateDiamondRequest;
-import vn.fpt.diamond_shop.request.GetDetailJewelryRequest;
-import vn.fpt.diamond_shop.request.GetListJewelryRequest;
-import vn.fpt.diamond_shop.service.JewelryService;
+import vn.fpt.diamond_shop.request.AddOrderRequest;
+import vn.fpt.diamond_shop.request.GetListOrderRequest;
+import vn.fpt.diamond_shop.service.OrderService;
 
 import javax.validation.Valid;
 
@@ -19,11 +17,14 @@ import javax.validation.Valid;
 public class OrderController extends BaseController {
 
     @Autowired
-    private OrderController jewelryService;
+    private OrderService orderService;
 
-//    @PostMapping("list")
-//    public ResponseEntity<Object> list(@Valid @RequestBody GetListJewelryRequest request) {
-//        return ok(jewelryService.jewelries(request), null);
-//    }
-
+    @PostMapping("list")
+    public ResponseEntity<Object> list(@Valid @RequestBody GetListOrderRequest request) {
+        return orderService.orderList(request);
+    }
+    @PostMapping("add_order")
+    public ResponseEntity<Object> addOrder(@Valid @RequestBody AddOrderRequest request) {
+        return ok(orderService.addOrder(request), null);
+    }
 }

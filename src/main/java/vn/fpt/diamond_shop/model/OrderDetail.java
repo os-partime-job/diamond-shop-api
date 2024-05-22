@@ -25,7 +25,7 @@ public class OrderDetail {
     private Date orderDate;
 
     @Column(name = "status")
-    private String status;
+    private Integer status;
 
     @Column(name = "customer_id")
     private Long customerId;
