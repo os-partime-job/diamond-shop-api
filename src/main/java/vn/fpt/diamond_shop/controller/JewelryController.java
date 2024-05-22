@@ -25,7 +25,7 @@ public class JewelryController extends BaseController {
 
     @PostMapping("list")
     public ResponseEntity<Object> list(@Valid @RequestBody GetListJewelryRequest request) {
-        return ok(jewelryService.jewelries(request), null);
+        return jewelryService.jewelries(request);
     }
 
     @PostMapping("detail")
