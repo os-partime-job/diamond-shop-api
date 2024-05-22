@@ -42,8 +42,7 @@ public class JewelryServiceImpl implements JewelryService {
 
     @Override
     public GetDetailJewelryResponse detailJewelry(Long id) {
-        return null;
-//        return jewelryRepository.getDetailJewelry(id);
+        return jewelryRepository.getDetailJewelry(id);
     }
 
     @Override

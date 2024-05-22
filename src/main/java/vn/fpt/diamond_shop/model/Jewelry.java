@@ -60,4 +60,6 @@ public class Jewelry {
     @Column(name = "image_id")
     private Long imageId;
 
+    @Column(name = "gold_weight")
+    private Float goldWeight;
 }

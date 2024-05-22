@@ -44,8 +44,4 @@ public class JewelryController extends BaseController {
         request.setMultipartFile(file);
         return ok(jewelryService.createJewelry(request), null);
     }
-//    @PostMapping("upload/file")
-//    public ResponseEntity<Object> uploadFile(@RequestParam("image") MultipartFile file) {
-//        return ok(imageService.push(file), null);
-//    }
 }
