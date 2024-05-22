@@ -30,7 +30,7 @@ public class AddOrderResponse {
 
     private Integer quantityNumber;
 
-    private Double totalPrice;
+    private Long totalPrice;
 
     private Date createdAt;
 

@@ -75,6 +75,8 @@ public class OrderServiceImpl implements OrderService {
         AddOrderResponse response = new AddOrderResponse();
         BeanUtils.copyProperties(orderDetail, response);
         response.setJewelryTitle(jewelryData.getName());
+        response.setPriceItems(jewelryData.getMaterialPrices());
+        response.setTotalPrice(orderDetail.getTotalPrice());
         response.setImageUrl(imageRepository.getById(jewelryData.getImageId()).getUrl());
         return response;
     }
