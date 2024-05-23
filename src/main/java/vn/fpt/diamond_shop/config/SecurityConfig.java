@@ -94,6 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
                 .authorizeRequests()
+                .antMatchers("/social/google").permitAll()
                 .antMatchers("/",
                         "/error",
                         "/favicon.ico",
