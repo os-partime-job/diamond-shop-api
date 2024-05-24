@@ -2,6 +2,7 @@ name: CI/CD
 
 env:
   COMMIT-ID: ${{ github.sha }}
+  CONTAINER-REGISTRY: registry.digitalocean.com/diamondshop/diamond-shop-api
 
 on:
   push:
@@ -36,7 +37,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: registry.digitalocean.com/diamond-shop-api:$COMMIT-ID
+          tags: registry.digitalocean.com/diamondshop/diamond-shop-api:$COMMIT-ID
 
   deploy:
     name: Deploy to Digital Ocean Droplet
@@ -44,13 +45,13 @@ jobs:
     needs: build
     steps:
       - name: SSH and deploy
-        uses: appleboy/ssh-action@
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.DIGITALOCEAN_DROPLET_HOST }}
           username: ${{ secrets.DIGITALOCEAN_DROPLET_USERNAME }}
-          key: ${{ secrets.DIGITALOCEAN_DROPLET_SSH_PRIVATE_KEY }}
+          password: ${{ secrets.DIGITALOCEAN_DROPLET_PASSWORD }}
           script: |
-            docker pull registry.digitalocean.com/diamond-shop-api:$COMMIT-ID
+            docker pull registry.digitalocean.com/diamondshop/diamond-shop-api:$COMMIT-ID
             docker stop diamond-shop-api || true
             docker rm diamond-shop-api || true
-            docker run -d -p 8091:8091 --name diamond-shop-api registry.digitalocean.com/diamond-shop-api:$COMMIT-ID
+            docker run -d -p 8091:8091 --name diamond-shop-api registry.digitalocean.com/diamondshop/diamond-shop-api:$COMMIT-ID
