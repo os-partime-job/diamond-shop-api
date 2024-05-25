@@ -37,7 +37,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: registry.digitalocean.com/diamondshop/diamond-shop-api:$COMMIT-ID
+          tags: registry.digitalocean.com/diamondshop/diamond-shop-api:${{ env.COMMIT-ID }}
 
   deploy:
     name: Deploy to Digital Ocean Droplet
@@ -51,7 +51,7 @@ jobs:
           username: ${{ secrets.DIGITALOCEAN_DROPLET_USERNAME }}
           password: ${{ secrets.DIGITALOCEAN_DROPLET_PASSWORD }}
           script: |
-            docker pull registry.digitalocean.com/diamondshop/diamond-shop-api:$COMMIT-ID
-            docker stop diamond-shop-api || true
-            docker rm diamond-shop-api || true
-            docker run -d -p 8091:8091 --name diamond-shop-api registry.digitalocean.com/diamondshop/diamond-shop-api:$COMMIT-ID
+            docker pull registry.digitalocean.com/diamondshop/diamond-shop-api:${{ env.COMMIT-ID }}
+            docker stop diamond-shop-api
+            docker rm diamond-shop-api
+            docker run -d -p 8091:8091 --name diamond-shop-api registry.digitalocean.com/diamondshop/diamond-shop-api:${{ env.COMMIT-ID }}
