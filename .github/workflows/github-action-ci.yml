@@ -2,7 +2,7 @@ name: CI/CD
 
 env:
   COMMIT-ID: ${{ github.sha }}
-  CONTAINER-REGISTRY: registry.digitalocean.com/diamondshop/diamond-shop-api
+  CONTAINER-IMAGE-NAME: diamond-shop-api
 
 on:
   push:
@@ -21,9 +21,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
-      - name: Login to Digital Ocean Containter Registry
+      - name: Login to Digital Ocean Container Registry
         uses: docker/login-action@v3
         with:
           registry: registry.digitalocean.com
@@ -32,12 +32,14 @@ jobs:
           logout: true
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
           push: true
           tags: registry.digitalocean.com/diamondshop/diamond-shop-api:${{ env.COMMIT-ID }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   deploy:
     name: Deploy to Digital Ocean Droplet
@@ -51,7 +53,12 @@ jobs:
           username: ${{ secrets.DIGITALOCEAN_DROPLET_USERNAME }}
           password: ${{ secrets.DIGITALOCEAN_DROPLET_PASSWORD }}
           script: |
+            export CONTAINTER_ID=`docker ps -a | grep diamond-shop-api | awk {'print $1'}`
+            export IMAGE_ID=`docker images | grep diamond-shop-api | awk {'print $3'}`
+            docker stop $(docker ps -a | grep ${{ env.CONTAINER-IMAGE-NAME }} | awk '{print $1}')
+            docker rm $CONTAINTER_ID || true
+            docker images rm $IMAGE_ID || true
             docker pull registry.digitalocean.com/diamondshop/diamond-shop-api:${{ env.COMMIT-ID }}
             docker stop diamond-shop-api
             docker rm diamond-shop-api
-            docker run -d -p 8091:8091 --name diamond-shop-api registry.digitalocean.com/diamondshop/diamond-shop-api:${{ env.COMMIT-ID }}
+            docker run -d -p 8080:8091 --name diamond-shop-api registry.digitalocean.com/diamondshop/diamond-shop-api:${{ env.COMMIT-ID }}
