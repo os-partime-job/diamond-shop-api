@@ -59,4 +59,4 @@ jobs:
             docker rm $CONTAINTER_ID || true
             docker image rm $IMAGE_ID || true
             docker pull registry.digitalocean.com/diamondshop/diamond-shop-api:${{ env.COMMIT-ID }}
-            docker run -d -p 8080:8091 --name diamond-shop-api registry.digitalocean.com/diamondshop/diamond-shop-api:${{ env.COMMIT-ID }}
+            docker run -d -p 8091:8080 --name diamond-shop-api registry.digitalocean.com/diamondshop/diamond-shop-api:${{ env.COMMIT-ID }}

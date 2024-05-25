@@ -10,4 +10,5 @@ RUN ["mvn", "package"]
 FROM openjdk:11-jdk
 ENV TZ="Asia/Ho_Chi_Minh"
 COPY --from=build opt/src/app/target/*.jar diamond_shop-0.0.1-SNAPSHOT.jar
+
 ENTRYPOINT ["java","-jar","diamond_shop-0.0.1-SNAPSHOT.jar"]
