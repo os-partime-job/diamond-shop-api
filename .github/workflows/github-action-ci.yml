@@ -57,8 +57,6 @@ jobs:
             export IMAGE_ID=`docker images | grep diamond-shop-api | awk {'print $3'}`
             docker stop $(docker ps -a | grep ${{ env.CONTAINER-IMAGE-NAME }} | awk '{print $1}')
             docker rm $CONTAINTER_ID || true
-            docker images rm $IMAGE_ID || true
+            docker image rm $IMAGE_ID || true
             docker pull registry.digitalocean.com/diamondshop/diamond-shop-api:${{ env.COMMIT-ID }}
-            docker stop diamond-shop-api
-            docker rm diamond-shop-api
             docker run -d -p 8080:8091 --name diamond-shop-api registry.digitalocean.com/diamondshop/diamond-shop-api:${{ env.COMMIT-ID }}
