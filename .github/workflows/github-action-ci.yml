@@ -53,10 +53,8 @@ jobs:
           username: ${{ secrets.DIGITALOCEAN_DROPLET_USERNAME }}
           password: ${{ secrets.DIGITALOCEAN_DROPLET_PASSWORD }}
           script: |
-            export CONTAINTER_ID=`docker ps -a | grep diamond-shop-api | awk {'print $1'}`
-            export IMAGE_ID=`docker images | grep diamond-shop-api | awk {'print $3'}`
             docker stop $(docker ps -a | grep ${{ env.CONTAINER-IMAGE-NAME }} | awk '{print $1}')
-            docker rm $CONTAINTER_ID || true
-            docker image rm $IMAGE_ID || true
+            docker rm $(docker ps -a | grep diamond-shop-api | awk {'print $1'}) || true
+            docker image rm $(docker images | grep diamond-shop-api | awk {'print $3'}) || true
             docker pull registry.digitalocean.com/diamondshop/diamond-shop-api:${{ env.COMMIT-ID }}
             docker run -d -p 8091:8080 --name diamond-shop-api registry.digitalocean.com/diamondshop/diamond-shop-api:${{ env.COMMIT-ID }}
