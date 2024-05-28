@@ -44,4 +44,5 @@ public class JewelryController extends BaseController {
         request.setMultipartFile(file);
         return ok(jewelryService.createJewelry(request), null);
     }
+
 }
