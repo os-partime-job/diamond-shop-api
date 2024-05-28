@@ -21,5 +21,6 @@ public class SignUpRequest {
     private String extra;
     private String phoneNumber;
     private String fullName;
+    private String otp;
 
 }
