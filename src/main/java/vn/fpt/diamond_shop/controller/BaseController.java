@@ -5,9 +5,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import vn.fpt.diamond_shop.response.BaseResponse;
 import vn.fpt.diamond_shop.response.Meta;
+import vn.fpt.diamond_shop.util.UUIDUtil;
 
 public class BaseController {
-    public ResponseEntity<Object> ok(Object payload, String requestId) {
+    public ResponseEntity<Object> ok(Object payload ) {
+        String requestId = UUIDUtil.generateUUID();
+        BaseResponse response = new BaseResponse(new Meta(requestId, 200, "success", HttpStatus.OK.toString()),payload);
+        return ResponseEntity.ok(response);
+    }
+
+    public ResponseEntity<Object> ok(Object payload , String requestId) {
         BaseResponse response = new BaseResponse(new Meta(requestId, 200, "success", HttpStatus.OK.toString()),payload);
         return ResponseEntity.ok(response);
     }

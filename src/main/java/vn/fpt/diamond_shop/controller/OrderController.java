@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.fpt.diamond_shop.constants.UrlConstants;
 import vn.fpt.diamond_shop.request.AddOrderRequest;
+import vn.fpt.diamond_shop.request.GetListCartRequest;
 import vn.fpt.diamond_shop.request.GetListOrderRequest;
 import vn.fpt.diamond_shop.service.OrderService;
 
@@ -20,11 +21,11 @@ public class OrderController extends BaseController {
     private OrderService orderService;
 
     @PostMapping("list")
-    public ResponseEntity<Object> list(@Valid @RequestBody GetListOrderRequest request) {
-        return orderService.orderList(request);
+    public ResponseEntity<Object> list(@Valid @RequestBody GetListCartRequest request) {
+        return ok(orderService.listCart(request));
     }
     @PostMapping("add_order")
     public ResponseEntity<Object> addOrder(@Valid @RequestBody AddOrderRequest request) {
-        return ok(orderService.addOrder(request), null);
+        return ok(orderService.addOrder(request));
     }
 }

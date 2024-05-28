@@ -7,23 +7,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import java.sql.Date;
+import java.util.Date;
 
 
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@AllArgsConstructor
-@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AddOrderResponse {
+public class ListCartResponse {
     private Long id;
 
     private Long jewelryId;
 
-    private Date orderDate;
-
-    private Integer status;
+    private String status;
 
     private Long customerId;
 
@@ -44,4 +39,15 @@ public class AddOrderResponse {
     private Long priceItems;
 
     private String imageUrl;
+
+    public ListCartResponse(Long id, String status, Integer quantityNumber, Date createdAt, String createdBy, String jewelryTitle, Long priceItems, String imageUrl) {
+        this.id = id;
+        this.status = status;
+        this.quantityNumber = quantityNumber;
+        this.createdAt = createdAt;
+        this.createdBy = createdBy;
+        this.jewelryTitle = jewelryTitle;
+        this.priceItems = priceItems;
+        this.imageUrl = imageUrl;
+    }
 }
