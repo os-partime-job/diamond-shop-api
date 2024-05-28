@@ -8,13 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import vn.fpt.diamond_shop.constants.StatusOrder;
+import vn.fpt.diamond_shop.model.Cart;
 import vn.fpt.diamond_shop.model.Jewelry;
 import vn.fpt.diamond_shop.model.OrderDetail;
-import vn.fpt.diamond_shop.repository.ImageRepository;
-import vn.fpt.diamond_shop.repository.OrderDetailRepository;
-import vn.fpt.diamond_shop.repository.OrdersRepository;
-import vn.fpt.diamond_shop.repository.JewelryRepository;
+import vn.fpt.diamond_shop.repository.*;
+import vn.fpt.diamond_shop.request.AddCartRequest;
 import vn.fpt.diamond_shop.request.AddOrderRequest;
+import vn.fpt.diamond_shop.request.GetListCartRequest;
 import vn.fpt.diamond_shop.request.GetListOrderRequest;
 import vn.fpt.diamond_shop.response.*;
 import vn.fpt.diamond_shop.service.OrderService;
@@ -34,6 +34,9 @@ public class OrderServiceImpl implements OrderService {
     private OrderDetailRepository orderDetailRepository;
     @Autowired
     private JewelryRepository jewelryRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @Autowired
     private ImageRepository imageRepository;
@@ -79,5 +82,22 @@ public class OrderServiceImpl implements OrderService {
         response.setTotalPrice(orderDetail.getTotalPrice());
         response.setImageUrl(imageRepository.getById(jewelryData.getImageId()).getUrl());
         return response;
+    }
+
+    @Override
+    public Object listCart(GetListCartRequest request) {
+        List<ListCartResponse> listCartResponse = cartRepository.getListCartResponse();
+        return listCartResponse;
+    }
+
+    @Override
+    public Boolean addCart(AddCartRequest request) {
+        Cart cart = new Cart();
+        cart.setJewelryId(request.getJewelryId());
+        cart.setQuantity(request.getQuantity());
+        cart.setUserId(request.getCustomerId());
+        cart.setCreatedAt(new Date(new java.util.Date().getTime()));
+        cartRepository.save(cart);
+        return true;
     }
 }

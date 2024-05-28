@@ -35,7 +35,7 @@ public class UserController extends BaseController {
 
         changeProfileRequest.setEmail(user.getEmail());
         accountService.changeProfile(changeProfileRequest);
-        return ok("Change profile successfully", null);
+        return ok("Change profile successfully");
     }
 
     @PostMapping("/change-profile/avt")
@@ -44,12 +44,12 @@ public class UserController extends BaseController {
         User user = userRepository.findById(userPrincipal.getId()).orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
 
         accountService.updateAvt(user.getId(), file);
-        return ok("Update avatar successfully", null);
+        return ok("Update avatar successfully");
     }
 
     @GetMapping
     public ResponseEntity<?> getAllUser(@CurrentUser UserPrincipal userPrincipal) {
-        return ok(accountService.profile(userPrincipal.getId()), null);
+        return ok(accountService.profile(userPrincipal.getId()));
     }
 
 }
