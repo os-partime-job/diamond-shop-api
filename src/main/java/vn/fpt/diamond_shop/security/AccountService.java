@@ -60,7 +60,7 @@ public class AccountService {
         user.setName(registerRequest.getName());
         user.setEmail(registerRequest.getEmail());
         user.setProvider(AuthProvider.local);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         Long userId = userRepository.save(user).getId();
 
         UserRole userRole = new UserRole();
