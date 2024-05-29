@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GetListCartRequest extends BaseRequest{
-    private Long customerId;
     private Integer limit;
     private Integer offset;
     private String sort;

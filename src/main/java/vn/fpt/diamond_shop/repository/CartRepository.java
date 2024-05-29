@@ -2,6 +2,7 @@ package vn.fpt.diamond_shop.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vn.fpt.diamond_shop.model.Cart;
 import vn.fpt.diamond_shop.response.ListCartResponse;
@@ -29,6 +30,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
             "(j.jewelryTypeId = jt.id)\n" +
             "left join Image as i on\n" +
             "(j.imageId = i.id)\n"+
-            " WHERE 1 = 1 ")
-    List<ListCartResponse> getListCartResponse();
+            " WHERE 1 = 1 " +
+            "AND c.userId = :userId ")
+    List<ListCartResponse> getListCartResponse(@Param("userId") Long userId);
 }
