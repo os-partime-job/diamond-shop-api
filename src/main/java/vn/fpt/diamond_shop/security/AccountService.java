@@ -18,12 +18,14 @@ import vn.fpt.diamond_shop.response.UserProfileResponse;
 import vn.fpt.diamond_shop.security.exception.BadRequestException;
 import vn.fpt.diamond_shop.security.model.*;
 import vn.fpt.diamond_shop.service.ImageService;
+import vn.fpt.diamond_shop.service.Impl.OtpService;
 
 import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
 
 @Service
 public class AccountService {
+
     @Autowired
     private AddressRepository addressRepository;
     @Autowired
@@ -36,12 +38,20 @@ public class AccountService {
     private EndUserRepository endUserRepository;
     @Autowired
     private ImageService imageService;
+    @Autowired
+    private OtpService otpService;
 
     @Transactional
     public void register(SignUpRequest registerRequest) {
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
             throw new BadRequestException("Email address already in use.");
         }
+
+        if (otpService.getOtp(registerRequest.getEmail()) == null ||
+                !registerRequest.getOtp().equals(otpService.getOtp(registerRequest.getEmail()))) {
+            throw new BadRequestException("Invalid OTP");
+        }
+
         User user = new User();
         user.setName(registerRequest.getName());
         user.setEmail(registerRequest.getEmail());

@@ -1,15 +1,33 @@
 package vn.fpt.diamond_shop.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.fpt.diamond_shop.repository.UserRepository;
+import vn.fpt.diamond_shop.security.exception.BadRequestException;
+import vn.fpt.diamond_shop.service.Impl.OtpService;
+import vn.fpt.diamond_shop.service.MailService;
+import vn.fpt.diamond_shop.util.OTPUtils;
 
 @RestController
 @RequestMapping("/shop/otp")
 public class OtpController extends BaseController {
 
+    @Autowired
+    private MailService mailService;
+    @Autowired
+    private OtpService otpService;
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("")
-    public ResponseEntity<?> checkOtp(@RequestParam(required = true, name = "otp") int otp,
-                                      @RequestParam(required = true, name = "email") String email) {
-        return ok("OTP ok", null);
+    public ResponseEntity<?> sendOtp(@RequestParam(required = true, name = "email") String email) {
+        if (userRepository.existsByEmail(email)) {
+            throw new BadRequestException("Email address already in use.");
+        }
+        String otp = OTPUtils.gen();
+        otpService.cacheOtp(email, otp);
+        mailService.sendOtp(email, "Diamond Shop OTP", otp);
+        return ok("Send otp to " + email + " success", null);
     }
 }
