@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import vn.fpt.diamond_shop.model.Address;
+import vn.fpt.diamond_shop.model.ChangePasswordRequest;
 import vn.fpt.diamond_shop.model.EndUser;
 import vn.fpt.diamond_shop.request.ChangeProfileRequest;
 import vn.fpt.diamond_shop.request.SignUpRequest;
@@ -40,6 +41,8 @@ public class AccountService {
     private ImageService imageService;
     @Autowired
     private OtpService otpService;
+    @Autowired
+    private TokenProvider tokenProvider;
 
     @Transactional
     public void register(SignUpRequest registerRequest) {
@@ -51,11 +54,11 @@ public class AccountService {
                 !registerRequest.getOtp().equals(otpService.getOtp(registerRequest.getEmail()))) {
             throw new BadRequestException("Invalid OTP");
         }
+        otpService.deleteOtp(registerRequest.getEmail());
 
         User user = new User();
         user.setName(registerRequest.getName());
         user.setEmail(registerRequest.getEmail());
-        user.setPassword(registerRequest.getPassword());
         user.setProvider(AuthProvider.local);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Long userId = userRepository.save(user).getId();
@@ -130,7 +133,21 @@ public class AccountService {
     public void updateAvt(Long accountId, MultipartFile file) {
         User account = userRepository.findById(accountId).orElseThrow(() -> new BadRequestException("User not found"));
         ImageInformation imageInformation = imageService.push(file);
-        account.setImageUrl(imageInformation.getUrl());
+        account.setImageUrl(imageInformation.getImageName());
         userRepository.save(account);
+    }
+
+    public void changePass(ChangePasswordRequest request) {
+        User account = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new BadRequestException("User not found"));
+        if (passwordEncoder.matches(account.getPassword(), request.getPassword())) {
+            throw new BadRequestException("New password must be different from old password");
+        }
+        if (otpService.getOtp(request.getEmail()) == null ||
+                !otpService.getOtp(request.getEmail()).equals(request.getOtp())) {
+            throw new BadRequestException("Invalid OTP");
+        }
+        account.setPassword(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(account);
+        otpService.deleteOtp(request.getEmail());
     }
 }

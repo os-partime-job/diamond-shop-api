@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vn.fpt.diamond_shop.controller.BaseController;
+import vn.fpt.diamond_shop.model.ChangePasswordRequest;
 import vn.fpt.diamond_shop.request.ChangeProfileRequest;
 import vn.fpt.diamond_shop.security.AccountService;
 import vn.fpt.diamond_shop.security.exception.ResourceNotFoundException;
@@ -50,6 +51,12 @@ public class UserController extends BaseController {
     @GetMapping
     public ResponseEntity<?> getAllUser(@CurrentUser UserPrincipal userPrincipal) {
         return ok(accountService.profile(userPrincipal.getId()));
+    }
+
+    @PutMapping("/change-pass")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
+        accountService.changePass(request);
+        return ok("Change password success");
     }
 
 }

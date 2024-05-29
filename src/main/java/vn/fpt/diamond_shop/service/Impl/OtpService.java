@@ -1,5 +1,6 @@
 package vn.fpt.diamond_shop.service.Impl;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,10 @@ public class OtpService {
 
     @CachePut(value = "otpCache", key = "#email")
     public String cacheOtp(String email, String otp) {
-        // This method always runs and its result is put into the cache
         return otp;
     }
 
+    @CacheEvict(value = "otpCache", key = "#email")
+    public void deleteOtp(String email) {
+    }
 }

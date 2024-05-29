@@ -20,14 +20,22 @@ public class OtpController extends BaseController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("")
+    @GetMapping("/register")
     public ResponseEntity<?> sendOtp(@RequestParam(required = true, name = "email") String email) {
         if (userRepository.existsByEmail(email)) {
             throw new BadRequestException("Email address already in use.");
         }
         String otp = OTPUtils.gen();
         otpService.cacheOtp(email, otp);
-        mailService.sendOtp(email, "Diamond Shop OTP", otp);
+        mailService.sendOtp(email, "Diamond Shop OTP - Register", otp);
+        return ok("Send otp to " + email + " success", null);
+    }
+
+    @GetMapping("/forget")
+    public ResponseEntity<?> sendOtpForget(@RequestParam(required = true, name = "email") String email) {
+        String otp = OTPUtils.gen();
+        otpService.cacheOtp(email, otp);
+        mailService.sendOtp(email, "Diamond Shop OTP - Change password", otp);
         return ok("Send otp to " + email + " success", null);
     }
 }
