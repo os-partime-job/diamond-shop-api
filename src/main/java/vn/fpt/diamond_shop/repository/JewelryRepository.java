@@ -45,6 +45,6 @@ public interface JewelryRepository extends JpaRepository<Jewelry, Long> {
             "j.imageId as image_id,\n" +
             "i.url as url\n" +
             ") FROM Jewelry as j left join  JewelryType as jt on (j.jewelryTypeId = jt.id) left join  Diamond as d on (j.idDiamond  = d.id) left join Image as i on (j.imageId  = i.id)"+
-            " WHERE 1 = 1 ")
+            " WHERE 1 = 1 and (:id is null or jt.id = :id) ")
     Page<GetListJewelryResponse> getListJewelry(@Param("id") Long id, Pageable pageable);
 }
