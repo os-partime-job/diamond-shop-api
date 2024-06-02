@@ -85,6 +85,41 @@ public class AccountService {
         endUserRepository.save(endUser);
 
     }
+    @Transactional
+    public void registerV2(SignUpRequest registerRequest) {
+        if (userRepository.existsByEmail(registerRequest.getEmail())) {
+            throw new BadRequestException("Email address already in use.");
+        }
+
+        User user = new User();
+        user.setName(registerRequest.getName());
+        user.setEmail(registerRequest.getEmail());
+        user.setProvider(AuthProvider.local);
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        Long userId = userRepository.save(user).getId();
+
+        UserRole userRole = new UserRole();
+        userRole.setRoleId(RoleEnum.END_USER.getId());
+        userRole.setAccountId(userId);
+        userRoleRepository.save(userRole);
+
+        Address address = new Address();
+        address.setProvince(registerRequest.getProvince());
+        address.setDistrict(registerRequest.getDistrict());
+        address.setCity(registerRequest.getCity());
+        address.setWard(registerRequest.getWard());
+        address.setExtra(registerRequest.getExtra());
+        Long addressId = addressRepository.save(address).getId();
+
+        EndUser endUser = new EndUser();
+        endUser.setPhoneNumber(registerRequest.getPhoneNumber());
+        endUser.setFullName(registerRequest.getName());
+        endUser.setCreateAt(OffsetDateTime.now());
+        endUser.setAccountId(userId);
+        endUser.setAddress(addressId);
+        endUserRepository.save(endUser);
+
+    }
 
     public void changeProfile(ChangeProfileRequest changeProfileRequest) {
 
