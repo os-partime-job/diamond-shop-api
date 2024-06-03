@@ -15,4 +15,6 @@ public interface OrderService {
     Object listCart(GetListCartRequest request);
 
     Boolean addCart(AddCartRequest request);
+
+    Boolean updateCart(AddCartRequest request);
 }
