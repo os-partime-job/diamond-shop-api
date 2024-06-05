@@ -29,7 +29,12 @@ public class CartController extends BaseController {
         return ok(orderService.listCart(request));
     }
     @PostMapping("add_card")
-    public ResponseEntity<Object> addOrder(@Valid @RequestBody AddCartRequest request) {
+    public ResponseEntity<Object> addCart(@Valid @RequestBody AddCartRequest request) {
         return ok(orderService.addCart(request));
+    }
+
+    @PostMapping("update")
+    public ResponseEntity<Object> updateCart(@Valid @RequestBody AddCartRequest request) {
+        return ok(orderService.updateCart(request));
     }
 }

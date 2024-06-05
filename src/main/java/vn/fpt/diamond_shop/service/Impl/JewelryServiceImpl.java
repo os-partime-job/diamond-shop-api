@@ -86,6 +86,33 @@ public class JewelryServiceImpl implements JewelryService {
         return true;
     }
 
+    @Override
+    public boolean updateJewelry(CreateDiamondRequest request) {
+        ImageInformation imageInformation = null;
+        if (request.getMultipartFile() != null) {
+             imageInformation = imageService.push(request.getMultipartFile());
+        }
+
+        Jewelry jewelry = jewelryRepository.findJewelryById(request.getId());
+        if (jewelry !=null) {
+            jewelry.setName(request.getName());
+            jewelry.setDescription(request.getDescription());
+            jewelry.setQuantity(request.getQuantity());
+            jewelry.setMaterialPrices(request.getMaterialPrices().longValue());
+            if (imageInformation != null) {
+                jewelry.setImageId(imageInformation.getImageId());
+            }
+            jewelryRepository.save(jewelry);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean deleteJewelry(Long id) {
+        jewelryRepository.deleteById(id);
+        return true;
+    }
+
     private String jewelryCode() {
         long count = jewelryRepository.count();
         return JEWELRY_CODE_DEFAULT + count;

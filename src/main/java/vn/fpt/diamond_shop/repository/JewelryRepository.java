@@ -43,8 +43,10 @@ public interface JewelryRepository extends JpaRepository<Jewelry, Long> {
             "j.quantity as quantity,\n" +
             "j.materialPrices as price,\n" +
             "j.imageId as image_id,\n" +
-            "i.url as url\n" +
+            "i.url as url,\n" +
+            "j.description as description\n" +
             ") FROM Jewelry as j left join  JewelryType as jt on (j.jewelryTypeId = jt.id) left join  Diamond as d on (j.idDiamond  = d.id) left join Image as i on (j.imageId  = i.id)"+
-            " WHERE 1 = 1 ")
+            " WHERE 1 = 1 and (:id is null or jt.id = :id) ")
     Page<GetListJewelryResponse> getListJewelry(@Param("id") Long id, Pageable pageable);
+    Jewelry findJewelryById(Long id);
 }

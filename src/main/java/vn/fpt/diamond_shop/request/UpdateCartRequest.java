@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AddCartRequest extends BaseRequest{
+public class UpdateCartRequest extends BaseRequest{
     private Long customerId;
     private Long jewelryId;
     private Integer quantity;
-    private String status;
+    private Long id;
 }

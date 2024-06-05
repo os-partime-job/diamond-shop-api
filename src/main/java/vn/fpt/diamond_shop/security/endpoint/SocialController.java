@@ -75,7 +75,7 @@ public class SocialController extends BaseController {
             signUpRequest.setName(name);
             signUpRequest.setEmail(email);
             signUpRequest.setPassword(password);
-            accountService.register(signUpRequest);
+            accountService.registerV2(signUpRequest);
         }
         user = userRepository.findByEmail(email).get();
         LoginRequest loginRequest = new LoginRequest();
