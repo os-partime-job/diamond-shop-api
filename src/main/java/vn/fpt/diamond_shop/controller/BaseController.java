@@ -28,4 +28,8 @@ public class BaseController {
         BaseResponse response = new BaseResponse(new Meta(requestId, 500, "internal server error", HttpStatus.INTERNAL_SERVER_ERROR.toString()),message);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(throwable.getClass().getName() + ": " + throwable.getMessage());
     }
+
+    public ResponseEntity<?> noContent(){
+        return ResponseEntity.noContent().build();
+    }
 }
