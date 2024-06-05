@@ -8,6 +8,8 @@ import vn.fpt.diamond_shop.constants.UrlConstants;
 import vn.fpt.diamond_shop.request.AddOrderRequest;
 import vn.fpt.diamond_shop.request.GetListCartRequest;
 import vn.fpt.diamond_shop.request.GetListOrderRequest;
+import vn.fpt.diamond_shop.security.CurrentUser;
+import vn.fpt.diamond_shop.security.UserPrincipal;
 import vn.fpt.diamond_shop.service.OrderService;
 
 import javax.validation.Valid;
@@ -21,11 +23,13 @@ public class OrderController extends BaseController {
     private OrderService orderService;
 
     @PostMapping("list")
-    public ResponseEntity<Object> list(@Valid @RequestBody GetListCartRequest request) {
-        return ok(orderService.listCart(request));
+    public ResponseEntity<Object> list(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetListOrderRequest request) {
+        request.setCustomerId(userPrincipal.getId());
+        return ok(orderService.orderList(request));
     }
     @PostMapping("add_order")
-    public ResponseEntity<Object> addOrder(@Valid @RequestBody AddOrderRequest request) {
+    public ResponseEntity<Object> addOrder(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody AddOrderRequest request) {
+        request.setCustomerId(userPrincipal.getId());
         return ok(orderService.addOrder(request));
     }
 }

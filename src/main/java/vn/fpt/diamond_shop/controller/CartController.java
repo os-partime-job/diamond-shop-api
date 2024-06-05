@@ -12,6 +12,8 @@ import vn.fpt.diamond_shop.request.AddCartRequest;
 import vn.fpt.diamond_shop.request.AddOrderRequest;
 import vn.fpt.diamond_shop.request.GetListCartRequest;
 import vn.fpt.diamond_shop.request.GetListOrderRequest;
+import vn.fpt.diamond_shop.security.CurrentUser;
+import vn.fpt.diamond_shop.security.UserPrincipal;
 import vn.fpt.diamond_shop.service.OrderService;
 
 import javax.validation.Valid;
@@ -25,16 +27,19 @@ public class CartController extends BaseController {
     private OrderService orderService;
 
     @PostMapping("list")
-    public ResponseEntity<Object> list(@Valid @RequestBody GetListCartRequest request) {
+    public ResponseEntity<Object> list(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetListCartRequest request) {
+        request.setCustomerId(userPrincipal.getId());
         return ok(orderService.listCart(request));
     }
     @PostMapping("add_card")
-    public ResponseEntity<Object> addCart(@Valid @RequestBody AddCartRequest request) {
+    public ResponseEntity<Object> addCart(@CurrentUser UserPrincipal userPrincipal,@Valid @RequestBody AddCartRequest request) {
+        request.setCustomerId(userPrincipal.getId());
         return ok(orderService.addCart(request));
     }
 
     @PostMapping("update")
-    public ResponseEntity<Object> updateCart(@Valid @RequestBody AddCartRequest request) {
+    public ResponseEntity<Object> updateCart(@CurrentUser UserPrincipal userPrincipal,@Valid @RequestBody AddCartRequest request) {
+        request.setCustomerId(userPrincipal.getId());
         return ok(orderService.updateCart(request));
     }
 }
