@@ -35,6 +35,7 @@ public class RenewImageJob {
                 e.setUrl(imageInformation.getUrl());
                 e.setUpdateAt(OffsetDateTime.now(ZoneId.of("UTC")));
             } catch (Exception ex) {
+                throw new RuntimeException(ex.getMessage());
             }
         });
         imageRepository.saveAll(images);
