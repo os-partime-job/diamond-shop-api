@@ -1,8 +1,8 @@
 package vn.fpt.diamond_shop.constants;
 
 public enum StatusOrder {
-    INIT("Khởi tạo",0),
-    CREATE_PAYMENT("Tạo mã thanh toán",1),
+    INIT("init",0),
+    CREATE_PAYMENT("watting payment",1),
     PAYMENT("Thanh toán",0)
     ;
 

@@ -9,9 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import vn.fpt.diamond_shop.constants.StatusOrder;
+import vn.fpt.diamond_shop.exception.DiamondShopException;
 import vn.fpt.diamond_shop.model.Cart;
 import vn.fpt.diamond_shop.model.Jewelry;
 import vn.fpt.diamond_shop.model.OrderDetail;
+import vn.fpt.diamond_shop.model.Orders;
 import vn.fpt.diamond_shop.repository.*;
 import vn.fpt.diamond_shop.request.AddCartRequest;
 import vn.fpt.diamond_shop.request.AddOrderRequest;
@@ -19,6 +21,7 @@ import vn.fpt.diamond_shop.request.GetListCartRequest;
 import vn.fpt.diamond_shop.request.GetListOrderRequest;
 import vn.fpt.diamond_shop.response.*;
 import vn.fpt.diamond_shop.service.OrderService;
+import vn.fpt.diamond_shop.util.UUIDUtil;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -64,26 +67,47 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public AddOrderResponse addOrder(AddOrderRequest request) {
-        OrderDetail orderDetail = new OrderDetail();
-        orderDetail.setOrderDate(new Date(new java.util.Date().getTime()));
-        orderDetail.setCreatedAt(new Date(new java.util.Date().getTime()));
-        orderDetail.setJewelryId(request.getJewelryId());
-        orderDetail.setCustomerId(request.getCustomerId());
-        orderDetail.setStatus(StatusOrder.INIT.getCode());
-        orderDetail.setQuantityNumber(request.getQuantity());
-        Optional<Jewelry> Jewelry = jewelryRepository.findById(request.getJewelryId());
-        Jewelry jewelryData = Jewelry.get();
-        if(jewelryData != null){
-            orderDetail.setTotalPrice(request.getQuantity()*jewelryData.getMaterialPrices());
+        List<Cart> cartsById = cartRepository.findAllById(request.getCartIds());
+        String uniqueOrderId = UUIDUtil.generateUUID();
+        List<Long> listJewelris = new ArrayList<>();
+        if(!cartsById.isEmpty()){
+            Long priceItems = 0L;
+            for(Cart cart : cartsById){
+                //insert order detail
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setOrderDate(new Date(new java.util.Date().getTime()));
+                orderDetail.setCreatedAt(new Date(new java.util.Date().getTime()));
+                orderDetail.setJewelryId(cart.getJewelryId());
+                orderDetail.setCustomerId(request.getCustomerId());
+                orderDetail.setStatus(StatusOrder.INIT.getValue());
+                orderDetail.setUniqueOrderId(uniqueOrderId);
+                orderDetail.setQuantityNumber(cart.getQuantity());
+                Optional<Jewelry> Jewelry = jewelryRepository.findById(cart.getJewelryId());
+                Jewelry jewelryData = Jewelry.get();
+                if(jewelryData != null){
+                    orderDetail.setTotalPrice(cart.getQuantity()*jewelryData.getMaterialPrices());
+                }
+                priceItems += orderDetail.getTotalPrice();
+                orderDetailRepository.save(orderDetail);
+                listJewelris.add(cart.getJewelryId());
+            }
+            Orders orders = new Orders();
+            orders.setUniqueOrderId(uniqueOrderId);
+            orders.setOrderDate(new Date(new java.util.Date().getTime()));
+            orders.setCreatedAt(new Date(new java.util.Date().getTime()));
+            orders.setStatus(StatusOrder.CREATE_PAYMENT.getValue());
+            orders.setTotalPrice(priceItems);
+            ordersRepository.save(orders);
+
+
+            AddOrderResponse response = new AddOrderResponse();
+            response.setTotalPrice(priceItems);
+            response.setUniqueOrderId(uniqueOrderId);
+            response.setJewelryId(listJewelris);
+            return response;
+        }else{
+           throw new DiamondShopException(400, "Dont exist cart info!");
         }
-        orderDetailRepository.save(orderDetail);
-        AddOrderResponse response = new AddOrderResponse();
-        BeanUtils.copyProperties(orderDetail, response);
-        response.setJewelryTitle(jewelryData.getName());
-        response.setPriceItems(jewelryData.getMaterialPrices());
-        response.setTotalPrice(orderDetail.getTotalPrice());
-        response.setImageUrl(imageRepository.getById(jewelryData.getImageId()).getUrl());
-        return response;
     }
 
     @Override

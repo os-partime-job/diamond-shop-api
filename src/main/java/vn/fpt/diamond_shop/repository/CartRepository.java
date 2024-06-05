@@ -37,7 +37,8 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
             "left join Image as i on\n" +
             "(j.imageId = i.id)\n"+
             " WHERE 1 = 1 " +
-            "and (:userId is null or c.userId = :userId)"
+            "and (:userId is null or c.userId = :userId)"+
+            "and c.status = 'active'"
     )
     List<ListCartResponse> getListCartResponse(@Param("userId")Long userId);
 
