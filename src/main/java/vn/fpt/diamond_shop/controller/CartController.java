@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.fpt.diamond_shop.constants.UrlConstants;
-import vn.fpt.diamond_shop.request.AddCartRequest;
-import vn.fpt.diamond_shop.request.AddOrderRequest;
-import vn.fpt.diamond_shop.request.GetListCartRequest;
-import vn.fpt.diamond_shop.request.GetListOrderRequest;
+import vn.fpt.diamond_shop.request.*;
 import vn.fpt.diamond_shop.security.CurrentUser;
 import vn.fpt.diamond_shop.security.UserPrincipal;
 import vn.fpt.diamond_shop.service.OrderService;
@@ -41,5 +38,10 @@ public class CartController extends BaseController {
     public ResponseEntity<Object> updateCart(@CurrentUser UserPrincipal userPrincipal,@Valid @RequestBody AddCartRequest request) {
         request.setCustomerId(userPrincipal.getId());
         return ok(orderService.updateCart(request));
+    }
+
+    @PostMapping("delete")
+    public ResponseEntity<Object> deleteCart(@CurrentUser UserPrincipal userPrincipal,@Valid @RequestBody DeleteCartRequest request) {
+        return ok(orderService.deleteCart(request));
     }
 }

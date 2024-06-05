@@ -15,10 +15,7 @@ import vn.fpt.diamond_shop.model.Jewelry;
 import vn.fpt.diamond_shop.model.OrderDetail;
 import vn.fpt.diamond_shop.model.Orders;
 import vn.fpt.diamond_shop.repository.*;
-import vn.fpt.diamond_shop.request.AddCartRequest;
-import vn.fpt.diamond_shop.request.AddOrderRequest;
-import vn.fpt.diamond_shop.request.GetListCartRequest;
-import vn.fpt.diamond_shop.request.GetListOrderRequest;
+import vn.fpt.diamond_shop.request.*;
 import vn.fpt.diamond_shop.response.*;
 import vn.fpt.diamond_shop.service.OrderService;
 import vn.fpt.diamond_shop.util.UUIDUtil;
@@ -150,6 +147,12 @@ public class OrderServiceImpl implements OrderService {
             }
             cartRepository.updateByUserIdAndJewelryId(request.getCustomerId(), request.getJewelryId(), byCustomerIdAndAndJewelryId.getQuantity(), byCustomerIdAndAndJewelryId.getUpdatedAt(), byCustomerIdAndAndJewelryId.getStatus());
         }
+        return true;
+    }
+
+    @Override
+    public Boolean deleteCart(DeleteCartRequest request) {
+        cartRepository.deleteById(request.getCartId());
         return true;
     }
 }

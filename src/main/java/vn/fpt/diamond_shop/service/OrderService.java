@@ -17,4 +17,6 @@ public interface OrderService {
     Boolean addCart(AddCartRequest request);
 
     Boolean updateCart(AddCartRequest request);
+
+    Boolean deleteCart(DeleteCartRequest request);
 }
