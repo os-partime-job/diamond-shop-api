@@ -87,6 +87,7 @@ public class OrderServiceImpl implements OrderService {
                 priceItems += orderDetail.getTotalPrice();
                 orderDetailRepository.save(orderDetail);
                 listJewelris.add(cart.getJewelryId());
+                cartRepository.deleteById(cart.getId());
             }
             Orders orders = new Orders();
             orders.setUniqueOrderId(uniqueOrderId);
@@ -101,6 +102,7 @@ public class OrderServiceImpl implements OrderService {
             response.setTotalPrice(priceItems);
             response.setUniqueOrderId(uniqueOrderId);
             response.setJewelryId(listJewelris);
+
             return response;
         }else{
            throw new DiamondShopException(400, "Dont exist cart info!");
