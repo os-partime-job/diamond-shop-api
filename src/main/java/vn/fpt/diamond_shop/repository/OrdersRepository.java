@@ -5,4 +5,5 @@ import vn.fpt.diamond_shop.model.Orders;
 
 public interface OrdersRepository extends JpaRepository<Orders, Long> {
 
+
 }

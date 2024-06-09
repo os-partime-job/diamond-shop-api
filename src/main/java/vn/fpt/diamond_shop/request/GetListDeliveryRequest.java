@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GetListOrderRequest extends BaseRequest{
-    private Long customerId;
+public class GetListDeliveryRequest extends BaseRequest{
+    private Integer limit;
+    private Integer offset;
+    private String sort;
 }

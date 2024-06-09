@@ -44,21 +44,9 @@ public class OrderServiceImpl implements OrderService {
     private static String ACTIVE_CART = "active";
     @Override
     public ResponseEntity<Object> orderList(GetListOrderRequest request) {
-        List<GetListOrderResponse>orderResponses = new ArrayList<>();
-        if(request.getLimit() == null){
-            request.setLimit(10);
-        }
-        if(request.getOffset() == null){
-            request.setOffset(0);
-        }
-        Page<GetListOrderResponse> orderList =  null;
-        orderResponses = orderList.getContent();
+        List<OrderDetail> allByCustomerId = orderDetailRepository.findAllByCustomerIdOrderByCreatedAtDesc(request.getCustomerId());
         Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
-        meta.setLimit(request.getLimit());
-        meta.setOffset(request.getOffset());
-        meta.setTotal(Integer.valueOf(String.valueOf(orderList.getTotalElements()))) ;
-        BaseResponse response = new BaseResponse(meta,orderResponses);
-
+        BaseResponse response = new BaseResponse(meta,allByCustomerId);
         return ResponseEntity.ok(response);
     }
 
@@ -76,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
                 orderDetail.setCreatedAt(new Date(new java.util.Date().getTime()));
                 orderDetail.setJewelryId(cart.getJewelryId());
                 orderDetail.setCustomerId(request.getCustomerId());
-                orderDetail.setStatus(StatusOrder.INIT.getValue());
+                orderDetail.setStatus(StatusOrder.CREATE_PAYMENT.getValue());
                 orderDetail.setUniqueOrderId(uniqueOrderId);
                 orderDetail.setQuantityNumber(cart.getQuantity());
                 Optional<Jewelry> Jewelry = jewelryRepository.findById(cart.getJewelryId());
@@ -93,6 +81,7 @@ public class OrderServiceImpl implements OrderService {
             orders.setUniqueOrderId(uniqueOrderId);
             orders.setOrderDate(new Date(new java.util.Date().getTime()));
             orders.setCreatedAt(new Date(new java.util.Date().getTime()));
+            orders.setCustomerId(request.getCustomerId());
             orders.setStatus(StatusOrder.CREATE_PAYMENT.getValue());
             orders.setTotalPrice(priceItems);
             ordersRepository.save(orders);
@@ -156,5 +145,11 @@ public class OrderServiceImpl implements OrderService {
     public Boolean deleteCart(DeleteCartRequest request) {
         cartRepository.deleteById(request.getCartId());
         return true;
+    }
+
+    @Override
+    public OrderDetail detail(GetOrderDetailRequest request) {
+        Optional<OrderDetail> orderDetail = orderDetailRepository.findById(request.getOrderId());
+        return orderDetail.get();
     }
 }

@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.fpt.diamond_shop.constants.UrlConstants;
 import vn.fpt.diamond_shop.request.AddOrderRequest;
-import vn.fpt.diamond_shop.request.GetListCartRequest;
 import vn.fpt.diamond_shop.request.GetListOrderRequest;
+import vn.fpt.diamond_shop.request.GetOrderDetailRequest;
 import vn.fpt.diamond_shop.security.CurrentUser;
 import vn.fpt.diamond_shop.security.UserPrincipal;
 import vn.fpt.diamond_shop.service.OrderService;
@@ -31,5 +31,11 @@ public class OrderController extends BaseController {
     public ResponseEntity<Object> addOrder(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody AddOrderRequest request) {
         request.setCustomerId(userPrincipal.getId());
         return ok(orderService.addOrder(request));
+    }
+
+    @PostMapping("detail")
+    public ResponseEntity<Object> detail(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetOrderDetailRequest request) {
+        request.setCustomerId(userPrincipal.getId());
+        return ok(orderService.detail(request));
     }
 }

@@ -1,6 +1,7 @@
 package vn.fpt.diamond_shop.service;
 
 import org.springframework.http.ResponseEntity;
+import vn.fpt.diamond_shop.model.OrderDetail;
 import vn.fpt.diamond_shop.request.*;
 import vn.fpt.diamond_shop.response.AddOrderResponse;
 import vn.fpt.diamond_shop.response.ListCartResponse;
@@ -19,4 +20,6 @@ public interface OrderService {
     Boolean updateCart(AddCartRequest request);
 
     Boolean deleteCart(DeleteCartRequest request);
+
+    OrderDetail detail(GetOrderDetailRequest request);
 }
