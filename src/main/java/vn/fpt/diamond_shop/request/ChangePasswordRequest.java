@@ -1,4 +1,4 @@
-package vn.fpt.diamond_shop.model;
+package vn.fpt.diamond_shop.request;
 
 import lombok.Data;
 
