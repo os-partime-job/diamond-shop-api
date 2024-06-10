@@ -43,11 +43,9 @@ public class OrderServiceImpl implements OrderService {
 
     private static String ACTIVE_CART = "active";
     @Override
-    public ResponseEntity<Object> orderList(GetListOrderRequest request) {
+    public List<OrderDetail> orderList(GetListOrderRequest request) {
         List<OrderDetail> allByCustomerId = orderDetailRepository.findAllByCustomerIdOrderByCreatedAtDesc(request.getCustomerId());
-        Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
-        BaseResponse response = new BaseResponse(meta,allByCustomerId);
-        return ResponseEntity.ok(response);
+        return allByCustomerId;
     }
 
     @Override

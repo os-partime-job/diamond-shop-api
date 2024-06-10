@@ -9,7 +9,7 @@ import vn.fpt.diamond_shop.response.ListCartResponse;
 import java.util.List;
 
 public interface OrderService {
-    ResponseEntity<Object> orderList(GetListOrderRequest request);
+    List<OrderDetail>orderList(GetListOrderRequest request);
 
     AddOrderResponse addOrder(AddOrderRequest request);
 
