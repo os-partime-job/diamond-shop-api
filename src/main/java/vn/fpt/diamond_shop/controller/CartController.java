@@ -3,6 +3,7 @@ package vn.fpt.diamond_shop.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ public class CartController extends BaseController {
 
     @PostMapping("list")
     public ResponseEntity<Object> list(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetListCartRequest request) {
-        request.setCustomerId(userPrincipal.getId());
+        request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
         return ok(orderService.listCart(request));
     }
     @PostMapping("add_card")
@@ -36,7 +37,7 @@ public class CartController extends BaseController {
 
     @PostMapping("update")
     public ResponseEntity<Object> updateCart(@CurrentUser UserPrincipal userPrincipal,@Valid @RequestBody AddCartRequest request) {
-        request.setCustomerId(userPrincipal.getId());
+        request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
         return ok(orderService.updateCart(request));
     }
 

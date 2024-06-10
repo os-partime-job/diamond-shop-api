@@ -54,4 +54,32 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
             "and (:jewelryId is null or c.jewelryId = :jewelryId)"
     )
     void updateByUserIdAndJewelryId(@Param("userId")Long userId,@Param("jewelryId") Long jewelryId,@Param("quantity")  Integer quantity,@Param("updatedAt")  Date updatedAt,@Param("status")  String status);
+    @Query(value = "select new vn.fpt.diamond_shop.response.ListCartResponse("+
+            "c.id as id,\n" +
+            "c.userId as customer_id,\n" +
+            "j.id as jewelry_id,\n" +
+            "c.status as status,\n" +
+            "c.quantity as quantity_number,\n" +
+            "c.createdAt as created_at,\n" +
+            "c.createdBy as created_by,\n" +
+            "j.name as jewelry_title,\n" +
+            "j.materialPrices as price_items,\n" +
+            "i.url as image_url " +
+            ") FROM \n" +
+            "Cart c \n" +
+            "left join Jewelry j on\n" +
+            "(j.id = c.jewelryId)\n" +
+            "left join JewelryType  as jt on\n" +
+            "(j.jewelryTypeId = jt.id)\n" +
+            "left join Image as i on\n" +
+            "(j.imageId = i.id)\n"+
+            "left join EndUser as eu on\n" +
+            "(eu.accountId = c.userId) " +
+            " WHERE 1 = 1 " +
+            "and (:phoneNumber is null or eu.phoneNumber = :phoneNumber)"+
+            "and c.status = 'active'"
+    )
+    List<ListCartResponse> getListCartByPhoneNumberResponse(@Param("phoneNumber")String phoneNumber);
+
+
 }

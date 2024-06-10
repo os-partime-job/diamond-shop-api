@@ -7,15 +7,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GetListCartRequest extends BaseRequest{
-    private Long customerId;
-    private String phoneNumber;
-    private Integer limit;
-    private Integer offset;
+public class AddDeliveryRequest extends BaseRequest{
+    private Long orderId;
+    private Long deliveryId;
+    private String status;
+    private Date endDateEstimated;
+    private Integer deliveryFee;
     private String sort;
 }

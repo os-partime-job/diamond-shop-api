@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import vn.fpt.diamond_shop.constants.StatusOrder;
 import vn.fpt.diamond_shop.exception.DiamondShopException;
-import vn.fpt.diamond_shop.model.Cart;
-import vn.fpt.diamond_shop.model.Jewelry;
-import vn.fpt.diamond_shop.model.OrderDetail;
-import vn.fpt.diamond_shop.model.Orders;
+import vn.fpt.diamond_shop.model.*;
 import vn.fpt.diamond_shop.repository.*;
 import vn.fpt.diamond_shop.request.*;
 import vn.fpt.diamond_shop.response.*;
@@ -41,6 +38,8 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private ImageRepository imageRepository;
 
+    @Autowired
+    private EndUserRepository endUserRepository;
     private static String ACTIVE_CART = "active";
     @Override
     public ResponseEntity<Object> orderList(GetListOrderRequest request) {
@@ -100,34 +99,52 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Object listCart(GetListCartRequest request) {
-        List<ListCartResponse> listCartResponse = cartRepository.getListCartResponse(request.getCustomerId());
-        return listCartResponse;
+        if(!StringUtils.isEmpty(request.getPhoneNumber())){
+            List<ListCartResponse> listCartResponse = cartRepository.getListCartByPhoneNumberResponse(request.getPhoneNumber());
+            return listCartResponse;
+        }else{
+            List<ListCartResponse> listCartResponse = cartRepository.getListCartResponse(request.getCustomerId());
+            return listCartResponse;
+        }
     }
 
     @Override
     public Boolean addCart(AddCartRequest request) {
-        Cart byCustomerIdAndAndJewelryId = cartRepository.findByUserIdAndAndJewelryId(request.getCustomerId(), request.getJewelryId());
-        if(byCustomerIdAndAndJewelryId != null){
-            //update
-            byCustomerIdAndAndJewelryId.setQuantity(byCustomerIdAndAndJewelryId.getQuantity() + request.getQuantity());
-            byCustomerIdAndAndJewelryId.setUpdatedAt(new java.util.Date());
-            cartRepository.updateByUserIdAndJewelryId(request.getCustomerId(), request.getJewelryId(), byCustomerIdAndAndJewelryId.getQuantity(), byCustomerIdAndAndJewelryId.getUpdatedAt(), byCustomerIdAndAndJewelryId.getStatus());
-        }else{
-            //insert
-            Cart cart = new Cart();
-            cart.setJewelryId(request.getJewelryId());
-            cart.setQuantity(request.getQuantity());
-            cart.setUserId(request.getCustomerId());
-            cart.setCreatedAt(new Date(new java.util.Date().getTime()));
-            cart.setStatus(ACTIVE_CART);
-            cartRepository.save(cart);
+        if(!StringUtils.isEmpty(request.getPhoneNumber())) {
+            EndUser endUserByPhoneNumber = endUserRepository.findEndUserByPhoneNumber(request.getPhoneNumber());
+            if(endUserByPhoneNumber != null){
+                request.setCustomerId(endUserByPhoneNumber.getAccountId());
+            }
+        }
+            Cart byCustomerIdAndAndJewelryId = cartRepository.findByUserIdAndAndJewelryId(request.getCustomerId(), request.getJewelryId());
+            if (byCustomerIdAndAndJewelryId != null) {
+                //update
+                byCustomerIdAndAndJewelryId.setQuantity(byCustomerIdAndAndJewelryId.getQuantity() + request.getQuantity());
+                byCustomerIdAndAndJewelryId.setUpdatedAt(new java.util.Date());
+                cartRepository.updateByUserIdAndJewelryId(request.getCustomerId(), request.getJewelryId(), byCustomerIdAndAndJewelryId.getQuantity(), byCustomerIdAndAndJewelryId.getUpdatedAt(), byCustomerIdAndAndJewelryId.getStatus());
+            } else {
+                //insert
+                Cart cart = new Cart();
+                cart.setJewelryId(request.getJewelryId());
+                cart.setQuantity(request.getQuantity());
+                cart.setUserId(request.getCustomerId());
+                cart.setCreatedAt(new Date(new java.util.Date().getTime()));
+                cart.setStatus(ACTIVE_CART);
+                cartRepository.save(cart);
+            }
+
+            return true;
         }
 
-        return true;
-    }
 
     @Override
     public Boolean updateCart(AddCartRequest request) {
+        if(!StringUtils.isEmpty(request.getPhoneNumber())) {
+            EndUser endUserByPhoneNumber = endUserRepository.findEndUserByPhoneNumber(request.getPhoneNumber());
+            if(endUserByPhoneNumber != null){
+                request.setCustomerId(endUserByPhoneNumber.getAccountId());
+            }
+        }
         Cart byCustomerIdAndAndJewelryId = cartRepository.findByUserIdAndAndJewelryId(request.getCustomerId(), request.getJewelryId());
         if(byCustomerIdAndAndJewelryId != null){
             //update
