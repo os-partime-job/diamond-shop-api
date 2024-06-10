@@ -54,6 +54,7 @@ public class OrderServiceImpl implements OrderService {
         List<Cart> cartsById = cartRepository.findAllById(request.getCartIds());
         String uniqueOrderId = UUIDUtil.generateUUID();
         List<Long> listJewelris = new ArrayList<>();
+        Orders orders = new Orders();
         if(!cartsById.isEmpty()){
             Long priceItems = 0L;
             for(Cart cart : cartsById){
@@ -62,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
                 orderDetail.setOrderDate(new Date(new java.util.Date().getTime()));
                 orderDetail.setCreatedAt(new Date(new java.util.Date().getTime()));
                 orderDetail.setJewelryId(cart.getJewelryId());
-                orderDetail.setCustomerId(request.getCustomerId());
+                orderDetail.setCustomerId(cart.getUserId());
                 orderDetail.setStatus(StatusOrder.CREATE_PAYMENT.getValue());
                 orderDetail.setUniqueOrderId(uniqueOrderId);
                 orderDetail.setQuantityNumber(cart.getQuantity());
@@ -75,12 +76,12 @@ public class OrderServiceImpl implements OrderService {
                 orderDetailRepository.save(orderDetail);
                 listJewelris.add(cart.getJewelryId());
                 cartRepository.deleteById(cart.getId());
+                orders.setCustomerId(orderDetail.getCustomerId());
             }
-            Orders orders = new Orders();
+
             orders.setUniqueOrderId(uniqueOrderId);
             orders.setOrderDate(new Date(new java.util.Date().getTime()));
             orders.setCreatedAt(new Date(new java.util.Date().getTime()));
-            orders.setCustomerId(request.getCustomerId());
             orders.setStatus(StatusOrder.CREATE_PAYMENT.getValue());
             orders.setTotalPrice(priceItems);
             ordersRepository.save(orders);

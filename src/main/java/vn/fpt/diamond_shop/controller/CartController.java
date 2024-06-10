@@ -31,7 +31,7 @@ public class CartController extends BaseController {
     }
     @PostMapping("add_card")
     public ResponseEntity<Object> addCart(@CurrentUser UserPrincipal userPrincipal,@Valid @RequestBody AddCartRequest request) {
-        request.setCustomerId(userPrincipal.getId());
+        request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
         return ok(orderService.addCart(request));
     }
 

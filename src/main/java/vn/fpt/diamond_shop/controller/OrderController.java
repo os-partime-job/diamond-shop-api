@@ -24,18 +24,18 @@ public class OrderController extends BaseController {
 
     @PostMapping("list")
     public ResponseEntity<Object> list(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetListOrderRequest request) {
-        request.setCustomerId(userPrincipal.getId());
+        request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
         return ok(orderService.orderList(request));
     }
     @PostMapping("add_order")
     public ResponseEntity<Object> addOrder(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody AddOrderRequest request) {
-        request.setCustomerId(userPrincipal.getId());
+        request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
         return ok(orderService.addOrder(request));
     }
 
     @PostMapping("detail")
     public ResponseEntity<Object> detail(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetOrderDetailRequest request) {
-        request.setCustomerId(userPrincipal.getId());
+        request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
         return ok(orderService.detail(request));
     }
 }
