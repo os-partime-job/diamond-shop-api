@@ -17,7 +17,7 @@ import java.util.Optional;
 @Transactional
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
-    @Query(value = "select new vn.fpt.diamond_shop.response.ListCartResponse("+
+    @Query(value = "select new vn.fpt.diamond_shop.response.ListCartResponse(" +
             "c.id as id,\n" +
             "c.userId as customer_id,\n" +
             "j.id as jewelry_id,\n" +
@@ -35,7 +35,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
             "left join JewelryType  as jt on\n" +
             "(j.jewelryTypeId = jt.id)\n" +
             "left join Image as i on\n" +
-            "(j.imageId = i.id)\n"+
+            "(j.imageId = i.id)\n" +
             " WHERE 1 = 1 " +
             "and (:userId is null or c.userId = :userId)"+
             "and c.status = 'active'"
