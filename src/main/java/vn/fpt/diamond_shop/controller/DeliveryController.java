@@ -3,13 +3,12 @@ package vn.fpt.diamond_shop.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import vn.fpt.diamond_shop.constants.UrlConstants;
+import vn.fpt.diamond_shop.request.AddDeliveryRequest;
 import vn.fpt.diamond_shop.request.GetListCartRequest;
 import vn.fpt.diamond_shop.request.GetListDeliveryRequest;
+import vn.fpt.diamond_shop.request.UpdateDeliverRequest;
 import vn.fpt.diamond_shop.security.CurrentUser;
 import vn.fpt.diamond_shop.security.UserPrincipal;
 import vn.fpt.diamond_shop.service.DeliveryService;
@@ -31,7 +30,17 @@ public class DeliveryController extends BaseController {
 
 
     @PostMapping("add")
-    public ResponseEntity<Object> add(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetListDeliveryRequest request) {
-        return deliveryService.listDelivery(request);
+    public ResponseEntity<Object> add(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody AddDeliveryRequest request) {
+        return ok(deliveryService.addDelivery(request));
+    }
+
+    @GetMapping("list-deliver")
+    public ResponseEntity<Object> listDeliver() {
+        return deliveryService.getListDeliver();
+    }
+
+    @PostMapping("update-deliver")
+    public ResponseEntity<Object> updateDeliver(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody UpdateDeliverRequest request) {
+        return ok(deliveryService.updateDeliver(request));
     }
 }
