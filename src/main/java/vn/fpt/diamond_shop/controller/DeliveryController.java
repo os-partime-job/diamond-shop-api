@@ -29,7 +29,7 @@ public class DeliveryController extends BaseController {
     }
 
 
-    @PostMapping("add")
+    @PostMapping("add-update")
     public ResponseEntity<Object> add(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody AddDeliveryRequest request) {
         return ok(deliveryService.addDelivery(request));
     }

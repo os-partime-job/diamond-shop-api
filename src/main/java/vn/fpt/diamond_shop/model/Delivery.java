@@ -17,7 +17,7 @@ public class Delivery {
     private Long id;
 
     @Column(name = "order_id")
-    private Long orderId;
+    private String orderId;
 
     @Column(name = "deliver_id")
     private Long deliverId;

@@ -36,4 +36,6 @@ public interface DeliverRepository extends JpaRepository<Deliver, Long> {
                                );
 
     List<Deliver> findAllByOrderByIdDesc();
+
+    List<Deliver> findAllByStatus(String status);
 }

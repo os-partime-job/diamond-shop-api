@@ -18,10 +18,7 @@ import vn.fpt.diamond_shop.service.DeliveryService;
 import vn.fpt.diamond_shop.service.OrderService;
 import vn.fpt.diamond_shop.util.UUIDUtil;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -73,14 +70,34 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     public Boolean addDelivery(AddDeliveryRequest request) {
+        Delivery allByOrderId = deliveryRepository.findAllByOrderId(request.getOrderId());
         Delivery delivery = new Delivery();
-        delivery.setDeliveryFee(request.getDeliveryId());
-        delivery.setStatus(StatusDelivery.WAITING.getValue());
-        delivery.setCreatedAt(new Date());
-        delivery.setEndDateEstimated(request.getEndDateEstimated());
-        delivery.setOrderId(request.getOrderId());
-        delivery.setStatusDate(new Date());
-        deliveryRepository.save(delivery);
+        List<Deliver> allDeleverByStatus = deliverRepository.findAllByStatus(StatusDelivery.StatusDeliver.ACTIVE.getValue());
+        Random rand = new Random();
+        Date date1 = new Date();
+        Date date2 = (Date) date1.clone();
+        date2.setDate(date1.getDate() + 3);
+        if(allByOrderId == null){
+            //add
+            delivery.setDeliveryFee(request.getDeliveryId());
+            delivery.setStatus(StatusDelivery.WAITING.getValue());
+            delivery.setCreatedAt(new Date());
+            delivery.setEndDateEstimated(request.getEndDateEstimated());
+            delivery.setOrderId(request.getOrderId());
+            delivery.setStatusDate(new Date());
+            delivery.setEndDateEstimated(date2);
+            delivery.setDeliverId(request.getDeliveryId() == null ? allDeleverByStatus.get(rand.nextInt(allDeleverByStatus.size())).getId() : request.getDeliveryId());
+            deliveryRepository.save(delivery);
+        }else {
+            //update
+            if(request.getDeliveryId() != null){
+                allByOrderId.setDeliverId(request.getDeliveryId());
+            }
+            allByOrderId.setEndDateEstimated(date2);
+            allByOrderId.setUpdatedAt(new Date());
+            allByOrderId.setDeliveryFee(request.getDeliveryFee() == null ? allByOrderId.getDeliveryFee() : request.getDeliveryFee());
+            deliveryRepository.save(allByOrderId);
+        }
 
         return true;
     }

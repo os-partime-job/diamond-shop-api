@@ -15,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddDeliveryRequest extends BaseRequest{
-    private Long orderId;
+    private String orderId;
     private Long deliveryId;
     private String status;
     private Date endDateEstimated;
