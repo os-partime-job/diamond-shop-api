@@ -76,6 +76,7 @@ public class JewelryServiceImpl implements JewelryService {
         BeanUtils.copyProperties(request, jewelry);
         jewelry.setJewelryCode(jewelryCode());
         jewelry.setCreatedBy("Khoa Tran");
+        jewelry.setMaterialPrices(request.getMaterialPrices().longValue());
         jewelry.setJewelryTypeId(request.getJewelryTypeId());
         jewelry.setIdGuide(1L);
         jewelry.setImageId(imageInformation.getImageId());
