@@ -25,7 +25,8 @@ public class OrderController extends BaseController {
     @PostMapping("list")
     public ResponseEntity<Object> list(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetListOrderRequest request) {
         request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
-        return ok(orderService.orderList(request));
+        request.setCustomerId(9L);
+        return orderService.orderList(request);
     }
     @PostMapping("add_order")
     public ResponseEntity<Object> addOrder(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody AddOrderRequest request) {

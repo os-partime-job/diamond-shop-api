@@ -5,7 +5,7 @@ public enum StatusOrder {
     CREATE_PAYMENT("watting payment",1),
     PAYMENT("payment",2),
     DELIVERY("delivery",3),
-    DONE("done",4),
+    DONE("success",4),
     ;
 
 
@@ -31,4 +31,5 @@ public enum StatusOrder {
     public void setCode(int code) {
         this.code = code;
     }
+
 }

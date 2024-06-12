@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,8 +19,8 @@ import vn.fpt.diamond_shop.response.*;
 import vn.fpt.diamond_shop.service.OrderService;
 import vn.fpt.diamond_shop.util.UUIDUtil;
 
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,9 +44,28 @@ public class OrderServiceImpl implements OrderService {
     private EndUserRepository endUserRepository;
     private static String ACTIVE_CART = "active";
     @Override
-    public List<OrderDetail> orderList(GetListOrderRequest request) {
-        List<OrderDetail> allByCustomerId = orderDetailRepository.findAllByCustomerIdOrderByCreatedAtDesc(request.getCustomerId());
-        return allByCustomerId;
+    public ResponseEntity<Object> orderList(GetListOrderRequest request) {
+        if(request.getLimit() == null){
+            request.setLimit(10);
+        }
+        if(request.getOffset() == null){
+            request.setOffset(0);
+        }
+        Page<OrderDetail> orderDetailsPage = null;
+        if(StringUtils.isEmpty(request.getStatus())){
+            orderDetailsPage = orderDetailRepository.findAllByCustomerIdOrderByCreatedAtDesc(request.getCustomerId(),PageRequest.of(request.getOffset(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
+        }else{
+            orderDetailsPage = orderDetailRepository.findAllByCustomerIdAndStatusOrderByCreatedAtDesc(request.getCustomerId(), request.getStatus(), PageRequest.of(request.getOffset(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
+
+        }
+        List<OrderDetail> orderDetails = orderDetailsPage.getContent();
+        Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
+        meta.setLimit(request.getLimit());
+        meta.setOffset(request.getOffset());
+        meta.setTotal(Integer.valueOf(String.valueOf(orderDetailsPage.getTotalElements()))) ;
+        BaseResponse response = new BaseResponse(meta,orderDetails);
+
+        return ResponseEntity.ok(response);
     }
 
     @Override
@@ -58,8 +79,8 @@ public class OrderServiceImpl implements OrderService {
             for(Cart cart : cartsById){
                 //insert order detail
                 OrderDetail orderDetail = new OrderDetail();
-                orderDetail.setOrderDate(new Date(new java.util.Date().getTime()));
-                orderDetail.setCreatedAt(new Date(new java.util.Date().getTime()));
+                orderDetail.setOrderDate(new java.util.Date());
+                orderDetail.setCreatedAt(new Date());
                 orderDetail.setJewelryId(cart.getJewelryId());
                 orderDetail.setCustomerId(cart.getUserId());
                 orderDetail.setStatus(StatusOrder.CREATE_PAYMENT.getValue());
@@ -78,8 +99,8 @@ public class OrderServiceImpl implements OrderService {
             }
 
             orders.setUniqueOrderId(uniqueOrderId);
-            orders.setOrderDate(new Date(new java.util.Date().getTime()));
-            orders.setCreatedAt(new Date(new java.util.Date().getTime()));
+            orders.setOrderDate(new Date());
+            orders.setCreatedAt(new Date());
             orders.setStatus(StatusOrder.CREATE_PAYMENT.getValue());
             orders.setTotalPrice(priceItems);
             ordersRepository.save(orders);
