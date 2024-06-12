@@ -5,7 +5,7 @@ public enum StatusOrder {
     CREATE_PAYMENT("watting payment",1),
     PAYMENT("payment",2),
     DELIVERY("delivery",3),
-    DONE("done",4),
+    DONE("success",4),
     ;
 
 

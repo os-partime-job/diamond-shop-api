@@ -5,8 +5,8 @@ import lombok.NoArgsConstructor;
 import vn.fpt.diamond_shop.constants.DiamondColorEnum;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
