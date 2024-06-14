@@ -38,4 +38,16 @@ public class OrderController extends BaseController {
         request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
         return ok(orderService.detail(request));
     }
+
+    @PostMapping("udpate")
+    public ResponseEntity<Object> update(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetOrderDetailRequest request) {
+        request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
+        return ok(orderService.detail(request));
+    }
+
+    @PostMapping("list_all_user")
+    public ResponseEntity<Object> listAllUser(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetListOrderRequest request) {
+        request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
+        return orderService.orderListAllUser(request);
+    }
 }

@@ -12,4 +12,5 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
     Page<OrderDetail> findAllByCustomerIdAndStatusOrderByCreatedAtDesc(Long customerId, String status, Pageable pageable);
     Page<OrderDetail> findAllByCustomerIdOrderByCreatedAtDesc(Long customerId, Pageable pageable);
 
+    List<OrderDetail> findAllByUniqueOrderId(String uniqueOrderId);
 }
