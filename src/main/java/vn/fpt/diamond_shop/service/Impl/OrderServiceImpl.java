@@ -43,6 +43,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private EndUserRepository endUserRepository;
     private static String ACTIVE_CART = "active";
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public ResponseEntity<Object> orderList(GetListOrderRequest request) {
         if(request.getLimit() == null){
@@ -214,6 +217,11 @@ public class OrderServiceImpl implements OrderService {
             ordersListAllUser.setOrderDetails(allByUniqueOrderId);
             ordersListAllUsers.add(ordersListAllUser);
         }
+        for(OrdersListAllUser ordersListAllUser : ordersListAllUsers){
+            Optional<EndUser> endUserByAccountId = endUserRepository.findEndUserByAccountId(ordersListAllUser.getCustomerId());
+            EndUser endUser = endUserByAccountId.get();
+            ordersListAllUser.setPhoneNumber(endUser != null ? endUser.getPhoneNumber() : null);
+        }
         Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
         meta.setLimit(request.getLimit());
         meta.setOffset(request.getOffset());
@@ -224,7 +232,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Boolean updateOrder(GetOrderDetailRequest request) {
+    public Boolean updateOrder(UpdateOrderRequest request) {
+        EndUser endUserByPhoneNumber = endUserRepository.findEndUserByPhoneNumber(request.getPhoneNumber());
+
+//        ordersRepository.findAllOrderByOrderByCreatedAtDesc()
         return null;
     }
 }

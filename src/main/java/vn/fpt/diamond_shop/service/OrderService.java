@@ -26,5 +26,5 @@ public interface OrderService {
     ResponseEntity<Object> orderListAllUser(GetListOrderRequest request);
 
 
-    Boolean updateOrder(GetOrderDetailRequest request);
+    Boolean updateOrder(UpdateOrderRequest request);
 }

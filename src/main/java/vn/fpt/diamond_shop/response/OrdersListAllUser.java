@@ -30,5 +30,7 @@ public class OrdersListAllUser {
 
     private Date updatedAt;
 
+    private String phoneNumber;
+
     private List<OrderDetail> orderDetails;
 }

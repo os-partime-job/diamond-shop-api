@@ -14,5 +14,8 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpdateOrderRequest extends BaseRequest{
     private Long customerId;
+    private Long deliverId;
     private Long orderId;
+    private String phoneNumber;
+    private String status;
 }
