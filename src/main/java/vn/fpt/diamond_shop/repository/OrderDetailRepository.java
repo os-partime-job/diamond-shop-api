@@ -9,7 +9,12 @@ import java.util.List;
 
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
 
+<<<<<<< Updated upstream
     Page<OrderDetail> findAllByCustomerIdAndStatusOrderByCreatedAtDesc(Long customerId, String status, Pageable pageable);
     Page<OrderDetail> findAllByCustomerIdOrderByCreatedAtDesc(Long customerId, Pageable pageable);
 
 }
+=======
+    Page<OrderDetail> findAllByCustomerIdOrderByCreatedAtDesc(Long customerId, Pageable Pageable);
+}
+>>>>>>> Stashed changes
