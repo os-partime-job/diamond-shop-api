@@ -9,11 +9,8 @@ import vn.fpt.diamond_shop.response.ListCartResponse;
 import java.util.List;
 
 public interface OrderService {
-<<<<<<< Updated upstream
     ResponseEntity<Object> orderList(GetListOrderRequest request);
-=======
-    ResponseEntity<Object>orderList(GetListOrderRequest request);
->>>>>>> Stashed changes
+
 
     AddOrderResponse addOrder(AddOrderRequest request);
 

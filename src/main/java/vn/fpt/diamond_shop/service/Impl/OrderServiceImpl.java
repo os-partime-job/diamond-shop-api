@@ -46,16 +46,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ResponseEntity<Object> orderList(GetListOrderRequest request) {
         if(request.getLimit() == null){
-<<<<<<< Updated upstream
-            request.setLimit(10);
-=======
             request.setLimit(9);
->>>>>>> Stashed changes
         }
         if(request.getOffset() == null){
             request.setOffset(0);
         }
-<<<<<<< Updated upstream
         Page<OrderDetail> orderDetailsPage = null;
         if(StringUtils.isEmpty(request.getStatus())){
             orderDetailsPage = orderDetailRepository.findAllByCustomerIdOrderByCreatedAtDesc(request.getCustomerId(),PageRequest.of(request.getOffset(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
@@ -69,15 +64,6 @@ public class OrderServiceImpl implements OrderService {
         meta.setOffset(request.getOffset());
         meta.setTotal(Integer.valueOf(String.valueOf(orderDetailsPage.getTotalElements()))) ;
         BaseResponse response = new BaseResponse(meta,orderDetails);
-
-=======
-        Page<OrderDetail> allByCustomerIdPage = orderDetailRepository.findAllByCustomerIdOrderByCreatedAtDesc(request.getCustomerId(), PageRequest.of((int )request.getOffset()/ request.getLimit(), request.getLimit()));
-        Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
-        meta.setLimit(request.getLimit());
-        meta.setOffset(request.getOffset());
-        meta.setTotal(Integer.valueOf(String.valueOf(allByCustomerIdPage.getTotalElements()))) ;
-        BaseResponse response = new BaseResponse(meta,allByCustomerIdPage.getContent());
->>>>>>> Stashed changes
         return ResponseEntity.ok(response);
     }
 
