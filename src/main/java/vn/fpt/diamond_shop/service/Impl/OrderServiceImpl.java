@@ -49,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ResponseEntity<Object> orderList(GetListOrderRequest request) {
         if(request.getLimit() == null){
-            request.setLimit(10);
+            request.setLimit(9);
         }
         if(request.getOffset() == null){
             request.setOffset(0);
@@ -67,7 +67,6 @@ public class OrderServiceImpl implements OrderService {
         meta.setOffset(request.getOffset());
         meta.setTotal(Integer.valueOf(String.valueOf(orderDetailsPage.getTotalElements()))) ;
         BaseResponse response = new BaseResponse(meta,orderDetails);
-
         return ResponseEntity.ok(response);
     }
 
