@@ -43,6 +43,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private EndUserRepository endUserRepository;
     private static String ACTIVE_CART = "active";
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public ResponseEntity<Object> orderList(GetListOrderRequest request) {
         if(request.getLimit() == null){
@@ -187,5 +190,51 @@ public class OrderServiceImpl implements OrderService {
     public OrderDetail detail(GetOrderDetailRequest request) {
         Optional<OrderDetail> orderDetail = orderDetailRepository.findById(request.getOrderId());
         return orderDetail.get();
+    }
+
+    @Override
+    public ResponseEntity<Object> orderListAllUser(GetListOrderRequest request) {
+        if(request.getLimit() == null){
+            request.setLimit(10);
+        }
+        if(request.getOffset() == null){
+            request.setOffset(0);
+        }
+        Page<Orders> ordersPage = null;
+        if(StringUtils.isEmpty(request.getStatus())){
+            ordersPage = ordersRepository.findAllOrderByOrderByCreatedAtDesc(PageRequest.of(request.getOffset(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
+        }else{
+            ordersPage = ordersRepository.findAllOrderByStatusOrderByCreatedAtDesc(request.getStatus(), PageRequest.of(request.getOffset(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
+
+        }
+        List<Orders> orderDetails = ordersPage.getContent();
+        List<OrdersListAllUser> ordersListAllUsers = new ArrayList<>();
+        for(Orders order : orderDetails){
+            OrdersListAllUser ordersListAllUser = new OrdersListAllUser();
+            BeanUtils.copyProperties(order, ordersListAllUser);
+            List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(order.getUniqueOrderId());
+            ordersListAllUser.setOrderDetails(allByUniqueOrderId);
+            ordersListAllUsers.add(ordersListAllUser);
+        }
+        for(OrdersListAllUser ordersListAllUser : ordersListAllUsers){
+            Optional<EndUser> endUserByAccountId = endUserRepository.findEndUserByAccountId(ordersListAllUser.getCustomerId());
+            EndUser endUser = endUserByAccountId.get();
+            ordersListAllUser.setPhoneNumber(endUser != null ? endUser.getPhoneNumber() : null);
+        }
+        Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
+        meta.setLimit(request.getLimit());
+        meta.setOffset(request.getOffset());
+        meta.setTotal(Integer.valueOf(String.valueOf(ordersPage.getTotalElements()))) ;
+        BaseResponse response = new BaseResponse(meta,ordersListAllUsers);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public Boolean updateOrder(UpdateOrderRequest request) {
+        EndUser endUserByPhoneNumber = endUserRepository.findEndUserByPhoneNumber(request.getPhoneNumber());
+
+//        ordersRepository.findAllOrderByOrderByCreatedAtDesc()
+        return null;
     }
 }

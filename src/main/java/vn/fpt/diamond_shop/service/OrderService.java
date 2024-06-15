@@ -23,4 +23,9 @@ public interface OrderService {
     Boolean deleteCart(DeleteCartRequest request);
 
     OrderDetail detail(GetOrderDetailRequest request);
+
+    ResponseEntity<Object> orderListAllUser(GetListOrderRequest request);
+
+
+    Boolean updateOrder(UpdateOrderRequest request);
 }
