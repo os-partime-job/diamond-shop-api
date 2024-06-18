@@ -45,6 +45,8 @@ public class OrderServiceImpl implements OrderService {
     private static String ACTIVE_CART = "active";
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private DeliveryRepository deliveryRepository;
 
     @Override
     public ResponseEntity<Object> orderList(GetListOrderRequest request) {
@@ -54,6 +56,15 @@ public class OrderServiceImpl implements OrderService {
         if(request.getOffset() == null){
             request.setOffset(0);
         }
+        if(!StringUtils.isEmpty(request.getPhoneNumber())) {
+            EndUser endUserByPhoneNumber = endUserRepository.findEndUserByPhoneNumber(request.getPhoneNumber());
+            if(endUserByPhoneNumber != null){
+                request.setCustomerId(endUserByPhoneNumber.getAccountId());
+            }
+        }
+        Page<Orders> ordersPage = null;
+        ordersPage = ordersRepository.findAllOrderByCustomerIdOrderByCreatedAtDesc(request.getCustomerId(), PageRequest.of(request.getOffset()/ request.getLimit(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
+
         Page<OrderDetail> orderDetailsPage = null;
         if(StringUtils.isEmpty(request.getStatus())){
             orderDetailsPage = orderDetailRepository.findAllByCustomerIdOrderByCreatedAtDesc(request.getCustomerId(),PageRequest.of(request.getOffset()/ request.getLimit(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
@@ -214,6 +225,7 @@ public class OrderServiceImpl implements OrderService {
             BeanUtils.copyProperties(order, ordersListAllUser);
             List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(order.getUniqueOrderId());
             ordersListAllUser.setOrderDetails(allByUniqueOrderId);
+            ordersListAllUser.setDeliveryInfo(deliveryRepository.findAllByOrderId(order.getUniqueOrderId()));
             ordersListAllUsers.add(ordersListAllUser);
         }
         for(OrdersListAllUser ordersListAllUser : ordersListAllUsers){

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.repository.query.Param;
+import vn.fpt.diamond_shop.model.Delivery;
 import vn.fpt.diamond_shop.model.OrderDetail;
 
 import javax.persistence.*;
@@ -31,6 +32,8 @@ public class OrdersListAllUser {
     private Date updatedAt;
 
     private String phoneNumber;
+
+    private Delivery deliveryInfo;
 
     private List<OrderDetail> orderDetails;
 }
