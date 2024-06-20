@@ -70,14 +70,21 @@ public class OrderServiceImpl implements OrderService {
             orderDetailsPage = orderDetailRepository.findAllByCustomerIdOrderByCreatedAtDesc(request.getCustomerId(),PageRequest.of(request.getOffset()/ request.getLimit(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
         }else{
             orderDetailsPage = orderDetailRepository.findAllByCustomerIdAndStatusOrderByCreatedAtDesc(request.getCustomerId(), request.getStatus(), PageRequest.of(request.getOffset()/ request.getLimit(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
-
         }
-        List<OrderDetail> orderDetails = orderDetailsPage.getContent();
+        List<OrdersListAllUser> ordersListAllUsers = new ArrayList<>();
+        for(Orders order : ordersPage){
+            OrdersListAllUser ordersListAllUser = new OrdersListAllUser();
+            BeanUtils.copyProperties(order, ordersListAllUser);
+            List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(order.getUniqueOrderId());
+            ordersListAllUser.setOrderDetails(allByUniqueOrderId);
+            ordersListAllUser.setDeliveryInfo(deliveryRepository.findAllByOrderId(order.getUniqueOrderId()));
+            ordersListAllUsers.add(ordersListAllUser);
+        }
         Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
         meta.setLimit(request.getLimit());
         meta.setOffset(request.getOffset());
         meta.setTotal(Integer.valueOf(String.valueOf(orderDetailsPage.getTotalElements()))) ;
-        BaseResponse response = new BaseResponse(meta,orderDetails);
+        BaseResponse response = new BaseResponse(meta,ordersListAllUsers);
         return ResponseEntity.ok(response);
     }
 
