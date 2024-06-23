@@ -38,9 +38,10 @@ public class AdminServiceImpl implements AdminService {
             user.setName(request.getFullName());
         }
         if (request.isDeactivate()) {
-            deactivateAccount(request.getAccountId());
+//            deactivateAccount(request.getAccountId());
+            user.setActive(false);
         } else {
-            activateAccount(request.getAccountId());
+//            activateAccount(request.getAccountId());
         }
         if (request.getRoleId() != null) {
             setRole(request.getAccountId(), request.getRoleId());
