@@ -223,9 +223,9 @@ public class OrderServiceImpl implements OrderService {
         }
         Page<Orders> ordersPage = null;
         if(StringUtils.isEmpty(request.getStatus())){
-            ordersPage = ordersRepository.findAllOrderByOrderByCreatedAtDesc(PageRequest.of(request.getOffset(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
+            ordersPage = ordersRepository.findAllOrderByOrderByCreatedAtDesc(PageRequest.of(request.getOffset()/request.getLimit(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
         }else{
-            ordersPage = ordersRepository.findAllOrderByStatusOrderByCreatedAtDesc(request.getStatus(), PageRequest.of(request.getOffset(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
+            ordersPage = ordersRepository.findAllOrderByStatusOrderByCreatedAtDesc(request.getStatus(), PageRequest.of(request.getOffset()/request.getLimit(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
 
         }
         List<Orders> orderDetails = ordersPage.getContent();
