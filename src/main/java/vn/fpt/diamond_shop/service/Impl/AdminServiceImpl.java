@@ -15,6 +15,7 @@ import vn.fpt.diamond_shop.service.AdminService;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,6 +30,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private EndUserRepository endUserRepository;
+
     @Override
     public void changeInforAccount(ManagerModifyAccountRequest request) {
         UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -37,6 +39,7 @@ public class AdminServiceImpl implements AdminService {
         }
 
         User user = userRepository.findById(request.getAccountId()).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setModifiedAt(new Date());
         if (request.getEmail() != null)
             user.setEmail(request.getEmail());
         if (request.getFullName() != null) {
@@ -85,11 +88,15 @@ public class AdminServiceImpl implements AdminService {
     private void deactivateAccount(Long accountId) {
         User user = userRepository.findById(accountId).orElseThrow(() -> new RuntimeException("User not found"));
         user.setActive(false);
+        user.setModifiedAt(new Date());
+        userRepository.save(user);
     }
 
     private void activateAccount(Long accountId) {
         User user = userRepository.findById(accountId).orElseThrow(() -> new RuntimeException("User not found"));
         user.setActive(true);
+        user.setModifiedAt(new Date());
+        userRepository.save(user);
     }
 
     @Override
