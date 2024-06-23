@@ -8,6 +8,7 @@ import vn.fpt.diamond_shop.constants.UrlConstants;
 import vn.fpt.diamond_shop.request.AddOrderRequest;
 import vn.fpt.diamond_shop.request.GetListOrderRequest;
 import vn.fpt.diamond_shop.request.GetOrderDetailRequest;
+import vn.fpt.diamond_shop.request.UpdateOrderRequest;
 import vn.fpt.diamond_shop.security.CurrentUser;
 import vn.fpt.diamond_shop.security.UserPrincipal;
 import vn.fpt.diamond_shop.service.OrderService;
@@ -37,5 +38,17 @@ public class OrderController extends BaseController {
     public ResponseEntity<Object> detail(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetOrderDetailRequest request) {
         request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
         return ok(orderService.detail(request));
+    }
+
+    @PostMapping("update")
+    public ResponseEntity<Object> update(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody UpdateOrderRequest request) {
+        request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
+        return ok(orderService.updateOrder(request));
+    }
+
+    @PostMapping("list_all_user")
+    public ResponseEntity<Object> listAllUser(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetListOrderRequest request) {
+        request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
+        return orderService.orderListAllUser(request);
     }
 }

@@ -35,10 +35,8 @@ public class DiamondController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<Diamond>> list(@RequestParam("page") int page,
-                                              @RequestParam("size") int size) {
-        List<Diamond> diamonds = new ArrayList<>();
-        return BaseResponse.ok(diamonds);
+    public ResponseEntity<List<Diamond>> list() {
+        return BaseResponse.ok(diamondService.listDiamonds());
     }
 
 }

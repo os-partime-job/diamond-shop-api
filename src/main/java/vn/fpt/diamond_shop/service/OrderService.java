@@ -11,6 +11,7 @@ import java.util.List;
 public interface OrderService {
     ResponseEntity<Object> orderList(GetListOrderRequest request);
 
+
     AddOrderResponse addOrder(AddOrderRequest request);
 
     Object listCart(GetListCartRequest request);
@@ -22,4 +23,9 @@ public interface OrderService {
     Boolean deleteCart(DeleteCartRequest request);
 
     OrderDetail detail(GetOrderDetailRequest request);
+
+    ResponseEntity<Object> orderListAllUser(GetListOrderRequest request);
+
+
+    Boolean updateOrder(UpdateOrderRequest request);
 }
