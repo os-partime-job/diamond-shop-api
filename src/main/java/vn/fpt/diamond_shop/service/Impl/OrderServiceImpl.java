@@ -78,6 +78,7 @@ public class OrderServiceImpl implements OrderService {
             List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(order.getUniqueOrderId());
             ordersListAllUser.setOrderDetails(allByUniqueOrderId);
             ordersListAllUser.setDeliveryInfo(deliveryRepository.findAllByOrderId(order.getUniqueOrderId()));
+            ordersListAllUser.setPhoneNumber(request.getPhoneNumber());
             ordersListAllUsers.add(ordersListAllUser);
         }
         Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
@@ -161,7 +162,7 @@ public class OrderServiceImpl implements OrderService {
                 //update
                 byCustomerIdAndAndJewelryId.setQuantity(byCustomerIdAndAndJewelryId.getQuantity() + request.getQuantity());
                 byCustomerIdAndAndJewelryId.setUpdatedAt(new java.util.Date());
-                cartRepository.updateByUserIdAndJewelryId(request.getCustomerId(), request.getJewelryId(), byCustomerIdAndAndJewelryId.getQuantity(), byCustomerIdAndAndJewelryId.getUpdatedAt(), byCustomerIdAndAndJewelryId.getStatus());
+                cartRepository.updateByUserIdAndJewelryId(request.getCustomerId(), request.getJewelryId(), byCustomerIdAndAndJewelryId.getQuantity(), byCustomerIdAndAndJewelryId.getUpdatedAt(), byCustomerIdAndAndJewelryId.getStatus(), request.getSize());
             } else {
                 //insert
                 Cart cart = new Cart();
@@ -170,6 +171,7 @@ public class OrderServiceImpl implements OrderService {
                 cart.setUserId(request.getCustomerId());
                 cart.setCreatedAt(new Date(new java.util.Date().getTime()));
                 cart.setStatus(ACTIVE_CART);
+                cart.setSize(request.getSize());
                 cartRepository.save(cart);
             }
 
@@ -190,10 +192,11 @@ public class OrderServiceImpl implements OrderService {
             //update
             byCustomerIdAndAndJewelryId.setQuantity(byCustomerIdAndAndJewelryId.getQuantity() + request.getQuantity());
             byCustomerIdAndAndJewelryId.setUpdatedAt(new java.util.Date());
+            byCustomerIdAndAndJewelryId.setSize(request.getSize());
             if(!StringUtils.isEmpty(request.getStatus())){
                 byCustomerIdAndAndJewelryId.setStatus(request.getStatus());
             }
-            cartRepository.updateByUserIdAndJewelryId(request.getCustomerId(), request.getJewelryId(), byCustomerIdAndAndJewelryId.getQuantity(), byCustomerIdAndAndJewelryId.getUpdatedAt(), byCustomerIdAndAndJewelryId.getStatus());
+            cartRepository.updateByUserIdAndJewelryId(request.getCustomerId(), request.getJewelryId(), byCustomerIdAndAndJewelryId.getQuantity(), byCustomerIdAndAndJewelryId.getUpdatedAt(), byCustomerIdAndAndJewelryId.getStatus(), request.getSize());
         }
         return true;
     }
