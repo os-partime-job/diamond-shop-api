@@ -21,5 +21,5 @@ public interface CouponService {
 
     void activeCoupon(String couponCode);
 
-    Coupon getCoupon(Long id);
+    Coupon getCoupon(Long id, String code);
 }

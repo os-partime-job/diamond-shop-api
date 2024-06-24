@@ -21,8 +21,9 @@ public class CouponController extends BaseController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getCoupon(@RequestParam(name = "id", required = true) Long id) {
-        return ok(couponService.getCoupon(id));
+    public ResponseEntity<?> getCoupon(@RequestParam(name = "id", required = false) Long id,
+                                       @RequestParam(name = "code", required = false) String code) {
+        return ok(couponService.getCoupon(id, code));
     }
 
     @PostMapping("/add")

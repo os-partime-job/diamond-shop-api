@@ -51,8 +51,14 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public Coupon getCoupon(Long id) {
-        return couponRepository.findById(id).orElseThrow(() -> new DiamondShopException("Coupon not found"));
+    public Coupon getCoupon(Long id, String code) {
+        if (code != null) {
+            return couponRepository.findByCouponsCode(code).orElseThrow(() -> new DiamondShopException("Coupon not found"));
+        } else if (id != null) {
+            return couponRepository.findById(id).orElseThrow(() -> new DiamondShopException("Coupon not found"));
+        } else {
+            throw new DiamondShopException("");
+        }
     }
 
     @Override
