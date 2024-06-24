@@ -23,5 +23,5 @@ public interface CouponService {
 
     Coupon getCoupon(Long id, String code);
 
-    boolean checkCoupon(Long customerId, String couponCode);
+    Coupon checkCoupon(Long customerId, String couponCode);
 }

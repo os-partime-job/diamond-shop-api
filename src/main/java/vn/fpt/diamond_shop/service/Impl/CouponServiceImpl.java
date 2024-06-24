@@ -62,7 +62,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public boolean checkCoupon(Long customerId, String couponCode) {
+    public Coupon checkCoupon(Long customerId, String couponCode) {
         Coupon coupon = couponRepository.findByCouponsCode(couponCode.toUpperCase())
                 .orElseThrow(() -> new RuntimeException("Coupon not found"));
 
@@ -91,7 +91,7 @@ public class CouponServiceImpl implements CouponService {
                 Date accountAge = user.getCreatedAt();
 
                 if (accountAge == null)
-                    return false;
+                    return coupon;
                 LocalDate var2 = Instant.ofEpochMilli(accountAge.getTime())
                         .atZone(ZoneId.systemDefault())
                         .toLocalDate();
@@ -108,7 +108,7 @@ public class CouponServiceImpl implements CouponService {
                 }
             }
         }
-        return true;
+        return coupon;
     }
 
     @Override
@@ -185,19 +185,18 @@ public class CouponServiceImpl implements CouponService {
         Coupon coupon = couponRepository.findByCouponsCode(request.getCouponCode().toUpperCase())
                 .orElseThrow(() -> new RuntimeException("Coupon not found"));
 
-        if (this.checkCoupon(request.getUserId(), request.getCouponCode())) {
-            coupon.setQuantity(coupon.getQuantity() - 1);
-            couponRepository.save(coupon);
+        this.checkCoupon(request.getUserId(), request.getCouponCode();
 
-            CouponsHistory couponsHistory = new CouponsHistory();
-            couponsHistory.setCouponsCode(request.getCouponCode());
-            couponsHistory.setCustomerId(request.getUserId());
-            couponsHistory.setOrderId(request.getOrderId());
-            couponsHistory.setCreatedAt(new Date());
-            couponsHistoryRepository.save(couponsHistory);
-        } else {
-            throw new DiamondShopException("Coupon not valid");
-        }
+        coupon.setQuantity(coupon.getQuantity() - 1);
+        couponRepository.save(coupon);
+
+        CouponsHistory couponsHistory = new CouponsHistory();
+        couponsHistory.setCouponsCode(request.getCouponCode());
+        couponsHistory.setCustomerId(request.getUserId());
+        couponsHistory.setOrderId(request.getOrderId());
+        couponsHistory.setCreatedAt(new Date());
+        couponsHistoryRepository.save(couponsHistory);
+
     }
 
 
