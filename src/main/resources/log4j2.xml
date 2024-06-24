@@ -1,37 +1,57 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Configuration monitorInterval="60">
-    <Properties>
-        <Property name="log-path">logs</Property>
-    </Properties>
-    <Appenders>
-        <Console name="Console-Appender" target="SYSTEM_OUT">
-            <PatternLayout>
-                <pattern>
-                    %d{yyyy-MM-dd HH:mm:ss} %50.50c{1.} %20.20M %highlight{[%-5level]@%3.3L} - %m%n
-                </pattern>
+<Configuration status="WARN" monitorInterval="30">
 
-            </PatternLayout>
+    <Properties>
+        <Property name="LOG_PATTERN">
+            %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1.} : %m%n%ex
+        </Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
-        <RollingFile name="core-log" fileName="${log-path}/core.log"
-                     filePattern="${log-path}/core-%d{yyyy-MM-dd}.log">
+
+        <RollingFile name="File-DEBUG" fileName="logs/app-debug.log" filePattern="logs/app-debug-%d{MM-dd-yyyy}.log.gz"
+                     ignoreExceptions="false">
             <PatternLayout>
-                <pattern>
-                    [%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{10} - %msg%n
-                </pattern>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1"
-                                           modulate="true"/>
-            </Policies>
+            <TimeBasedTriggeringPolicy/>
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingFile>
+
+        <RollingFile name="File-INFO" fileName="logs/app-info.log" filePattern="logs/app-info-%d{MM-dd-yyyy}.log.gz"
+                     ignoreExceptions="false">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+            <TimeBasedTriggeringPolicy/>
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingFile>
+
+
+        <RollingFile name="File-ERROR" fileName="logs/app-error.log" filePattern="logs/app-error-%d{MM-dd-yyyy}.log.gz"
+                     ignoreExceptions="false">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+            <TimeBasedTriggeringPolicy/>
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
         </RollingFile>
     </Appenders>
+
     <Loggers>
-        <Root>
-            <AppenderRef ref="Console-Appender"/>
+        <Root level="debug">
+            <AppenderRef ref="File-INFO"/>
+            <AppenderRef ref="File-ERROR"/>
+            <AppenderRef ref="File-DEBUG"/>
         </Root>
-        <Logger name="vn.fpt.diamond_shop" level="debug" additivity="false">
-            <AppenderRef ref="core-log" level="info"/>
-            <AppenderRef ref="Console-Appender" level="info"/>
-        </Logger>
     </Loggers>
 </Configuration>

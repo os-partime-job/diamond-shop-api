@@ -37,10 +37,11 @@ public class LoggingAspect {
     }
 
     @AfterThrowing(value = "webLog()", throwing = "e")
-    public void doAfterThrowing(JoinPoint proceedingJoinPoint, Throwable e) {
+    public void doAfterThrowing(JoinPoint proceedingJoinPoint, Throwable e) throws Throwable {
         stopWatch.stop();
         WrapRequest<Object> logReq = logRequest(proceedingJoinPoint);
         log.info(GSON.toJson(logReq));
+        throw e.initCause(e.getCause());
     }
 
     @Around("webLog()")
