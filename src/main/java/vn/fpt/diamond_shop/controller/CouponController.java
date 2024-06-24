@@ -64,5 +64,4 @@ public class CouponController extends BaseController {
         couponService.deactivateCoupon(couponCode);
         return ok("Deactivated coupon successfully");
     }
-
 }

@@ -42,7 +42,7 @@ public class OrderController extends BaseController {
     @LogActivities
     public ResponseEntity<Object> detail(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetListOrderRequest request) {
         request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
-        return ok(orderService.orderList(request));
+        return orderService.orderList(request);
     }
 
     @PostMapping("update")
