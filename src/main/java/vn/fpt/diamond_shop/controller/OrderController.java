@@ -12,6 +12,7 @@ import vn.fpt.diamond_shop.request.UpdateOrderRequest;
 import vn.fpt.diamond_shop.security.CurrentUser;
 import vn.fpt.diamond_shop.security.UserPrincipal;
 import vn.fpt.diamond_shop.service.OrderService;
+import vn.fpt.diamond_shop.util.logger.LogActivities;
 
 import javax.validation.Valid;
 
@@ -24,30 +25,35 @@ public class OrderController extends BaseController {
     private OrderService orderService;
 
     @PostMapping("list")
+    @LogActivities
     public ResponseEntity<Object> list(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetListOrderRequest request) {
         request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
         return orderService.orderList(request);
     }
 
     @PostMapping("add_order")
+    @LogActivities
     public ResponseEntity<Object> addOrder(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody AddOrderRequest request) {
         request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
         return ok(orderService.addOrder(request));
     }
 
     @PostMapping("detail")
+    @LogActivities
     public ResponseEntity<Object> detail(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetListOrderRequest request) {
         request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
         return ok(orderService.orderList(request));
     }
 
     @PostMapping("update")
+    @LogActivities
     public ResponseEntity<Object> update(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody UpdateOrderRequest request) {
         request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
         return ok(orderService.updateOrder(request));
     }
 
     @PostMapping("list_all_user")
+    @LogActivities
     public ResponseEntity<Object> listAllUser(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetListOrderRequest request) {
         request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
         return orderService.orderListAllUser(request);

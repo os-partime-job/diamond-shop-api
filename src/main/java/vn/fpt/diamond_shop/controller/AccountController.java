@@ -9,6 +9,7 @@ import vn.fpt.diamond_shop.request.GetListDeliveryRequest;
 import vn.fpt.diamond_shop.security.CurrentUser;
 import vn.fpt.diamond_shop.security.UserPrincipal;
 import vn.fpt.diamond_shop.service.AdminService;
+import vn.fpt.diamond_shop.util.logger.LogActivities;
 
 import javax.validation.Valid;
 
@@ -21,6 +22,7 @@ public class AccountController extends BaseController {
     private AdminService accountService;
 
     @GetMapping("list")
+    @LogActivities
     public ResponseEntity<Object> list() {
         return ok(accountService.searchAccount());
     }

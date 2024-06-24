@@ -62,6 +62,56 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
+    public boolean checkCoupon(Long customerId, String couponCode) {
+        Coupon coupon = couponRepository.findByCouponsCode(couponCode.toUpperCase())
+                .orElseThrow(() -> new RuntimeException("Coupon not found"));
+
+        if (coupon.getExpirationDate().before(new java.util.Date())) {
+            throw new DiamondShopException("Coupon expired");
+        }
+        if (coupon.getQuantity() <= 0) {
+            throw new DiamondShopException("Coupon out of stock");
+        }
+        if (couponsHistoryRepository.findByCouponsCodeAndCustomerId(couponCode, customerId).isPresent()) {
+            throw new DiamondShopException("Coupon already used");
+        }
+        if (!coupon.getIsActive()) {
+            throw new DiamondShopException("Coupon is deactivated");
+        }
+        if (coupon.getDiscountType().equals(DiscountType.PERSONAL.name())) {
+            if (coupon.getType().equals(CouponsConditionEnum.CUSTOMERS_LOYAL.name())) {
+                Long cusConsumeAmount = orderRepository.getCustomerAmount(customerId, StatusOrder.DONE.getValue());
+                if (cusConsumeAmount < coupon.getValue()) {
+                    throw new DiamondShopException("Customer not enough condition: Not spending enough money");
+                }
+            } else if (coupon.getType().equals(CouponsConditionEnum.ACCOUNT_AGE.name())) {
+                Optional<User> var1 = userRepository.findById(customerId);
+                User user = var1.orElseThrow(() -> new DiamondShopException("User not found"));
+                Date now = new Date();
+                Date accountAge = user.getCreatedAt();
+
+                if (accountAge == null)
+                    return false;
+                LocalDate var2 = Instant.ofEpochMilli(accountAge.getTime())
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate();
+
+                LocalDate var3 = Instant.ofEpochMilli(now.getTime())
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate();
+
+                Period period = Period.between(var2, var3);
+                int dayBetween = period.getDays();
+
+                if (dayBetween < coupon.getValue()) {
+                    throw new DiamondShopException("Customer not enough condition: Account age not enough");
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
     public CouponsResponse addCoupon(AddCouponRequest request) {
         if (couponRepository.findByCouponsCode(request.getCode()).isPresent()) {
             throw new DiamondShopException("Coupon code already exists");
@@ -86,6 +136,7 @@ public class CouponServiceImpl implements CouponService {
         coupon.setType(request.getType());
         coupon.setValue(request.getValue());
         coupon.setQuantity(request.getQuantity());
+        coupon.setIsActive(true);
         coupon.setCreatedAt(new Date());
 
         Coupon var1 = couponRepository.save(coupon);
@@ -134,47 +185,7 @@ public class CouponServiceImpl implements CouponService {
         Coupon coupon = couponRepository.findByCouponsCode(request.getCouponCode().toUpperCase())
                 .orElseThrow(() -> new RuntimeException("Coupon not found"));
 
-        if (coupon.getExpirationDate().before(new java.util.Date())) {
-            throw new DiamondShopException("Coupon expired");
-        }
-        if (coupon.getQuantity() <= 0) {
-            throw new DiamondShopException("Coupon out of stock");
-        }
-        if (couponsHistoryRepository.findByCouponsCodeAndCustomerId(request.getCouponCode(), request.getUserId()).isPresent()) {
-            throw new DiamondShopException("Coupon already used");
-        }
-        if (!coupon.getIsActive()) {
-            throw new DiamondShopException("Coupon is deactivated");
-        }
-        if (coupon.getDiscountType().equals(DiscountType.PERSONAL.name())) {
-            if (coupon.getType().equals(CouponsConditionEnum.CUSTOMERS_LOYAL.name())) {
-                Long cusConsumeAmount = orderRepository.getCustomerAmount(request.getUserId(), StatusOrder.DONE.getValue());
-                if (cusConsumeAmount < coupon.getValue()) {
-                    throw new DiamondShopException("Customer not enough condition: Not spending enough money");
-                }
-            } else if (coupon.getType().equals(CouponsConditionEnum.ACCOUNT_AGE.name())) {
-                Optional<User> var1 = userRepository.findById(request.getUserId());
-                User user = var1.orElseThrow(() -> new DiamondShopException("User not found"));
-                Date now = new Date();
-                Date accountAge = user.getCreatedAt();
-
-                if (accountAge == null)
-                    return;
-                LocalDate var2 = Instant.ofEpochMilli(accountAge.getTime())
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate();
-
-                LocalDate var3 = Instant.ofEpochMilli(now.getTime())
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate();
-
-                Period period = Period.between(var2, var3);
-                int dayBetween = period.getDays();
-
-                if (dayBetween < coupon.getValue()) {
-                    throw new DiamondShopException("Customer not enough condition: Account age not enough");
-                }
-            }
+        if (this.checkCoupon(request.getUserId(), request.getCouponCode())) {
             coupon.setQuantity(coupon.getQuantity() - 1);
             couponRepository.save(coupon);
 
@@ -184,7 +195,8 @@ public class CouponServiceImpl implements CouponService {
             couponsHistory.setOrderId(request.getOrderId());
             couponsHistory.setCreatedAt(new Date());
             couponsHistoryRepository.save(couponsHistory);
-
+        } else {
+            throw new DiamondShopException("Coupon not valid");
         }
     }
 

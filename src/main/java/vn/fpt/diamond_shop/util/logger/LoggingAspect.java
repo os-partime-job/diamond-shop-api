@@ -1,6 +1,7 @@
 package vn.fpt.diamond_shop.util.logger;
 
 import com.google.gson.Gson;
+import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -22,15 +23,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Aspect
 @Component
+@Log4j2
 public class LoggingAspect {
     private final StopWatch stopWatch = new StopWatch();
-    private static final Logger log = LoggerFactory.getLogger(LoggingAspect.class);
-    protected  static final Gson GSON = new Gson();
+    protected static final Gson GSON = new Gson();
 
     //define ref annotation
     @Pointcut("@annotation(vn.fpt.diamond_shop.util.logger.LogActivities)")
