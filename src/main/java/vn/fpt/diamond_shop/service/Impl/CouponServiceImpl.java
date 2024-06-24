@@ -185,7 +185,7 @@ public class CouponServiceImpl implements CouponService {
         Coupon coupon = couponRepository.findByCouponsCode(request.getCouponCode().toUpperCase())
                 .orElseThrow(() -> new RuntimeException("Coupon not found"));
 
-        this.checkCoupon(request.getUserId(), request.getCouponCode();
+        this.checkCoupon(request.getUserId(), request.getCouponCode());
 
         coupon.setQuantity(coupon.getQuantity() - 1);
         couponRepository.save(coupon);
