@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import vn.fpt.diamond_shop.request.AddCouponRequest;
 import vn.fpt.diamond_shop.request.ModifyCouponRequest;
 import vn.fpt.diamond_shop.request.UsingCouponRequest;
+import vn.fpt.diamond_shop.security.CurrentUser;
+import vn.fpt.diamond_shop.security.UserPrincipal;
 import vn.fpt.diamond_shop.service.CouponService;
 import vn.fpt.diamond_shop.util.logger.LogActivities;
 
@@ -37,16 +39,16 @@ public class CouponController extends BaseController {
 
     @PutMapping("/use")
     @LogActivities
-    public ResponseEntity<?> useCoupon(@RequestBody UsingCouponRequest usingCouponRequest) {
+    public ResponseEntity<?> useCoupon(@CurrentUser UserPrincipal userPrincipal, @RequestBody UsingCouponRequest usingCouponRequest) {
+        usingCouponRequest.setUserId(userPrincipal.getId());
         couponService.usingCoupon(usingCouponRequest);
         return ok("Used coupon successfully");
     }
 
     @GetMapping("/check")
     @LogActivities
-    public ResponseEntity<?> checkCoupon(@RequestParam(name = "code", required = true) String couponCode,
-                                         @RequestParam(name = "customerId", required = true) Long customerId) {
-        return ok(couponService.checkCoupon(customerId, couponCode));
+    public ResponseEntity<?> checkCoupon(@CurrentUser UserPrincipal userPrincipal, @RequestParam(name = "code", required = true) String couponCode) {
+        return ok(couponService.checkCoupon(userPrincipal.getId(), couponCode));
     }
 
     @PutMapping("/modify")
