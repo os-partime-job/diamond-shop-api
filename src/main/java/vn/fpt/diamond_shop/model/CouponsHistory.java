@@ -19,20 +19,16 @@ public class CouponsHistory {
     private Integer id;
 
     @Column(name = "customer_id")
-    private Integer customerId;
+    private Long customerId;
 
-    @Size(max = 100)
     @Column(name = "coupons_code", length = 100)
     private String couponsCode;
 
     @Column(name = "total_discount")
     private Integer totalDiscount;
 
-    @Column(name = "expiration_date")
-    private Instant expirationDate;
-
-    @Column(name = "is_active")
-    private Integer isActive;
+    @Column(name = "order_id")
+    private String orderId;
 
     @Column(name = "created_at")
     private Date createdAt;

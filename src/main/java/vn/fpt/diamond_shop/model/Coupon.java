@@ -16,13 +16,13 @@ public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "coupons_code", length = 100)
     private String couponsCode;
 
     @Column(name = "discount_percent", length = 100)
-    private String discountPercent;
+    private Long discountPercent;
 
     @Column(name = "expiration_date")
     private Date expirationDate;
@@ -36,13 +36,17 @@ public class Coupon {
     @Column(name = "value")
     private Long value;
 
+    @Column(name = "quantity")
+    private Integer quantity;
+
+    @Column(name = "is_active", columnDefinition = "boolean default true")
+    private Boolean isActive;
+
     @Column(name = "created_at", length = 100)
     private Date createdAt;
 
     @Column(name = "updated_date", length = 100)
     private Date updatedDate;
 
-    @Column(name = "quantity")
-    private Integer quantity;
 
 }

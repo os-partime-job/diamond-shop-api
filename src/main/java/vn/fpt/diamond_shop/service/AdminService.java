@@ -12,9 +12,10 @@ public interface AdminService {
 
     List<ManagerListAccountResponse> listAccount();
 
-    List<Role> listRole();
 
     void setRole(Long accountId, Long roleId);
 
     List<EndUser> searchAccount();
+
+    void checkSendMailCoupon();
 }

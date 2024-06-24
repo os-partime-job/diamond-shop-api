@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import vn.fpt.diamond_shop.constants.CouponsConditionEnum;
-import vn.fpt.diamond_shop.constants.CouponsType;
+import vn.fpt.diamond_shop.constants.DiscountType;
 import vn.fpt.diamond_shop.constants.MailTypeEnum;
 import vn.fpt.diamond_shop.constants.StatusOrder;
 import vn.fpt.diamond_shop.model.Coupon;
@@ -13,6 +13,7 @@ import vn.fpt.diamond_shop.repository.*;
 import vn.fpt.diamond_shop.request.CouponsMail;
 import vn.fpt.diamond_shop.security.model.User;
 import vn.fpt.diamond_shop.service.MailService;
+import vn.fpt.diamond_shop.util.DateTimeUtils;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -44,7 +45,6 @@ public class BackGroundJobService {
     @Autowired
     private OrdersRepository ordersRepository;
 
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void checkAndSendCoupon() {
@@ -59,17 +59,17 @@ public class BackGroundJobService {
             //Mail param contents
             CouponsMail mail = new CouponsMail();
             mail.setCode(coupon.getCouponsCode());
-            mail.setExpiredDate(simpleDateFormat.format(coupon.getExpirationDate()));
-            mail.setPercent(Long.valueOf(coupon.getDiscountPercent()));
+            mail.setExpiredDate(DateTimeUtils.format(coupon.getExpirationDate(), "dd/MM/yyyy HH:mm:ss"));
+            mail.setPercent(coupon.getDiscountPercent());
 
             //Send mail to all user
-            if (coupon.getDiscountType().equals(CouponsType.ALL.name())) {
+            if (coupon.getDiscountType().equals(DiscountType.ALL.name())) {
                 listUser.forEach(user -> {
                     if (!mailHistoryRepository.existsByMailAndTypeAndValue(user.getEmail(), MailTypeEnum.COUPON.name(), coupon.getCouponsCode())) {
                         mailService.sendCoupon(user.getEmail(), "DIAMOND COUPON", mail);
                     }
                 });
-            } else if (coupon.getDiscountType().equals(CouponsType.PERSONAL.name())) {
+            } else if (coupon.getDiscountType().equals(DiscountType.PERSONAL.name())) {
                 listUser.forEach(user -> {
                     if (!mailHistoryRepository.existsByMailAndTypeAndValue(coupon.getType(), MailTypeEnum.COUPON.name(), coupon.getCouponsCode())) {
                         //Send mail to qualified person

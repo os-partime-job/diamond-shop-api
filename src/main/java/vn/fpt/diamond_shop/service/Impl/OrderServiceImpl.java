@@ -208,9 +208,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDetail detail(GetOrderDetailRequest request) {
-        Optional<OrderDetail> orderDetail = orderDetailRepository.findById(request.getOrderId());
-        return orderDetail.get();
+    public Object detail(GetOrderDetailRequest request) {
+        Orders order = ordersRepository.findById(request.getOrderId()).orElseThrow(() -> new DiamondShopException(400, "Order not found"));
+
+        List<OrdersListAllUser> ordersListAllUsers = new ArrayList<>();
+            OrdersListAllUser ordersListAllUser = new OrdersListAllUser();
+            BeanUtils.copyProperties(order, ordersListAllUser);
+            List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(order.getUniqueOrderId());
+            ordersListAllUser.setOrderDetails(allByUniqueOrderId);
+            ordersListAllUser.setDeliveryInfo(deliveryRepository.findAllByOrderId(order.getUniqueOrderId()));
+            //ordersListAllUser.setPhoneNumber(request.getPhoneNumber());
+            ordersListAllUsers.add(ordersListAllUser);
+
+        Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
+        BaseResponse response = new BaseResponse(meta, ordersListAllUsers);
+
+        return response;
     }
 
     @Override

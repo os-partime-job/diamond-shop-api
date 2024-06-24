@@ -1,6 +1,6 @@
 package vn.fpt.diamond_shop.constants;
 
-public enum CouponsType {
+public enum DiscountType {
     ALL,
     PERSONAL
 }

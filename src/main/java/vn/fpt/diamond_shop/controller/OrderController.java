@@ -28,6 +28,7 @@ public class OrderController extends BaseController {
         request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
         return orderService.orderList(request);
     }
+
     @PostMapping("add_order")
     public ResponseEntity<Object> addOrder(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody AddOrderRequest request) {
         request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
@@ -35,9 +36,9 @@ public class OrderController extends BaseController {
     }
 
     @PostMapping("detail")
-    public ResponseEntity<Object> detail(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetOrderDetailRequest request) {
+    public ResponseEntity<Object> detail(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetListOrderRequest request) {
         request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
-        return ok(orderService.detail(request));
+        return ok(orderService.orderList(request));
     }
 
     @PostMapping("update")

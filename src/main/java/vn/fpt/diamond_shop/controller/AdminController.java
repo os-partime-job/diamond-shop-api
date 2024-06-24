@@ -33,4 +33,10 @@ public class AdminController extends BaseController {
         renewImage.renewImageTask();
         return noContent();
     }
+
+    @PostMapping("/job/check-send-mail-coupon")
+    private ResponseEntity<?> checkSendMailCoupon() {
+        adminService.checkSendMailCoupon();
+        return noContent();
+    }
 }

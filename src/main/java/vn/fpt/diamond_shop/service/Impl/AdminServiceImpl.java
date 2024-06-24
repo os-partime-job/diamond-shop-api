@@ -23,13 +23,12 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private UserRoleRepository userRoleRepository;
-    private RoleRepository roleRepository;
-
     @Autowired
     private EndUserRepository endUserRepository;
+    @Autowired
+    private BackGroundJobService backGroundJobService;
 
     @Override
     public void changeInforAccount(ManagerModifyAccountRequest request) {
@@ -80,11 +79,6 @@ public class AdminServiceImpl implements AdminService {
         return responses;
     }
 
-    @Override
-    public List<Role> listRole() {
-        return roleRepository.findAll();
-    }
-
     private void deactivateAccount(Long accountId) {
         User user = userRepository.findById(accountId).orElseThrow(() -> new RuntimeException("User not found"));
         user.setActive(false);
@@ -119,5 +113,10 @@ public class AdminServiceImpl implements AdminService {
     public List<EndUser> searchAccount() {
         return endUserRepository.findAll();
 
+    }
+
+    @Override
+    public void checkSendMailCoupon() {
+        backGroundJobService.checkAndSendCoupon();
     }
 }
