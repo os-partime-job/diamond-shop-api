@@ -28,7 +28,7 @@ import java.util.*;
 @Component
 @Log4j2
 public class LoggingAspect {
-    private final StopWatch stopWatch = new StopWatch();
+//    private final StopWatch stopWatch = new StopWatch();
     protected static final Gson GSON = new Gson();
 
     //define ref annotation
@@ -38,7 +38,7 @@ public class LoggingAspect {
 
     @AfterThrowing(value = "webLog()", throwing = "e")
     public void doAfterThrowing(JoinPoint proceedingJoinPoint, Throwable e) throws Throwable {
-        stopWatch.stop();
+//        stopWatch.stop();
         WrapRequest<Object> logReq = logRequest(proceedingJoinPoint);
         log.info(GSON.toJson(logReq));
         throw e.initCause(e.getCause());
@@ -48,14 +48,14 @@ public class LoggingAspect {
     public Object logMethod(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         WrapRequest<Object> logReq = logRequest(proceedingJoinPoint);
         //calculate method execution time
-        stopWatch.start();
+//        stopWatch.start();
         Object result = proceedingJoinPoint.proceed();
-        stopWatch.stop();
+//        stopWatch.stop();
 
         WrapResponse<Object> logRes = new WrapResponse<>();
         BeanUtils.copyProperties(logReq, logRes);
         logRes.setResponse(result);
-        logRes.setExecutionTime(stopWatch.getLastTaskTimeMillis());
+//        logRes.setExecutionTime(stopWatch.getLastTaskTimeMillis());
 
         //Log method execution time
         log.info(GSON.toJson(logReq));
