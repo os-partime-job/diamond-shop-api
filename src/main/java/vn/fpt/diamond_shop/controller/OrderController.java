@@ -58,4 +58,10 @@ public class OrderController extends BaseController {
         request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
         return orderService.orderListAllUser(request);
     }
+
+    @GetMapping("post-order")
+    @LogActivities
+    public ResponseEntity<Object> getInfoPostOrder(@CurrentUser UserPrincipal userPrincipal) {
+        return orderService.preorderDetail(userPrincipal);
+    }
 }
