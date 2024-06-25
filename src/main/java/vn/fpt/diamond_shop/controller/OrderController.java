@@ -62,6 +62,6 @@ public class OrderController extends BaseController {
     @GetMapping("post-order")
     @LogActivities
     public ResponseEntity<Object> getInfoPostOrder(@CurrentUser UserPrincipal userPrincipal) {
-        return orderService.preorderDetail(userPrincipal);
+        return ok(orderService.preorderDetail(userPrincipal));
     }
 }
