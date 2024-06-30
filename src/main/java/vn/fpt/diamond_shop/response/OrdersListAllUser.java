@@ -31,7 +31,7 @@ public class OrdersListAllUser {
 
     private Date updatedAt;
 
-    private String email;
+    private String phoneNumber;
 
     private Delivery deliveryInfo;
 

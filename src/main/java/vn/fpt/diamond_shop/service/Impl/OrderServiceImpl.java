@@ -260,7 +260,7 @@ public class OrderServiceImpl implements OrderService {
         for(OrdersListAllUser ordersListAllUser : ordersListAllUsers){
             Optional<EndUser> endUserByAccountId = endUserRepository.findEndUserByAccountId(ordersListAllUser.getCustomerId());
             EndUser endUser = endUserByAccountId.get();
-            ordersListAllUser.se(endUser != null ? endUser.getPhoneNumber() : null);
+            ordersListAllUser.setPhoneNumber(endUser != null ? endUser.getPhoneNumber() : null);
         }
         Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
         meta.setLimit(request.getLimit());
