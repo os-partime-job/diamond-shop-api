@@ -229,7 +229,7 @@ public class OrderServiceImpl implements OrderService {
         Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
         BaseResponse response = new BaseResponse(meta, ordersListAllUsers);
 
-        return response;
+        return ordersListAllUsers;
     }
 
     @Override
