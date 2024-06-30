@@ -59,6 +59,11 @@ public class OrderController extends BaseController {
         return orderService.orderListAllUser(request);
     }
 
+    @GetMapping("post-order")
+    @LogActivities
+    public ResponseEntity<Object> getInfoPostOrder(@CurrentUser UserPrincipal userPrincipal) {
+        return ok(orderService.preorderDetail(userPrincipal));
+    }
     @GetMapping("dashboard")
     @LogActivities
     public ResponseEntity<Object> getDashboard() {

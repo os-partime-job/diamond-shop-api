@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import vn.fpt.diamond_shop.constants.StatusOrder;
@@ -17,6 +18,8 @@ import vn.fpt.diamond_shop.repository.*;
 import vn.fpt.diamond_shop.request.*;
 import vn.fpt.diamond_shop.response.*;
 import vn.fpt.diamond_shop.security.model.User;
+import vn.fpt.diamond_shop.security.AccountService;
+import vn.fpt.diamond_shop.security.UserPrincipal;
 import vn.fpt.diamond_shop.service.OrderService;
 import vn.fpt.diamond_shop.util.UUIDUtil;
 
@@ -48,6 +51,8 @@ public class OrderServiceImpl implements OrderService {
     private UserRepository userRepository;
     @Autowired
     private DeliveryRepository deliveryRepository;
+    @Autowired
+    private AccountService accountService;
 
     @Override
     public ResponseEntity<Object> orderList(GetListOrderRequest request) {
@@ -79,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
             List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(order.getUniqueOrderId());
             ordersListAllUser.setOrderDetails(allByUniqueOrderId);
             ordersListAllUser.setDeliveryInfo(deliveryRepository.findAllByOrderId(order.getUniqueOrderId()));
-//            ordersListAllUser.setPhoneNumber(request.getPhoneNumber());
+            ordersListAllUser.setPhoneNumber(request.getPhoneNumber());
             ordersListAllUsers.add(ordersListAllUser);
         }
         Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
@@ -212,19 +217,19 @@ public class OrderServiceImpl implements OrderService {
     public Object detail(GetOrderDetailRequest request) {
         Orders order = ordersRepository.findById(request.getOrderId()).orElseThrow(() -> new DiamondShopException(400, "Order not found"));
 
-        OrdersListAllUser ordersListAllUsers = null;
+        List<OrdersListAllUser> ordersListAllUsers = new ArrayList<>();
             OrdersListAllUser ordersListAllUser = new OrdersListAllUser();
             BeanUtils.copyProperties(order, ordersListAllUser);
             List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(order.getUniqueOrderId());
             ordersListAllUser.setOrderDetails(allByUniqueOrderId);
             ordersListAllUser.setDeliveryInfo(deliveryRepository.findAllByOrderId(order.getUniqueOrderId()));
             //ordersListAllUser.setPhoneNumber(request.getPhoneNumber());
-//            ordersListAllUsers.add(ordersListAllUser);
+            ordersListAllUsers.add(ordersListAllUser);
 
         Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
-        BaseResponse response = new BaseResponse(meta, ordersListAllUser);
+        BaseResponse response = new BaseResponse(meta, ordersListAllUsers);
 
-        return ordersListAllUser;
+        return response;
     }
 
     @Override
@@ -253,15 +258,15 @@ public class OrderServiceImpl implements OrderService {
             ordersListAllUsers.add(ordersListAllUser);
         }
         for(OrdersListAllUser ordersListAllUser : ordersListAllUsers){
-            Optional<User> userByAccountId = userRepository.findById(ordersListAllUser.getCustomerId());
-            User user = userByAccountId.get();
-            ordersListAllUser.setEmail(user != null ? user.getEmail() : null);
+            Optional<EndUser> endUserByAccountId = endUserRepository.findEndUserByAccountId(ordersListAllUser.getCustomerId());
+            EndUser endUser = endUserByAccountId.get();
+            ordersListAllUser.se(endUser != null ? endUser.getPhoneNumber() : null);
         }
         Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
         meta.setLimit(request.getLimit());
         meta.setOffset(request.getOffset());
-        meta.setTotal(Integer.valueOf(String.valueOf(ordersPage.getTotalElements()))) ;
-        BaseResponse response = new BaseResponse(meta,ordersListAllUsers);
+        meta.setTotal(Integer.valueOf(String.valueOf(ordersPage.getTotalElements())));
+        BaseResponse response = new BaseResponse(meta, ordersListAllUsers);
 
         return ResponseEntity.ok(response);
     }
@@ -274,6 +279,12 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
 
+    @Override
+    public Object preorderDetail(UserPrincipal userPrincipal) {
+        PreOrderDetailResponse preOrderDetailResponse = new PreOrderDetailResponse();
+        preOrderDetailResponse.setUserProfile(accountService.profile(userPrincipal.getId()));
+        return preOrderDetailResponse;
+    }
     @Override
     public DashboardResponse dashboard() {
         DashboardResponse dashboardResponse = new DashboardResponse();
@@ -298,4 +309,5 @@ public class OrderServiceImpl implements OrderService {
         dashboardResponse.setOrderInfo(ordersData);
         return dashboardResponse;
     }
+
 }
