@@ -21,14 +21,6 @@ public class SpringSocialApplication {
 
     public static void main(String[] args) {
         applicationContext = SpringApplication.run(SpringSocialApplication.class, args);
-        displayAllBeans();
-    }
-
-    public static void displayAllBeans() {
-        String[] allBeanNames = applicationContext.getBeanDefinitionNames();
-        for (String beanName : allBeanNames) {
-            System.out.println(beanName);
-        }
     }
 
 }

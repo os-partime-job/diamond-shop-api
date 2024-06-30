@@ -48,7 +48,7 @@ public class SendCouponMailJob {
 
     private String mailSubject = "DIAMOND COUPON";
 
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 28 21 * * ?")
     public void checkAndSendCoupon() {
         log.info("Start send coupon mail task");
         Date now = new Date();
@@ -56,7 +56,7 @@ public class SendCouponMailJob {
         List<User> listUser = userRepository.findAllByIdIn(listAccountId.stream().map(EndUser::getAccountId).collect(Collectors.toList()));
 
         //get all usable coupons by expiration date
-        List<Coupon> coupons = couponRepository.findAllByExpirationDateBefore(now);
+        List<Coupon> coupons = couponRepository.findAllByExpirationDateAfter(now);
         coupons.forEach(coupon -> {
             log.info("Starting check coupon: {}", coupon.getCouponsCode());
             //Mail param contents
