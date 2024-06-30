@@ -16,6 +16,7 @@ import vn.fpt.diamond_shop.model.*;
 import vn.fpt.diamond_shop.repository.*;
 import vn.fpt.diamond_shop.request.*;
 import vn.fpt.diamond_shop.response.*;
+import vn.fpt.diamond_shop.security.model.User;
 import vn.fpt.diamond_shop.service.OrderService;
 import vn.fpt.diamond_shop.util.UUIDUtil;
 
@@ -78,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
             List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(order.getUniqueOrderId());
             ordersListAllUser.setOrderDetails(allByUniqueOrderId);
             ordersListAllUser.setDeliveryInfo(deliveryRepository.findAllByOrderId(order.getUniqueOrderId()));
-            ordersListAllUser.setPhoneNumber(request.getPhoneNumber());
+//            ordersListAllUser.setPhoneNumber(request.getPhoneNumber());
             ordersListAllUsers.add(ordersListAllUser);
         }
         Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
@@ -211,19 +212,19 @@ public class OrderServiceImpl implements OrderService {
     public Object detail(GetOrderDetailRequest request) {
         Orders order = ordersRepository.findById(request.getOrderId()).orElseThrow(() -> new DiamondShopException(400, "Order not found"));
 
-        List<OrdersListAllUser> ordersListAllUsers = new ArrayList<>();
+        OrdersListAllUser ordersListAllUsers = null;
             OrdersListAllUser ordersListAllUser = new OrdersListAllUser();
             BeanUtils.copyProperties(order, ordersListAllUser);
             List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(order.getUniqueOrderId());
             ordersListAllUser.setOrderDetails(allByUniqueOrderId);
             ordersListAllUser.setDeliveryInfo(deliveryRepository.findAllByOrderId(order.getUniqueOrderId()));
             //ordersListAllUser.setPhoneNumber(request.getPhoneNumber());
-            ordersListAllUsers.add(ordersListAllUser);
+//            ordersListAllUsers.add(ordersListAllUser);
 
         Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
-        BaseResponse response = new BaseResponse(meta, ordersListAllUsers);
+        BaseResponse response = new BaseResponse(meta, ordersListAllUser);
 
-        return response;
+        return ordersListAllUser;
     }
 
     @Override
@@ -252,9 +253,9 @@ public class OrderServiceImpl implements OrderService {
             ordersListAllUsers.add(ordersListAllUser);
         }
         for(OrdersListAllUser ordersListAllUser : ordersListAllUsers){
-            Optional<EndUser> endUserByAccountId = endUserRepository.findEndUserByAccountId(ordersListAllUser.getCustomerId());
-            EndUser endUser = endUserByAccountId.get();
-            ordersListAllUser.setPhoneNumber(endUser != null ? endUser.getPhoneNumber() : null);
+            Optional<User> userByAccountId = userRepository.findById(ordersListAllUser.getCustomerId());
+            User user = userByAccountId.get();
+            ordersListAllUser.setEmail(user != null ? user.getEmail() : null);
         }
         Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
         meta.setLimit(request.getLimit());
@@ -271,5 +272,30 @@ public class OrderServiceImpl implements OrderService {
 
 //        ordersRepository.findAllOrderByOrderByCreatedAtDesc()
         return null;
+    }
+
+    @Override
+    public DashboardResponse dashboard() {
+        DashboardResponse dashboardResponse = new DashboardResponse();
+
+        DashboardResponse.OrdersData ordersData = new DashboardResponse.OrdersData();
+        ordersData.setTotalOrder(ordersRepository.findAll().size());
+        ordersData.setOrderInit(ordersRepository.findAllOrderByStatusOrderByCreatedAtDesc(StatusOrder.INIT.getValue()).size());
+        ordersData.setOrderWaitPayment(ordersRepository.findAllOrderByStatusOrderByCreatedAtDesc(StatusOrder.CREATE_PAYMENT.getValue()).size());
+        ordersData.setOrderDelivery(ordersRepository.findAllOrderByStatusOrderByCreatedAtDesc(StatusOrder.DELIVERY.getValue()).size());
+        ordersData.setOrderSuccess(ordersRepository.findAllOrderByStatusOrderByCreatedAtDesc(StatusOrder.DONE.getValue()).size());
+        ordersData.setOrderCancel(ordersRepository.findAllOrderByStatusOrderByCreatedAtDesc(StatusOrder.CANCEL.getValue()).size());
+
+        DashboardResponse.RevenueData revenueData = new DashboardResponse.RevenueData();
+        revenueData.setPriceInit(ordersRepository.getTotalStatusAmount(StatusOrder.INIT.getValue()));
+        revenueData.setPriceWaitPayment(ordersRepository.getTotalStatusAmount(StatusOrder.CREATE_PAYMENT.getValue()));
+        revenueData.setPriceDelivery(ordersRepository.getTotalStatusAmount(StatusOrder.DELIVERY.getValue()));
+        revenueData.setPriceSuccess(ordersRepository.getTotalStatusAmount(StatusOrder.DONE.getValue()));
+        revenueData.setPriceCancel(ordersRepository.getTotalStatusAmount(StatusOrder.CANCEL.getValue()));
+        revenueData.setTotalPrice(ordersRepository.getTotalStatusAmount(null));
+
+        dashboardResponse.setRevenueData(revenueData);
+        dashboardResponse.setOrderInfo(ordersData);
+        return dashboardResponse;
     }
 }
