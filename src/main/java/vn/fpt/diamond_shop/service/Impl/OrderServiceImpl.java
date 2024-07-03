@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import vn.fpt.diamond_shop.constants.StatusDelivery;
 import vn.fpt.diamond_shop.constants.StatusOrder;
 import vn.fpt.diamond_shop.exception.DiamondShopException;
 import vn.fpt.diamond_shop.model.*;
@@ -54,6 +55,8 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private DeliverRepository deliverRepository;
     @Override
     public ResponseEntity<Object> orderList(GetListOrderRequest request) {
         if(request.getLimit() == null){
@@ -240,32 +243,23 @@ public class OrderServiceImpl implements OrderService {
         if(request.getOffset() == null){
             request.setOffset(0);
         }
-        Page<Orders> ordersPage = null;
-        if(StringUtils.isEmpty(request.getStatus())){
-            ordersPage = ordersRepository.findAllOrderByOrderByCreatedAtDesc(PageRequest.of(request.getOffset()/request.getLimit(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
-        }else{
-            ordersPage = ordersRepository.findAllOrderByStatusOrderByCreatedAtDesc(request.getStatus(), PageRequest.of(request.getOffset()/request.getLimit(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
+        List<OrdersListAllUser> ordersListAllUsers = ordersRepository.searchAllOrders(request.getStatus(), request.getOrderId(), request.getPhoneNumber());
 
-        }
-        List<Orders> orderDetails = ordersPage.getContent();
-        List<OrdersListAllUser> ordersListAllUsers = new ArrayList<>();
-        for(Orders order : orderDetails){
-            OrdersListAllUser ordersListAllUser = new OrdersListAllUser();
-            BeanUtils.copyProperties(order, ordersListAllUser);
+        for(OrdersListAllUser order : ordersListAllUsers){
             List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(order.getUniqueOrderId());
-            ordersListAllUser.setOrderDetails(allByUniqueOrderId);
-            ordersListAllUser.setDeliveryInfo(deliveryRepository.findAllByOrderId(order.getUniqueOrderId()));
-            ordersListAllUsers.add(ordersListAllUser);
-        }
-        for(OrdersListAllUser ordersListAllUser : ordersListAllUsers){
-            Optional<EndUser> endUserByAccountId = endUserRepository.findEndUserByAccountId(ordersListAllUser.getCustomerId());
+            order.setOrderDetails(allByUniqueOrderId);
+            order.setDeliveryInfo(deliveryRepository.findAllByOrderId(order.getUniqueOrderId()));
+//            ordersListAllUsers.add(order);
+//        }
+//        for(OrdersListAllUser ordersListAllUser : ordersListAllUsers){
+            Optional<EndUser> endUserByAccountId = endUserRepository.findEndUserByAccountId(order.getCustomerId());
             EndUser endUser = endUserByAccountId.get();
-            ordersListAllUser.setPhoneNumber(endUser != null ? endUser.getPhoneNumber() : null);
+            order.setPhoneNumber(endUser != null ? endUser.getPhoneNumber() : null);
         }
         Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
         meta.setLimit(request.getLimit());
         meta.setOffset(request.getOffset());
-        meta.setTotal(Integer.valueOf(String.valueOf(ordersPage.getTotalElements())));
+        meta.setTotal(Integer.valueOf(String.valueOf(ordersListAllUsers.size())));
         BaseResponse response = new BaseResponse(meta, ordersListAllUsers);
 
         return ResponseEntity.ok(response);
@@ -273,10 +267,37 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Boolean updateOrder(UpdateOrderRequest request) {
-        EndUser endUserByPhoneNumber = endUserRepository.findEndUserByPhoneNumber(request.getPhoneNumber());
-
-//        ordersRepository.findAllOrderByOrderByCreatedAtDesc()
-        return null;
+        if(!StringUtils.isEmpty(request.getPhoneNumber())){
+            EndUser endUserByPhoneNumber = endUserRepository.findEndUserByPhoneNumber(request.getPhoneNumber());
+            request.setCustomerId(endUserByPhoneNumber.getAccountId());
+        }
+        Orders ordersRepositoryById = ordersRepository.findByUniqueOrderId(request.getOrderId()).get();
+        if(ordersRepositoryById != null){
+            //update order list
+            ordersRepositoryById.setStatus(request.getStatusOrder());
+            ordersRepository.save(ordersRepositoryById);
+            //order detail
+            List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(ordersRepositoryById.getUniqueOrderId());
+            for(OrderDetail orderDetail : allByUniqueOrderId){
+                orderDetail.setStatus(request.getStatusOrder());
+                orderDetailRepository.save(orderDetail);
+            }
+            //update delivery
+            Delivery delivery = deliveryRepository.findAllByOrderId(ordersRepositoryById.getUniqueOrderId());
+            delivery.setStatus(request.getStatusDelivery());
+            delivery.setUpdatedAt(new Date());
+            deliveryRepository.save(delivery);
+            //update deliver
+            Deliver deliverRepositoryByUserId = deliverRepository.findByUserId(delivery.getDeliverId());
+            deliverRepositoryByUserId.setTotalOrder(deliverRepositoryByUserId.getTotalOrder() + 1);
+            if(StatusDelivery.SUCCESS_DELIVERY.getValue().equals(request.getStatusDelivery()) ){
+                deliverRepositoryByUserId.setTotalOrderSuccess(deliverRepositoryByUserId.getTotalOrderSuccess() + 1);
+            }else{
+                deliverRepositoryByUserId.setTotalOrderFail(deliverRepositoryByUserId.getTotalOrderFail() + 1);
+            }
+            deliverRepository.save(deliverRepositoryByUserId);
+        }
+        return true;
     }
 
     @Override

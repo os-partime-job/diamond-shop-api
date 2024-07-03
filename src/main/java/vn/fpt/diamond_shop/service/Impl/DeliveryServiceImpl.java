@@ -106,7 +106,12 @@ public class DeliveryServiceImpl implements DeliveryService {
             delivery.setOrderId(request.getOrderId());
             delivery.setStatusDate(new Date());
             delivery.setEndDateEstimated(date2);
-            delivery.setDeliverId(request.getDeliveryId() == null ? allDeleverByStatus.get(rand.nextInt(allDeleverByStatus.size())).getId() : request.getDeliveryId());
+            if(request.getDeliveryId() == null){
+                delivery.setDeliverId(allDeleverByStatus.get(rand.nextInt(allDeleverByStatus.size())).getUserId());
+            }else{
+                Deliver byId = deliverRepository.findById(request.getDeliveryId()).get();
+                delivery.setDeliverId(byId.getUserId());
+            }
             deliveryRepository.save(delivery);
         }else {
             //update
