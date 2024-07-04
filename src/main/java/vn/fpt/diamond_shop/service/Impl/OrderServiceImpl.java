@@ -243,9 +243,9 @@ public class OrderServiceImpl implements OrderService {
         if(request.getOffset() == null){
             request.setOffset(0);
         }
-        List<OrdersListAllUser> ordersListAllUsers = ordersRepository.searchAllOrders(request.getStatus(), request.getOrderId(), request.getPhoneNumber());
-
-        for(OrdersListAllUser order : ordersListAllUsers){
+        Page<OrdersListAllUser> ordersListAllUsers2 = ordersRepository.searchAllOrders(request.getStatus(), request.getOrderId(), request.getPhoneNumber(),PageRequest.of(request.getOffset()/ request.getLimit(), request.getLimit()));
+//        List<OrdersListAllUser> ordersListAllUsers = ordersRepository.searchAllOrders(request.getStatus(), request.getOrderId(), request.getPhoneNumber());
+        for(OrdersListAllUser order : ordersListAllUsers2.getContent()){
             List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(order.getUniqueOrderId());
             order.setOrderDetails(allByUniqueOrderId);
             order.setDeliveryInfo(deliveryRepository.findAllByOrderId(order.getUniqueOrderId()));
@@ -259,8 +259,8 @@ public class OrderServiceImpl implements OrderService {
         Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
         meta.setLimit(request.getLimit());
         meta.setOffset(request.getOffset());
-        meta.setTotal(Integer.valueOf(String.valueOf(ordersListAllUsers.size())));
-        BaseResponse response = new BaseResponse(meta, ordersListAllUsers);
+        meta.setTotal((int) ordersListAllUsers2.getTotalElements()); //(int) ordersListAllUsers.getTotalElements()
+        BaseResponse response = new BaseResponse(meta, ordersListAllUsers2.getContent());
 
         return ResponseEntity.ok(response);
     }

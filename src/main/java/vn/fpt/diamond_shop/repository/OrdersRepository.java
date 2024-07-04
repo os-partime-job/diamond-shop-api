@@ -34,7 +34,7 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
 
     Optional<Orders> findByUniqueOrderId(String uniqueOrderId);
 
-    @Query(value  = "SELECT new vn.fpt.diamond_shop.response.OrdersListAllUser(" +
+    @Query(value = "SELECT new vn.fpt.diamond_shop.response.OrdersListAllUser(" +
             "o.id as id," +
             "o.uniqueOrderId as uniqueOrderId," +
             "o.orderDate as orderDate," +
@@ -50,8 +50,29 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
             "AND (:phoneNumber is null or eu.phoneNumber = :phoneNumber)" +
             "AND (:uniqueOrderId is null or o.uniqueOrderId = :uniqueOrderId)")
     List<OrdersListAllUser> searchAllOrders(
-                                 @Param("status") String status,
-                                 @Param("uniqueOrderId")String uniqueOrderId,
-                                 @Param("phoneNumber")String phoneNumber
-                                    );
+            @Param("status") String status,
+            @Param("uniqueOrderId") String uniqueOrderId,
+            @Param("phoneNumber") String phoneNumber
+    );
+    @Query(value  = "SELECT new vn.fpt.diamond_shop.response.OrdersListAllUser(" +
+            " o.id as id," +
+            "o.uniqueOrderId as uniqueOrderId," +
+            "o.orderDate as orderDate," +
+            "o.status as status," +
+            "o.customerId as customerId," +
+            "o.totalPrice as totalPrice," +
+            "o.createdAt as createdAt," +
+            "o.updatedAt as updatedAt," +
+            "eu.phoneNumber as phoneNumber  " +
+            ") FROM Orders as o left join EndUser as eu on (o.customerId = eu.accountId)" +
+            " WHERE  1= 1 " +
+            "AND (:status is null or o.status = :status)" +
+            "AND (:phoneNumber is null or eu.phoneNumber = :phoneNumber)" +
+            "AND (:uniqueOrderId is null or o.uniqueOrderId = :uniqueOrderId)")
+    Page<OrdersListAllUser> searchAllOrders(
+            @Param("status") String status,
+            @Param("uniqueOrderId") String uniqueOrderId,
+            @Param("phoneNumber") String phoneNumber,
+            Pageable pageable
+    );
 }
