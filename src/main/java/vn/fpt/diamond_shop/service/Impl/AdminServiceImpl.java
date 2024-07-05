@@ -17,6 +17,7 @@ import vn.fpt.diamond_shop.service.AdminService;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -65,6 +66,7 @@ public class AdminServiceImpl implements AdminService {
         users.forEach(e -> {
             UserRole role = userRoleRepository.findAllByAccountId(e.getId()).get(0);
             RoleEnum roleEnum = RoleEnum.getRoleEnumById(role.getRoleId());
+            EndUser endUserByAccountId = endUserRepository.findEndUserByAccountId(e.getId()).get();
             if (!e.getId().equals(userPrincipal.getId())) {
                 responses.add(new ManagerListAccountResponse(
                         e.getId(),
@@ -73,7 +75,8 @@ public class AdminServiceImpl implements AdminService {
                         e.getEmailVerified(),
                         roleEnum.name(),
                         e.getProvider().name(),
-                        e.isActive()));
+                        e.isActive(),
+                        endUserByAccountId.getPhoneNumber()));
             }
         });
         return responses;
