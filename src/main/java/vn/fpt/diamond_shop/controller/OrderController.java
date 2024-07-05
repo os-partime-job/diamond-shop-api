@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.fpt.diamond_shop.constants.UrlConstants;
-import vn.fpt.diamond_shop.request.AddOrderRequest;
-import vn.fpt.diamond_shop.request.GetListOrderRequest;
-import vn.fpt.diamond_shop.request.GetOrderDetailRequest;
-import vn.fpt.diamond_shop.request.UpdateOrderRequest;
+import vn.fpt.diamond_shop.request.*;
 import vn.fpt.diamond_shop.security.CurrentUser;
 import vn.fpt.diamond_shop.security.UserPrincipal;
 import vn.fpt.diamond_shop.service.OrderService;
@@ -64,10 +61,17 @@ public class OrderController extends BaseController {
     public ResponseEntity<Object> getInfoPostOrder(@CurrentUser UserPrincipal userPrincipal) {
         return ok(orderService.preorderDetail(userPrincipal));
     }
+
     @GetMapping("dashboard")
     @LogActivities
     public ResponseEntity<Object> getDashboard() {
 //        request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
         return ok(orderService.dashboard());
+    }
+
+    @PostMapping("sendMail")
+    public ResponseEntity<Object> sendMail(@RequestBody SendInvoiceRequest request) {
+        orderService.sendMailInvoice(request);
+        return ok("Send mail success");
     }
 }

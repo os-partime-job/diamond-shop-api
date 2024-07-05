@@ -32,5 +32,8 @@ public interface OrderService {
     Boolean updateOrder(UpdateOrderRequest request);
 
     Object preorderDetail(UserPrincipal userPrincipal);
+
     DashboardResponse dashboard();
+
+    void sendMailInvoice(SendInvoiceRequest request);
 }
