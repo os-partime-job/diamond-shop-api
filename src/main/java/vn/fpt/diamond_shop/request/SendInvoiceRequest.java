@@ -2,6 +2,8 @@ package vn.fpt.diamond_shop.request;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class SendInvoiceRequest {
     private String orderId;
@@ -10,7 +12,7 @@ public class SendInvoiceRequest {
     private Long customerId;
     private String total;
     private String address;
-    private Products products;
+    private List<Products> products;
 
     @Data
     public static class Products {

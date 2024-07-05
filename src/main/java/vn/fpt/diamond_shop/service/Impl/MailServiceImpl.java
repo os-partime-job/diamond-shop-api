@@ -44,7 +44,6 @@ public class MailServiceImpl implements MailService {
             param.put("orderId", mail.getOrderId());
             param.put("date", mail.getDate());
             param.put("address", mail.getAddress());
-            param.put("image", mail.getImage());
             param.put("products", mail.getProducts());
             push(email, subject, param, "invoice_mail_template.ftl");
         } catch (Exception e) {
@@ -81,5 +80,17 @@ public class MailServiceImpl implements MailService {
         helper.setText(htmlContent, true);
 
         emailSender.send(message);
+    }
+
+    public String getHtmlContent(Map<String, Object> attribute, String templateName) {
+        try {
+            freemarkerConfig.setTemplateLoader(new ClassTemplateLoader(getClass(), "/templates"));
+            Template template = freemarkerConfig.getTemplate(templateName);
+            StringWriter stringWriter = new StringWriter();
+            template.process(attribute, stringWriter);
+            return stringWriter.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

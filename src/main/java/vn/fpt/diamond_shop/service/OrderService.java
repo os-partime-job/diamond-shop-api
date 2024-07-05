@@ -36,4 +36,6 @@ public interface OrderService {
     DashboardResponse dashboard();
 
     void sendMailInvoice(SendInvoiceRequest request);
+
+    Object getInvoice(String orderId);
 }

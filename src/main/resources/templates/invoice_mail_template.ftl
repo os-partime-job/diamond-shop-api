@@ -1,13 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <meta name="x-apple-disable-message-reformatting">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="telephone=no" name="format-detection">
-    <title>New Template 2</title><!--[if (mso 16)]>
+    <title>Invoice</title><!--[if (mso 16)]>
     <style type="text/css">
         a {
             text-decoration: none;
@@ -512,7 +509,7 @@
                                                             <td align="center"
                                                                 style="padding:0;Margin:0;padding-bottom:20px"><p
                                                                         style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">
-                                                                    Expected delivery <strong>${}</strong>
+                                                                    Expected delivery <strong>${date}</strong>
                                                                 </p></td>
                                                         </tr>
                                                     </table>
@@ -955,4 +952,3 @@
     </table>
 </div>
 </body>
-</html>

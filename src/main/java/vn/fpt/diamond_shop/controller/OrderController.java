@@ -74,4 +74,9 @@ public class OrderController extends BaseController {
         orderService.sendMailInvoice(request);
         return ok("Send mail success");
     }
+
+    @GetMapping("get_invoice")
+    public ResponseEntity<Object> getInvoice(@RequestParam String orderId) {
+        return ok(orderService.getInvoice(orderId));
+    }
 }
