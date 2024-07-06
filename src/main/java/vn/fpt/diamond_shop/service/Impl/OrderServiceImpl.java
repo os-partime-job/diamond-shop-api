@@ -163,6 +163,8 @@ public class OrderServiceImpl implements OrderService {
             sendInvoiceRequest.setCustomerId(request.getCustomerId());
             sendInvoiceRequest.setTotal(String.valueOf(orders.getTotalPrice()));
             sendInvoiceRequest.setProducts(products);
+            // tam thoi chay code
+            sendInvoiceRequest.setAddress("tam thoi chay code");
             addInvoice(sendInvoiceRequest);
 
             return response;
