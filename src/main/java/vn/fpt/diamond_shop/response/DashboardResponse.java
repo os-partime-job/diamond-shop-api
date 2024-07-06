@@ -22,6 +22,8 @@ public class DashboardResponse {
 
     private RevenueData revenueData;
 
+    private List<SaleData> saleData;
+
     @Data
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     @AllArgsConstructor
@@ -48,5 +50,17 @@ public class DashboardResponse {
         private Long priceDelivery;
         private Long priceSuccess;
         private Long priceCancel;
+    }
+
+    @Data
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SaleData{
+        private Long saleId;
+        private Long totalPrice;
+        private Integer totalOrder;
+        private Long totalPriceSuccess;
+        private Integer totalOrderSuccess;
     }
 }

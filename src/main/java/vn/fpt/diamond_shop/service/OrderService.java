@@ -38,4 +38,8 @@ public interface OrderService {
     void sendMailInvoice(SendInvoiceRequest request);
 
     Object getInvoice(String orderId);
+
+    ResponseEntity<Object> saleList(GetListSaleRequest request);
+
+    DashboardResponse.SaleData saleDetail(Long saleId);
 }

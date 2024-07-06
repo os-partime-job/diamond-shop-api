@@ -79,4 +79,17 @@ public class OrderController extends BaseController {
     public ResponseEntity<Object> getInvoice(@RequestParam String orderId) {
         return ok(orderService.getInvoice(orderId));
     }
+
+    @PostMapping("sale_info")
+    @LogActivities
+    public ResponseEntity<Object> getSale(@Valid @RequestBody GetListSaleRequest request) {
+        return orderService.saleList(request);
+    }
+
+    @PostMapping("sale_detail")
+    @LogActivities
+    public ResponseEntity<Object> getSaleDetail(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetListSaleRequest request) {
+        request.setCustomerId(userPrincipal == null ? request.getSaleId() : userPrincipal.getId());
+        return ok(orderService.saleDetail(request.getCustomerId()));
+    }
 }

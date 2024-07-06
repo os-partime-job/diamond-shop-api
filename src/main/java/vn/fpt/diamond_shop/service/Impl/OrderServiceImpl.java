@@ -107,8 +107,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public AddOrderResponse addOrder(AddOrderRequest request) {
         List<Cart> cartsById = cartRepository.findAllById(request.getCartIds());
-        EndUser endUser = endUserRepository.findById(request.getCustomerId()).get();
-        User user = userRepository.findById(endUser.getId()).get();
+        EndUser endUser = endUserRepository.findEndUserByAccountId(request.getCustomerId()).get();
+        User user = userRepository.findById(endUser.getAccountId()).get();
         String uniqueOrderId = UUIDUtil.generateUUID();
         List<Long> listJewelris = new ArrayList<>();
         Orders orders = new Orders();
@@ -126,6 +126,7 @@ public class OrderServiceImpl implements OrderService {
                 orderDetail.setStatus(StatusOrder.CREATE_PAYMENT.getValue());
                 orderDetail.setUniqueOrderId(uniqueOrderId);
                 orderDetail.setQuantityNumber(cart.getQuantity());
+                orderDetail.setSaleId(cart.getSaleId());
                 Optional<Jewelry> Jewelry = jewelryRepository.findById(cart.getJewelryId());
                 Jewelry jewelryData = Jewelry.get();
                 if (jewelryData != null) {
@@ -186,9 +187,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Boolean addCart(AddCartRequest request) {
+        Long saleId = null;
         if (!StringUtils.isEmpty(request.getPhoneNumber())) {
             EndUser endUserByPhoneNumber = endUserRepository.findEndUserByPhoneNumber(request.getPhoneNumber());
             if (endUserByPhoneNumber != null) {
+                saleId = request.getCustomerId();
                 request.setCustomerId(endUserByPhoneNumber.getAccountId());
             }
         }
@@ -207,6 +210,7 @@ public class OrderServiceImpl implements OrderService {
             cart.setCreatedAt(new Date(new java.util.Date().getTime()));
             cart.setStatus(ACTIVE_CART);
             cart.setSize(request.getSize());
+            cart.setSaleId(saleId);
             cartRepository.save(cart);
         }
 
@@ -368,6 +372,34 @@ public class OrderServiceImpl implements OrderService {
         return invoice.getHtmlContent();
     }
 
+    @Override
+    public ResponseEntity<Object> saleList(GetListSaleRequest request) {
+        List<DashboardResponse.SaleData> saleDataList = new ArrayList<>();
+        List<Long> listSaleId = orderDetailRepository.getListSaleId(request.getCustomerId(), request.getStatus());
+        for (Long saleId : listSaleId) {
+            if(saleId != null){
+                saleDataList.add(processSaleData(saleId));
+            }
+        }
+        Meta meta = new Meta(request.getRequestId(), 200, "success", HttpStatus.OK.toString());
+        BaseResponse response = new BaseResponse(meta, saleDataList);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public DashboardResponse.SaleData saleDetail(Long saleId) {
+        return processSaleData(saleId);
+    }
+private DashboardResponse.SaleData processSaleData(Long saleId){
+    DashboardResponse.SaleData saleData = new DashboardResponse.SaleData();
+    saleData.setTotalPrice(orderDetailRepository.getSaleInfo(saleId, null));
+    saleData.setTotalOrder(orderDetailRepository.getOrderIdBySaleId(saleId, null).size());
+    saleData.setSaleId(saleId);
+    saleData.setTotalOrderSuccess(orderDetailRepository.getOrderIdBySaleId(saleId, StatusOrder.DONE.getValue()).size());
+    saleData.setTotalPriceSuccess(orderDetailRepository.getSaleInfo(saleId, StatusOrder.DONE.getValue()));
+    return saleData;
+}
     private void addInvoice(SendInvoiceRequest request) {
         Map<String, Object> attribute = new HashMap<>();
         attribute.put("orderId", request.getOrderId());
