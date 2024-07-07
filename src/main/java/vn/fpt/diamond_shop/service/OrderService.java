@@ -42,4 +42,6 @@ public interface OrderService {
     ResponseEntity<Object> saleList(GetListSaleRequest request);
 
     DashboardResponse.SaleData saleDetail(Long saleId);
+
+    Object invoiceDetal(GetListOrderRequest request);
 }

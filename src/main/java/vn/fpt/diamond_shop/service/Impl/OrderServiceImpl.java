@@ -391,7 +391,33 @@ public class OrderServiceImpl implements OrderService {
     public DashboardResponse.SaleData saleDetail(Long saleId) {
         return processSaleData(saleId);
     }
-private DashboardResponse.SaleData processSaleData(Long saleId){
+
+    @Override
+    public Object invoiceDetal(GetListOrderRequest request) {
+        InvoiceDetailResponse invoiceDetailResponse = new InvoiceDetailResponse();
+        invoiceDetailResponse.setOrderId(request.getOrderId());
+        Orders orders = ordersRepository.findByUniqueOrderId(request.getOrderId()).get();
+        invoiceDetailResponse.setOrderDate(orders.getCreatedAt());
+        EndUser endUserByAccountId = endUserRepository.findEndUserByAccountId(orders.getCustomerId()).get();
+        invoiceDetailResponse.setPhoneNumber(endUserByAccountId.getPhoneNumber());
+        invoiceDetailResponse.setCustomerName(endUserByAccountId.getFullName());
+        List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(request.getOrderId());
+        List<InvoiceDetailResponse.Product> productList = new ArrayList<>();
+        if(allByUniqueOrderId != null){
+            for (OrderDetail orderDetail : allByUniqueOrderId) {
+                InvoiceDetailResponse.Product product = new InvoiceDetailResponse.Product();
+                product.setQuantity(orderDetail.getQuantityNumber());
+                Jewelry jewelryById = jewelryRepository.findJewelryById(orderDetail.getJewelryId());
+                product.setJewelryName(jewelryById.getName());
+                product.setJewelryCode(jewelryById.getJewelryCode());
+                productList.add(product);
+            }
+        }
+        invoiceDetailResponse.setListOfProduct(productList);
+        return invoiceDetailResponse;
+    }
+
+    private DashboardResponse.SaleData processSaleData(Long saleId){
     DashboardResponse.SaleData saleData = new DashboardResponse.SaleData();
     saleData.setTotalPrice(orderDetailRepository.getSaleInfo(saleId, null));
     saleData.setTotalOrder(orderDetailRepository.getOrderIdBySaleId(saleId, null).size());

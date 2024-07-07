@@ -92,4 +92,9 @@ public class OrderController extends BaseController {
         request.setCustomerId(userPrincipal == null ? request.getSaleId() : userPrincipal.getId());
         return ok(orderService.saleDetail(request.getCustomerId()));
     }
+
+    @PostMapping("invoice_detail")
+    public ResponseEntity<Object> invoiceDetail(@Valid @RequestBody GetListOrderRequest request) {
+        return ok(orderService.invoiceDetal(request));
+    }
 }
