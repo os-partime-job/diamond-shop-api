@@ -48,4 +48,6 @@ public class OrderDetail {
     @Column(name = "sale_id")
     private Long saleId;
 
+    @Column(name = "size")
+    private String size;
 }

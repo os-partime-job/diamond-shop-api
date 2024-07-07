@@ -127,6 +127,7 @@ public class OrderServiceImpl implements OrderService {
                 orderDetail.setUniqueOrderId(uniqueOrderId);
                 orderDetail.setQuantityNumber(cart.getQuantity());
                 orderDetail.setSaleId(cart.getSaleId());
+                orderDetail.setSize(cart.getSize());
                 Optional<Jewelry> Jewelry = jewelryRepository.findById(cart.getJewelryId());
                 Jewelry jewelryData = Jewelry.get();
                 if (jewelryData != null) {
