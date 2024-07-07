@@ -44,4 +44,6 @@ public interface OrderService {
     DashboardResponse.SaleData saleDetail(Long saleId);
 
     Object invoiceDetal(GetListOrderRequest request);
+
+    Object giaInfo(GetListOrderRequest request);
 }

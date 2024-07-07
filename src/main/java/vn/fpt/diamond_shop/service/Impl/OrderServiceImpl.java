@@ -63,6 +63,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private MailServiceImpl mailService;
 
+    @Autowired
+    private DiamondRepository diamondRepository;
+
     @Override
     public ResponseEntity<Object> orderList(GetListOrderRequest request) {
         if (request.getLimit() == null) {
@@ -416,6 +419,39 @@ public class OrderServiceImpl implements OrderService {
         }
         invoiceDetailResponse.setListOfProduct(productList);
         return invoiceDetailResponse;
+    }
+
+    @Autowired
+    private ShapeRepository shapeRepository;
+
+    @Autowired
+    private CutRepository cutRepository;
+
+    @Autowired
+    private ClarityRepository clarityRepository;
+    @Autowired
+    private ColorRepository colorRepository;
+    @Override
+    public Object giaInfo(GetListOrderRequest request) {
+        List<GIAInfoResponse> giaInfoResponseList = new ArrayList<>();
+        GIAInfoResponse giaInfoResponse = new GIAInfoResponse();
+        List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(request.getOrderId());
+        if(allByUniqueOrderId != null){
+            for (OrderDetail orderDetail : allByUniqueOrderId) {
+                Diamond diamond = diamondRepository.findAllByName(orderDetail.getSize());
+                giaInfoResponse.setDiamond(diamond);
+                giaInfoResponse.setInvoiceId(orderDetail.getId());
+                giaInfoResponse.setShapeCut(shapeRepository.findById(diamond.getShapeId()).get().getShape());
+                giaInfoResponse.setCut(cutRepository.findById(diamond.getCutId()).get().getCut());
+                giaInfoResponse.setNameDiamond(diamond.getName());
+                giaInfoResponse.setClarity(clarityRepository.findById(diamond.getClarityId()).get().getClarity());
+                giaInfoResponse.setColor(colorRepository.findById(diamond.getColorId()).get().getColor());
+                giaInfoResponse.setCarat(diamond.getCarat());
+                giaInfoResponseList.add(giaInfoResponse);
+            }
+        }
+
+        return giaInfoResponseList;
     }
 
     private DashboardResponse.SaleData processSaleData(Long saleId){

@@ -97,4 +97,9 @@ public class OrderController extends BaseController {
     public ResponseEntity<Object> invoiceDetail(@Valid @RequestBody GetListOrderRequest request) {
         return ok(orderService.invoiceDetal(request));
     }
+
+    @PostMapping("gia_info")
+    public ResponseEntity<Object> giaInfo(@Valid @RequestBody GetListOrderRequest request) {
+        return ok(orderService.giaInfo(request));
+    }
 }
