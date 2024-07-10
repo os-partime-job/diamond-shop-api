@@ -81,7 +81,11 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         Page<Orders> ordersPage = null;
-        ordersPage = ordersRepository.findAllOrderByCustomerIdAndStatusOrderByCreatedAtDesc(request.getCustomerId(), request.getStatus(), PageRequest.of(request.getOffset() / request.getLimit(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
+        if (StringUtils.isEmpty(request.getStatus())) {
+            ordersPage = ordersRepository.findAllOrderByCustomerIdOrderByCreatedAtDesc(request.getCustomerId(), PageRequest.of(request.getOffset() / request.getLimit(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
+        }else{
+            ordersPage = ordersRepository.findAllOrderByCustomerIdAndStatusOrderByCreatedAtDesc(request.getCustomerId(), request.getStatus(), PageRequest.of(request.getOffset() / request.getLimit(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
+        }
 
         Page<OrderDetail> orderDetailsPage = null;
         if (StringUtils.isEmpty(request.getStatus())) {
