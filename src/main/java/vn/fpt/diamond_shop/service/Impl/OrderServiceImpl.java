@@ -308,28 +308,32 @@ public class OrderServiceImpl implements OrderService {
         Orders ordersRepositoryById = ordersRepository.findByUniqueOrderId(request.getOrderId()).get();
         if (ordersRepositoryById != null) {
             //update order list
-            ordersRepositoryById.setStatus(request.getStatusOrder());
-            ordersRepository.save(ordersRepositoryById);
-            //order detail
-            List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(ordersRepositoryById.getUniqueOrderId());
-            for (OrderDetail orderDetail : allByUniqueOrderId) {
-                orderDetail.setStatus(request.getStatusOrder());
-                orderDetailRepository.save(orderDetail);
+            if (Objects.nonNull(request.getStatusOrder())) {
+                ordersRepositoryById.setStatus(request.getStatusOrder());
+                ordersRepository.save(ordersRepositoryById);
+                //order detail
+                List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(ordersRepositoryById.getUniqueOrderId());
+                for (OrderDetail orderDetail : allByUniqueOrderId) {
+                    orderDetail.setStatus(request.getStatusOrder());
+                    orderDetailRepository.save(orderDetail);
+                }
             }
             //update delivery
-            Delivery delivery = deliveryRepository.findAllByOrderId(ordersRepositoryById.getUniqueOrderId());
-            delivery.setStatus(request.getStatusDelivery());
-            delivery.setUpdatedAt(new Date());
-            deliveryRepository.save(delivery);
-            //update deliver
-            Deliver deliverRepositoryByUserId = deliverRepository.findByUserId(delivery.getDeliverId());
-            deliverRepositoryByUserId.setTotalOrder(deliverRepositoryByUserId.getTotalOrder() + 1);
-            if (StatusDelivery.SUCCESS_DELIVERY.getValue().equals(request.getStatusDelivery())) {
-                deliverRepositoryByUserId.setTotalOrderSuccess(deliverRepositoryByUserId.getTotalOrderSuccess() + 1);
-            } else {
-                deliverRepositoryByUserId.setTotalOrderFail(deliverRepositoryByUserId.getTotalOrderFail() + 1);
+            if (Objects.nonNull(request.getStatusDelivery())) {
+                Delivery delivery = deliveryRepository.findAllByOrderId(ordersRepositoryById.getUniqueOrderId());
+                delivery.setStatus(request.getStatusDelivery());
+                delivery.setUpdatedAt(new Date());
+                deliveryRepository.save(delivery);
+                //update deliver
+                Deliver deliverRepositoryByUserId = deliverRepository.findByUserId(delivery.getDeliverId());
+                deliverRepositoryByUserId.setTotalOrder(deliverRepositoryByUserId.getTotalOrder() + 1);
+                if (StatusDelivery.SUCCESS_DELIVERY.getValue().equals(request.getStatusDelivery())) {
+                    deliverRepositoryByUserId.setTotalOrderSuccess(deliverRepositoryByUserId.getTotalOrderSuccess() + 1);
+                } else {
+                    deliverRepositoryByUserId.setTotalOrderFail(deliverRepositoryByUserId.getTotalOrderFail() + 1);
+                }
+                deliverRepository.save(deliverRepositoryByUserId);
             }
-            deliverRepository.save(deliverRepositoryByUserId);
         }
         return true;
     }
