@@ -10,7 +10,7 @@ import vn.fpt.diamond_shop.response.GetDetailDiamondResponse;
 import java.util.List;
 
 public interface DiamondService {
-    void addDiamond(AddDiamondRequest addDiamondRequest);
+    Boolean addDiamond(AddDiamondRequest addDiamondRequest);
 
     List<Diamond> listDiamonds();
 
