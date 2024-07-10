@@ -277,7 +277,7 @@ public class OrderServiceImpl implements OrderService {
         if (request.getOffset() == null) {
             request.setOffset(0);
         }
-        Page<OrdersListAllUser> ordersListAllUsers2 = ordersRepository.searchAllOrders(request.getStatus(), request.getOrderId(), request.getPhoneNumber(), PageRequest.of(request.getOffset() / request.getLimit(), request.getLimit()));
+        Page<OrdersListAllUser> ordersListAllUsers2 = ordersRepository.searchAllOrders(request.getStatus(), request.getOrderId(), request.getPhoneNumber(), PageRequest.of(request.getOffset() / request.getLimit(), request.getLimit(),Sort.by(Sort.Direction.DESC, "id")));
 //        List<OrdersListAllUser> ordersListAllUsers = ordersRepository.searchAllOrders(request.getStatus(), request.getOrderId(), request.getPhoneNumber());
         for (OrdersListAllUser order : ordersListAllUsers2.getContent()) {
             List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(order.getUniqueOrderId());
