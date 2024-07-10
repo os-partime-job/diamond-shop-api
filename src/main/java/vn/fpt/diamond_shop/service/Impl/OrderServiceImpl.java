@@ -81,7 +81,7 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         Page<Orders> ordersPage = null;
-        ordersPage = ordersRepository.findAllOrderByCustomerIdOrderByCreatedAtDesc(request.getCustomerId(), PageRequest.of(request.getOffset() / request.getLimit(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
+        ordersPage = ordersRepository.findAllOrderByCustomerIdAndStatusOrderByCreatedAtDesc(request.getCustomerId(), request.getStatus(), PageRequest.of(request.getOffset() / request.getLimit(), request.getLimit(), Sort.by(Sort.Direction.DESC, "id")));
 
         Page<OrderDetail> orderDetailsPage = null;
         if (StringUtils.isEmpty(request.getStatus())) {
@@ -318,6 +318,14 @@ public class OrderServiceImpl implements OrderService {
                     orderDetailRepository.save(orderDetail);
                 }
             }
+            if(StringUtils.isEmpty(request.getStatusDelivery())){
+                if(StatusOrder.DONE.equals(request.getStatusOrder())){
+                    request.setStatusDelivery(StatusDelivery.SUCCESS_DELIVERY.getValue());
+                }else if(StatusOrder.CANCEL.equals(request.getStatusOrder())){
+                    request.setStatusDelivery(StatusDelivery.FAIL_DELIVERY.getValue());
+                }
+            }
+
             //update delivery
             if (Objects.nonNull(request.getStatusDelivery())) {
                 Delivery delivery = deliveryRepository.findAllByOrderId(ordersRepositoryById.getUniqueOrderId());

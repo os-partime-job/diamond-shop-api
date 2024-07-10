@@ -21,7 +21,7 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
 
     List<Orders> findAllByOrderByCreatedAtDesc();
 
-    Page<Orders> findAllOrderByCustomerIdOrderByCreatedAtDesc(Long customerId, Pageable pageable);
+    Page<Orders> findAllOrderByCustomerIdAndStatusOrderByCreatedAtDesc(Long customerId, String status, Pageable pageable);
 
 
     @Query("SELECT SUM(o.totalPrice) FROM Orders o WHERE o.customerId = :customerId AND o.status = :status")
