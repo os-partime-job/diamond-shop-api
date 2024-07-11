@@ -11,6 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddDiamondRequest extends BaseRequest{
+    private Long idDiamond;
     private String nameDiamond;
     private Long priceDiamond;
     private int carat;

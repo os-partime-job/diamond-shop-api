@@ -48,6 +48,9 @@ public class Diamond {
 
     @Column(name = "price_diamond")
     private Long priceDiamond;
+
+    @Column(name = "profit")
+    private Long profit;
     public Diamond(int carat, Long clarityId, Long cutId, Long polishId, Long colorId, Long shapeId) {
         this.carat = carat;
         this.clarityId = clarityId;

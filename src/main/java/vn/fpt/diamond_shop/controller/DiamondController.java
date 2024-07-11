@@ -43,4 +43,14 @@ public class DiamondController extends BaseController{
         return BaseResponse.ok(diamondService.listDiamonds());
     }
 
+    @GetMapping("/list-all-diamond")
+    @LogActivities
+    public ResponseEntity<?> listAllDiamond() {
+        return BaseResponse.ok(diamondService.listAllDiamonds());
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> update(@Valid @RequestBody AddDiamondRequest request) {
+        return ok(diamondService.updateDiamond(request));
+    }
 }
