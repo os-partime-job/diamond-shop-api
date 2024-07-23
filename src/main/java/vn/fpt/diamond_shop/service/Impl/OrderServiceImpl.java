@@ -342,7 +342,7 @@ public class OrderServiceImpl implements OrderService {
                 delivery.setUpdatedAt(new Date());
                 deliveryRepository.save(delivery);
                 //update deliver
-                Deliver deliverRepositoryByUserId = deliverRepository.findById(delivery.getDeliverId()).get();
+                Deliver deliverRepositoryByUserId = deliverRepository.findByUserId(delivery.getDeliverId());
                 deliverRepositoryByUserId.setTotalOrder(deliverRepositoryByUserId.getTotalOrder() + 1);
                 if (StatusDelivery.SUCCESS_DELIVERY.getValue().equals(request.getStatusDelivery())) {
                     deliverRepositoryByUserId.setTotalOrderSuccess(deliverRepositoryByUserId.getTotalOrderSuccess() + 1);
