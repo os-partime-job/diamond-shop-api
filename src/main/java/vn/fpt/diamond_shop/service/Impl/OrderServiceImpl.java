@@ -331,7 +331,7 @@ public class OrderServiceImpl implements OrderService {
                     request.setStatusDelivery(StatusDelivery.SUCCESS_DELIVERY.getValue());
                 }else if(StatusOrder.CANCEL.equals(request.getStatusOrder())){
                     request.setStatusDelivery(StatusDelivery.FAIL_DELIVERY.getValue());
-                    createPaymentRefundApi.refund(request.getOrderId());
+                    // createPaymentRefundApi.refund(request.getOrderId());
                 }
             }
 
