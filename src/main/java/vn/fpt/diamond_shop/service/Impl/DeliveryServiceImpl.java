@@ -51,7 +51,6 @@ public class DeliveryServiceImpl implements DeliveryService {
         List<DeliverListResponse> deliverListResponses = new ArrayList<>();
         allByOrderByIdDesc.stream().forEach(
                 allByOrderByIdDescDeliver -> {
-                    if ("active".equals(allByOrderByIdDescDeliver.getStatus())) {
                         DeliverListResponse deliverListResponse = new DeliverListResponse();
                         deliverListResponse.setId(allByOrderByIdDescDeliver.getId());
                         deliverListResponse.setUserId(allByOrderByIdDescDeliver.getUserId());
@@ -61,7 +60,6 @@ public class DeliveryServiceImpl implements DeliveryService {
                         deliverListResponse.setStatus(allByOrderByIdDescDeliver.getStatus());
                         deliverListResponse.setUserName(endUserRepository.findEndUserByAccountId(allByOrderByIdDescDeliver.getUserId()).get().getFullName());
                         deliverListResponses.add(deliverListResponse);
-                    }
                 }
         );
 
