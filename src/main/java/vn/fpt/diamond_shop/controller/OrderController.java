@@ -56,6 +56,9 @@ public class OrderController extends BaseController {
     @LogActivities
     public ResponseEntity<Object> listAllUser(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody GetListOrderRequest request) {
         request.setCustomerId(userPrincipal == null ? null : userPrincipal.getId());
+        if(Boolean.TRUE == request.getIsDelivery()) {
+            request.setDeliveryId(userPrincipal == null ? null : userPrincipal.getId());
+        }
         return orderService.orderListAllUser(request);
     }
 
