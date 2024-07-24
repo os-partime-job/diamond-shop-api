@@ -96,7 +96,7 @@ public class JewelryServiceImpl implements JewelryService {
         java.util.Date date = new java.util.Date();
         jewelry.setCreatedAt(new Date(date.getTime()));
         Diamond diamond = diamondRepository.findById(request.getIdDiamond()).get();
-        jewelry.setTotailPrice(jewelry.getMaterialPrices()+ diamond.getPrice());
+        jewelry.setTotailPrice(Long.sum(diamond.getPrice() ,jewelry.getMaterialPrices()));
         jewelryRepository.save(jewelry);
         return true;
     }
@@ -115,7 +115,7 @@ public class JewelryServiceImpl implements JewelryService {
             jewelry.setQuantity(request.getQuantity());
             jewelry.setIdDiamond(request.getIdDiamond() == null ? jewelry.getIdDiamond() : request.getIdDiamond());
             Diamond diamond = diamondRepository.findById(jewelry.getIdDiamond()).get();
-            jewelry.setTotailPrice(jewelry.getMaterialPrices()+ diamond.getPrice());
+            jewelry.setTotailPrice(Long.sum(diamond.getPrice() ,jewelry.getMaterialPrices()));
             jewelry.setMaterialPrices(request.getMaterialPrices().longValue());
             if (imageInformation != null) {
                 jewelry.setImageId(imageInformation.getImageId());
