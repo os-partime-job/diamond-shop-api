@@ -80,12 +80,11 @@ public class JewelryServiceImpl implements JewelryService {
     @Override
     public boolean createJewelry(CreateDiamondRequest request) {
         ImageInformation imageInformation = imageService.push(request.getMultipartFile());
-        Long defaultDiamondId = 2L;
 
         Jewelry jewelry = new Jewelry();
         BeanUtils.copyProperties(request, jewelry);
         jewelry.setJewelryCode(jewelryCode());
-        jewelry.setIdDiamond(defaultDiamondId);
+        jewelry.setIdDiamond(request.getIdDiamond());
         jewelry.setCreatedBy("Khoa Tran");
         jewelry.setMaterialPrices(request.getMaterialPrices().longValue());
         jewelry.setJewelryTypeId(request.getJewelryTypeId());
@@ -94,6 +93,8 @@ public class JewelryServiceImpl implements JewelryService {
         jewelry.setIsActive(ACTIVE_VALUE);
         java.util.Date date = new java.util.Date();
         jewelry.setCreatedAt(new Date(date.getTime()));
+        Diamond diamond = diamondRepository.findById(request.getId()).get();
+        jewelry.setTotailPrice(request.getMaterialPrices().longValue()+ diamond.getPrice());
         jewelryRepository.save(jewelry);
         return true;
     }
