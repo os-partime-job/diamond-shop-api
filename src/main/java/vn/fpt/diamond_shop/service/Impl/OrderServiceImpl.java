@@ -459,7 +459,8 @@ public class OrderServiceImpl implements OrderService {
         List<OrderDetail> allByUniqueOrderId = orderDetailRepository.findAllByUniqueOrderId(request.getOrderId());
         if(allByUniqueOrderId != null){
             for (OrderDetail orderDetail : allByUniqueOrderId) {
-                Diamond diamond = diamondRepository.findAllByName(orderDetail.getSize());
+                Jewelry jewelryById = jewelryRepository.findJewelryById(orderDetail.getJewelryId());
+                Diamond diamond = diamondRepository.findById(jewelryById.getIdDiamond()).get();
                 giaInfoResponse.setDiamond(diamond);
                 giaInfoResponse.setInvoiceId(orderDetail.getId());
                 giaInfoResponse.setShapeCut(shapeRepository.findById(diamond.getShapeId()).get().getShape());
