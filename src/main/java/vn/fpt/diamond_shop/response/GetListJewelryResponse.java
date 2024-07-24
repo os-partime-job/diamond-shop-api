@@ -29,4 +29,6 @@ public class GetListJewelryResponse {
     private String url;
 
     private String description;
+
+    private Long idDiamond;
 }
