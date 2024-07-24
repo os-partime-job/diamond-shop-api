@@ -67,9 +67,9 @@ public class JewelryServiceImpl implements JewelryService {
     @Override
     public GetDetailJewelryResponse detailJewelry(Long id) {
         GetDetailJewelryResponse result = jewelryRepository.getDetailJewelry(id);
-        Diamond diamond = diamondRepository.findById(result.getDiamondId()).orElse(new Diamond());
+        Diamond diamond = diamondRepository.findById(result.getDiamondId()).get();
         result.setPriceDiamond(diamond.getPrice());
-        result.setTotalPrice(result.getPriceDiamond() + diamond.getPrice());
+        result.setTotalPrice(Long.sum(result.getPriceDiamond() ,result.getPrice()));
 //        String diamondColor = DiamondColorEnum.valueOf();
         return result;
     }
