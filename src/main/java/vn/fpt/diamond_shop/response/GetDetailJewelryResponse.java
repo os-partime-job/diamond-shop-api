@@ -15,6 +15,7 @@ import java.util.UUID;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 
 @NoArgsConstructor
+//@RequiredArgsConstructor
 public class GetDetailJewelryResponse {
     private Long idJewelry;
 
@@ -43,7 +44,7 @@ public class GetDetailJewelryResponse {
     private Float goldWeight;
     private Long priceDiamond;
     private Long totalPrice;
-    public GetDetailJewelryResponse(Long idJewelry, String jewelryTitle, String jewelryCode, String jewelryType, Long jewelryTypeId, Integer quantity, Long price, String description, Long imageId, String url, Integer idGuide, Long diamondId, Float goldWeight) {
+    public GetDetailJewelryResponse(Long idJewelry, String jewelryTitle, String jewelryCode, String jewelryType, Long jewelryTypeId, Integer quantity, Long price, Long totalPrice, String description, Long imageId, String url, Integer idGuide, Long diamondId, Float goldWeight) {
         this.idJewelry = idJewelry;
         this.jewelryTitle = jewelryTitle;
         this.jewelryCode = jewelryCode;
@@ -51,6 +52,7 @@ public class GetDetailJewelryResponse {
         this.jewelryTypeId = jewelryTypeId;
         this.quantity = quantity;
         this.price = price;
+        this.totalPrice = totalPrice;
         this.description = description;
         this.imageId = imageId;
         this.url = url;

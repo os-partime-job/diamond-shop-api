@@ -25,6 +25,7 @@ public interface JewelryRepository extends JpaRepository<Jewelry, Long> {
             "jt.id  as jewelry_type_id,\n" +
             "j.quantity as quantity,\n" +
             "j.materialPrices as price,\n" +
+            "j.totailPrice as total_price,\n" +
             "j.description as description,\n" +
             "j.imageId as image_id,\n" +
             "i.url as url,\n" +
@@ -42,6 +43,7 @@ public interface JewelryRepository extends JpaRepository<Jewelry, Long> {
             "jt.id  as jewelry_type_id,\n" +
             "j.quantity as quantity,\n" +
             "j.materialPrices as price,\n" +
+            "j.totailPrice as total_price,\n" +
             "j.imageId as image_id,\n" +
             "i.url as url,\n" +
             "j.description as description,\n" +
