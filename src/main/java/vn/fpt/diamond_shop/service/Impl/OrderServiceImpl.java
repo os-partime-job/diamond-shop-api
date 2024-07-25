@@ -148,7 +148,7 @@ public class OrderServiceImpl implements OrderService {
                     product.setQuantity(String.valueOf(product.getQuantity()));
                     product.setImage(imageRepository.findById(jewelryData.getImageId()).get().getUrl());
                     products.add(product);
-                    orderDetail.setTotalPrice(cart.getQuantity() * jewelryData.getMaterialPrices());
+                    orderDetail.setTotalPrice(cart.getQuantity() * jewelryData.getTotailPrice());
                 }
                 priceItems += orderDetail.getTotalPrice();
                 orderDetailRepository.save(orderDetail);
